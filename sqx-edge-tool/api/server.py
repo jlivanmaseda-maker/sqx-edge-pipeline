@@ -40,7 +40,7 @@ from core.strategy_cleaner import (
 
 app = Flask(__name__)
 
-VERSION = "0.3.0"
+VERSION = "0.4.0"
 CONFIG_PATH = ROOT / "config.json"
 
 # Dashboard estático: carpeta padre del módulo sqx-edge-tool/
@@ -439,6 +439,84 @@ def open_folder():
         return jsonify({"ok": True})
     except Exception as e:
         return jsonify({"ok": False, "error": str(e)}), 500
+
+
+# ── State backup endpoints ────────────────────────────────────────
+# Backup automático del localStorage del dashboard a disco (para no perder
+# tracking si se vacía el browser). Carpeta: analysis_output/state_backup_*.json
+import datetime as _dt
+
+BACKUP_DIR = DASHBOARD_ROOT / "analysis_output"
+BACKUP_RETENTION = 30  # mantener máximo N backups (rotación FIFO)
+
+
+def _list_state_backups() -> list[dict]:
+    if not BACKUP_DIR.exists():
+        return []
+    files = sorted(BACKUP_DIR.glob("state_backup_*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+    return [{"name": p.name, "size_kb": round(p.stat().st_size / 1024, 1),
+             "mtime": int(p.stat().st_mtime)} for p in files]
+
+
+def _rotate_state_backups() -> int:
+    """Borra backups viejos (>= BACKUP_RETENTION). Devuelve cuántos borró."""
+    files = sorted(BACKUP_DIR.glob("state_backup_*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+    if len(files) <= BACKUP_RETENTION:
+        return 0
+    to_delete = files[BACKUP_RETENTION:]
+    for p in to_delete:
+        try: p.unlink()
+        except OSError: pass
+    return len(to_delete)
+
+
+@app.route("/api/state/backup", methods=["POST"])
+def api_state_backup():
+    """Recibe el state completo del dashboard y lo guarda timestamped.
+    Body: {priority_progress, pipeline_state, strategies_user, plan_user}
+    """
+    try:
+        body = request.get_json(force=True) or {}
+        if not isinstance(body, dict):
+            return jsonify({"ok": False, "error": "body debe ser dict"}), 400
+        BACKUP_DIR.mkdir(exist_ok=True)
+        ts = _dt.datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
+        out = BACKUP_DIR / f"state_backup_{ts}.json"
+        # Wrapper con metadata
+        payload = {
+            "_meta": {"created_at": _dt.datetime.now().isoformat(timespec="seconds"),
+                      "version": VERSION, "keys": sorted(body.keys())},
+            "data": body,
+        }
+        out.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        rotated = _rotate_state_backups()
+        return jsonify({"ok": True, "filename": out.name, "size_kb": round(out.stat().st_size / 1024, 1),
+                        "rotated": rotated})
+    except Exception as e:
+        return jsonify({"ok": False, "error": str(e)}), 500
+
+
+@app.route("/api/state/backups", methods=["GET"])
+def api_state_backups():
+    """Lista backups disponibles (más reciente primero)."""
+    return jsonify({"ok": True, "backups": _list_state_backups()})
+
+
+@app.route("/api/state/restore/<path:filename>", methods=["GET"])
+def api_state_restore(filename: str):
+    """Devuelve el contenido de un backup concreto para restaurar en el browser."""
+    if not filename.startswith("state_backup_") or not filename.endswith(".json"):
+        abort(404)
+    p = BACKUP_DIR / filename
+    if not p.exists() or not p.is_file():
+        abort(404)
+    # Validar que el path no escape de BACKUP_DIR
+    try:
+        p.resolve().relative_to(BACKUP_DIR.resolve())
+    except ValueError:
+        abort(403)
+    return jsonify({"ok": True, "filename": filename,
+                    "payload": json.loads(p.read_text(encoding="utf-8"))})
 
 
 # ── Static dashboard server ───────────────────────────────────────

@@ -302,6 +302,9 @@
         <button class="export-btn" id="ps-add-phase-btn" style="border-color:var(--pink); color:var(--pink); background:rgba(236,72,153,.08);">+ Nueva fase</button>
         <button class="export-btn" id="ps-consolidate-plan" title="Genera snippet PLAN_MININGS + PHASE_META para pegar al HTML">💾 Consolidar plan</button>
         <button class="export-btn" id="ps-restore-auto" style="display:none; border-color:var(--purple); color:var(--purple);">↻ Restaurar todos a auto-sync</button>
+        <span id="state-backup-indicator" class="state-backup-badge" title="Backup automático del state al backend (debounced 10s tras cada cambio)"></span>
+        <button class="export-btn" id="state-backup-now" title="Forzar backup ahora (sin esperar el debounce)">☁ Backup ahora</button>
+        <button class="export-btn" id="state-backup-restore" title="Restaurar desde un backup anterior">↶ Restaurar backup…</button>
         <button class="export-btn" id="ps-plan-reset">Reset tracking</button>
       </div>
       <div id="ps-plan-user-info" style="display:none; padding:10px 14px; background:rgba(59,130,246,.08); border:1px solid rgba(59,130,246,.3); border-radius:8px; margin-bottom:14px; font-size:13px;">
@@ -2877,6 +2880,7 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
 <script src="js/priority.js"></script>
 <script src="js/strategies.js"></script>
 <script src="js/pipelineState.js"></script>
+<script src="js/stateBackup.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
