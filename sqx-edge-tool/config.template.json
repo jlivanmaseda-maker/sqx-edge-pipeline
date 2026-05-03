@@ -1,0 +1,15 @@
+{
+  "_comment": "Copia este archivo a config.json y edita. O mejor: deja config.json sin sqx_path y configura desde la UI con Auto-detect (más fácil).",
+  "sqx_path": "",
+  "sqx_data_db": "",
+  "sqx_projects_dir": "",
+  "template_capa1": "templates/Capa1_Long.cfx",
+  "template_capa2": "templates/Capa2_Base.cfx",
+  "output_dir": "output",
+  "darwinex_suffix": "_darwinex",
+  "asset_aliases": {
+    "_comment": "Aliases asset (plan) -> instrument (DB SQX). Edita según tu broker. Ejemplo Darwinex:",
+    "USTEC": "NDXm",
+    "GER40": "GDAXIm"
+  }
+}

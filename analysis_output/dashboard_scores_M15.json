@@ -1,0 +1,2873 @@
+{
+  "AUDCAD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.3,
+        "trend_efficiency_200": 0.068,
+        "sma200_persistence_bars": 24.4
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.151
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0798,
+        "vol_of_vol": 0.402
+      },
+      "regimen": {
+        "sma200_persistence_bars": 24.4,
+        "hurst_dist": 0.029
+      },
+      "estadistico": {
+        "ou_half_life_m15": 12090.7,
+        "kurtosis": 5.16
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.894
+      },
+      "sr": {
+        "round_bounce_rate": 0.499
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.116,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.939,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.182,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.47,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.53,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.273,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.758,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "AUDJPY": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.84,
+        "trend_efficiency_200": 0.075,
+        "sma200_persistence_bars": 27.6
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.041
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.1085,
+        "vol_of_vol": 0.502
+      },
+      "regimen": {
+        "sma200_persistence_bars": 27.6,
+        "hurst_dist": 0.011
+      },
+      "estadistico": {
+        "ou_half_life_m15": 21751.3,
+        "kurtosis": 6.56
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.89
+      },
+      "sr": {
+        "round_bounce_rate": 0.49
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.48,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.439,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.5,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.455,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.636,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.121,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.379,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "AUDNZD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.26,
+        "trend_efficiency_200": 0.0682,
+        "sma200_persistence_bars": 24.6
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.121
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0673,
+        "vol_of_vol": 0.474
+      },
+      "regimen": {
+        "sma200_persistence_bars": 24.6,
+        "hurst_dist": 0.036
+      },
+      "estadistico": {
+        "ou_half_life_m15": 32103.6,
+        "kurtosis": 6.07
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.894
+      },
+      "sr": {
+        "round_bounce_rate": 0.509
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.116,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.879,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.121,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "++",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.545,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "++",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.455,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.273,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.939,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "AUDUSD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 25.28,
+        "trend_efficiency_200": 0.0761,
+        "sma200_persistence_bars": 29.3
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.04
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0932,
+        "vol_of_vol": 0.522
+      },
+      "regimen": {
+        "sma200_persistence_bars": 29.3,
+        "hurst_dist": 0.01
+      },
+      "estadistico": {
+        "ou_half_life_m15": 65069.9,
+        "kurtosis": 5.93
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.888
+      },
+      "sr": {
+        "round_bounce_rate": 0.499
+      }
+    },
+    "subtype": "Major",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.727,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.394,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.455,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.538,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.288,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.061,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.758,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "CADCHF": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.16,
+        "trend_efficiency_200": 0.0728,
+        "sma200_persistence_bars": 26.3
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.114
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0853,
+        "vol_of_vol": 0.624
+      },
+      "regimen": {
+        "sma200_persistence_bars": 26.3,
+        "hurst_dist": 0.031
+      },
+      "estadistico": {
+        "ou_half_life_m15": 63498.2,
+        "kurtosis": 7.17
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.903
+      },
+      "sr": {
+        "round_bounce_rate": 0.499
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.182,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.803,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.545,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.561,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.545,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.758,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.758,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "CADJPY": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.74,
+        "trend_efficiency_200": 0.0769,
+        "sma200_persistence_bars": 27.9
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.046
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.096,
+        "vol_of_vol": 0.534
+      },
+      "regimen": {
+        "sma200_persistence_bars": 27.9,
+        "hurst_dist": 0.01
+      },
+      "estadistico": {
+        "ou_half_life_m15": 44126.8,
+        "kurtosis": 6.7
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.894
+      },
+      "sr": {
+        "round_bounce_rate": 0.493
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.586,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.515,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.515,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.462,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.538,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.273,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.561,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "CHFJPY": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.3,
+        "trend_efficiency_200": 0.0725,
+        "sma200_persistence_bars": 26.5
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.032
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0864,
+        "vol_of_vol": 0.616
+      },
+      "regimen": {
+        "sma200_persistence_bars": 26.5,
+        "hurst_dist": 0.03
+      },
+      "estadistico": {
+        "ou_half_life_m15": 120000.0,
+        "kurtosis": 6.51
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.896
+      },
+      "sr": {
+        "round_bounce_rate": 0.513
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.247,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.273,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.561,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.598,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.28,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.379,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 1.0,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "EURAUD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 25.14,
+        "trend_efficiency_200": 0.0754,
+        "sma200_persistence_bars": 26.9
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.033
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0828,
+        "vol_of_vol": 0.511
+      },
+      "regimen": {
+        "sma200_persistence_bars": 26.9,
+        "hurst_dist": 0.007
+      },
+      "estadistico": {
+        "ou_half_life_m15": 31309.1,
+        "kurtosis": 5.92
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.891
+      },
+      "sr": {
+        "round_bounce_rate": 0.474
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.566,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.303,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.326,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.326,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.424,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.152,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.03,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "EURCAD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.26,
+        "trend_efficiency_200": 0.0759,
+        "sma200_persistence_bars": 27.8
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.095
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0723,
+        "vol_of_vol": 0.544
+      },
+      "regimen": {
+        "sma200_persistence_bars": 27.8,
+        "hurst_dist": 0.011
+      },
+      "estadistico": {
+        "ou_half_life_m15": 17603.8,
+        "kurtosis": 6.28
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.904
+      },
+      "sr": {
+        "round_bounce_rate": 0.493
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.414,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.727,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.303,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.485,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.591,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.788,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.561,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    }
+  },
+  "EURCHF": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 23.55,
+        "trend_efficiency_200": 0.0659,
+        "sma200_persistence_bars": 22.4
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.157
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0524,
+        "vol_of_vol": 0.749
+      },
+      "regimen": {
+        "sma200_persistence_bars": 22.4,
+        "hurst_dist": 0.017
+      },
+      "estadistico": {
+        "ou_half_life_m15": 37793.9,
+        "kurtosis": 9.71
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.907
+      },
+      "sr": {
+        "round_bounce_rate": 0.496
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.03,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 1.0,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.424,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.326,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.652,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.848,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.682,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "EURGBP": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.47,
+        "trend_efficiency_200": 0.0753,
+        "sma200_persistence_bars": 27.4
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.084
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.065,
+        "vol_of_vol": 0.598
+      },
+      "regimen": {
+        "sma200_persistence_bars": 27.4,
+        "hurst_dist": 0.01
+      },
+      "estadistico": {
+        "ou_half_life_m15": 15077.5,
+        "kurtosis": 6.69
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.902
+      },
+      "sr": {
+        "round_bounce_rate": 0.491
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.409,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.636,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.333,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "++",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.386,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "++",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.758,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.727,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.439,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    }
+  },
+  "EURJPY": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.96,
+        "trend_efficiency_200": 0.078,
+        "sma200_persistence_bars": 29.5
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.037
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0861,
+        "vol_of_vol": 0.54
+      },
+      "regimen": {
+        "sma200_persistence_bars": 29.5,
+        "hurst_dist": 0.005
+      },
+      "estadistico": {
+        "ou_half_life_m15": 120000.0,
+        "kurtosis": 6.54
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.887
+      },
+      "sr": {
+        "round_bounce_rate": 0.489
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.727,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.348,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.409,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.47,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.295,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.03,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.318,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    }
+  },
+  "EURNZD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.63,
+        "trend_efficiency_200": 0.0719,
+        "sma200_persistence_bars": 26.5
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.042
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0896,
+        "vol_of_vol": 0.478
+      },
+      "regimen": {
+        "sma200_persistence_bars": 26.5,
+        "hurst_dist": 0.018
+      },
+      "estadistico": {
+        "ou_half_life_m15": 16311.7,
+        "kurtosis": 5.22
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.896
+      },
+      "sr": {
+        "round_bounce_rate": 0.48
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.298,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.485,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.348,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.485,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.485,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.379,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.076,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "EURUSD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 25.23,
+        "trend_efficiency_200": 0.0809,
+        "sma200_persistence_bars": 29.1
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.021
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0703,
+        "vol_of_vol": 0.603
+      },
+      "regimen": {
+        "sma200_persistence_bars": 29.1,
+        "hurst_dist": 0.003
+      },
+      "estadistico": {
+        "ou_half_life_m15": 23366.5,
+        "kurtosis": 6.7
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.896
+      },
+      "sr": {
+        "round_bounce_rate": 0.49
+      }
+    },
+    "subtype": "Major",
+    "tendencia": {
+      "editorial_L": "++",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.788,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.242,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.379,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.409,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.674,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.379,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "++",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.379,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    }
+  },
+  "GBPAUD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.84,
+        "trend_efficiency_200": 0.0725,
+        "sma200_persistence_bars": 26.4
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.037
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0895,
+        "vol_of_vol": 0.511
+      },
+      "regimen": {
+        "sma200_persistence_bars": 26.4,
+        "hurst_dist": 0.017
+      },
+      "estadistico": {
+        "ou_half_life_m15": 27793.0,
+        "kurtosis": 5.82
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.897
+      },
+      "sr": {
+        "round_bounce_rate": 0.491
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.338,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.348,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.386,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.424,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.439,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.47,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.439,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "GBPCAD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.02,
+        "trend_efficiency_200": 0.0733,
+        "sma200_persistence_bars": 26.4
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.124
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0767,
+        "vol_of_vol": 0.569
+      },
+      "regimen": {
+        "sma200_persistence_bars": 26.4,
+        "hurst_dist": 0.018
+      },
+      "estadistico": {
+        "ou_half_life_m15": 17766.5,
+        "kurtosis": 6.28
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.908
+      },
+      "sr": {
+        "round_bounce_rate": 0.494
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.207,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.909,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.394,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.455,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.576,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.879,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.621,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "GBPCHF": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.25,
+        "trend_efficiency_200": 0.0735,
+        "sma200_persistence_bars": 26.6
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.088
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0797,
+        "vol_of_vol": 0.678
+      },
+      "regimen": {
+        "sma200_persistence_bars": 26.6,
+        "hurst_dist": 0.025
+      },
+      "estadistico": {
+        "ou_half_life_m15": 37092.7,
+        "kurtosis": 7.14
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.9
+      },
+      "sr": {
+        "round_bounce_rate": 0.512
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.273,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.697,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.53,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.553,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.621,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.621,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.97,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    }
+  },
+  "GBPJPY": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.69,
+        "trend_efficiency_200": 0.0779,
+        "sma200_persistence_bars": 28.0
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": -0.003
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0941,
+        "vol_of_vol": 0.547
+      },
+      "regimen": {
+        "sma200_persistence_bars": 28.0,
+        "hurst_dist": 0.001
+      },
+      "estadistico": {
+        "ou_half_life_m15": 103398.0,
+        "kurtosis": 6.29
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.892
+      },
+      "sr": {
+        "round_bounce_rate": 0.494
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.611,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.121,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "++",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.53,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.333,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.318,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.197,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.621,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    }
+  },
+  "GBPNZD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.39,
+        "trend_efficiency_200": 0.069,
+        "sma200_persistence_bars": 25.2
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.111
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0946,
+        "vol_of_vol": 0.49
+      },
+      "regimen": {
+        "sma200_persistence_bars": 25.2,
+        "hurst_dist": 0.028
+      },
+      "estadistico": {
+        "ou_half_life_m15": 11133.4,
+        "kurtosis": 5.13
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.901
+      },
+      "sr": {
+        "round_bounce_rate": 0.48
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.197,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.758,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.424,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.492,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.53,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.682,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.076,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "GBPUSD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.86,
+        "trend_efficiency_200": 0.0795,
+        "sma200_persistence_bars": 30.1
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.019
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0728,
+        "vol_of_vol": 0.58
+      },
+      "regimen": {
+        "sma200_persistence_bars": 30.1,
+        "hurst_dist": 0.004
+      },
+      "estadistico": {
+        "ou_half_life_m15": 38018.2,
+        "kurtosis": 6.6
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.9
+      },
+      "sr": {
+        "round_bounce_rate": 0.482
+      }
+    },
+    "subtype": "Major",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.758,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.212,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "++",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.379,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.5,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.515,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.621,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.167,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    }
+  },
+  "GER40": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 25.75,
+        "trend_efficiency_200": 0.0848,
+        "sma200_persistence_bars": 29.9
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.053
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.1484,
+        "vol_of_vol": 0.723
+      },
+      "regimen": {
+        "sma200_persistence_bars": 29.9,
+        "hurst_dist": 0.012
+      },
+      "estadistico": {
+        "ou_half_life_m15": 79767.9,
+        "kurtosis": 10.43
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.898
+      },
+      "sr": {
+        "round_bounce_rate": 0.485
+      }
+    },
+    "subtype": "Index",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": "-",
+      "objective": "++",
+      "composite_score": 0.889,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "+",
+      "composite_score": 0.576,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": "+",
+      "objective": "++",
+      "composite_score": 0.879,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "+",
+      "composite_score": 0.674,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.561,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.515,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "-",
+      "composite_score": 0.227,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    }
+  },
+  "NZDCAD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.49,
+        "trend_efficiency_200": 0.0684,
+        "sma200_persistence_bars": 25.2
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.152
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0906,
+        "vol_of_vol": 0.414
+      },
+      "regimen": {
+        "sma200_persistence_bars": 25.2,
+        "hurst_dist": 0.033
+      },
+      "estadistico": {
+        "ou_half_life_m15": 15101.7,
+        "kurtosis": 4.96
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.896
+      },
+      "sr": {
+        "round_bounce_rate": 0.506
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.207,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.97,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.303,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.553,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.47,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.379,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.909,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "NZDJPY": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.57,
+        "trend_efficiency_200": 0.0731,
+        "sma200_persistence_bars": 26.7
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.049
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.1168,
+        "vol_of_vol": 0.475
+      },
+      "regimen": {
+        "sma200_persistence_bars": 26.7,
+        "hurst_dist": 0.019
+      },
+      "estadistico": {
+        "ou_half_life_m15": 29493.8,
+        "kurtosis": 6.02
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.892
+      },
+      "sr": {
+        "round_bounce_rate": 0.496
+      }
+    },
+    "subtype": "Minor",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.359,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.545,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.485,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.553,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.47,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.197,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.682,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "NZDUSD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 25.03,
+        "trend_efficiency_200": 0.0753,
+        "sma200_persistence_bars": 28.2
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.057
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.1013,
+        "vol_of_vol": 0.462
+      },
+      "regimen": {
+        "sma200_persistence_bars": 28.2,
+        "hurst_dist": 0.015
+      },
+      "estadistico": {
+        "ou_half_life_m15": 37023.2,
+        "kurtosis": 5.27
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.889
+      },
+      "sr": {
+        "round_bounce_rate": 0.485
+      }
+    },
+    "subtype": "Major",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.616,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.606,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.409,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.621,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.364,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.091,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.227,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "US30": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 25.88,
+        "trend_efficiency_200": 0.0868,
+        "sma200_persistence_bars": 30.6
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": -0.004
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.1235,
+        "vol_of_vol": 0.872
+      },
+      "regimen": {
+        "sma200_persistence_bars": 30.6,
+        "hurst_dist": 0.012
+      },
+      "estadistico": {
+        "ou_half_life_m15": 101851.0,
+        "kurtosis": 13.14
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.913
+      },
+      "sr": {
+        "round_bounce_rate": 0.505
+      }
+    },
+    "subtype": "Index",
+    "tendencia": {
+      "editorial_L": "++",
+      "editorial_S": "-",
+      "objective": "++",
+      "composite_score": 0.949,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "-",
+      "composite_score": 0.091,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.864,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.72,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.591,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "++",
+      "composite_score": 0.955,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "++",
+      "composite_score": 0.879,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    }
+  },
+  "US500": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 25.94,
+        "trend_efficiency_200": 0.0859,
+        "sma200_persistence_bars": 31.2
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.007
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.1273,
+        "vol_of_vol": 0.949
+      },
+      "regimen": {
+        "sma200_persistence_bars": 31.2,
+        "hurst_dist": 0.011
+      },
+      "estadistico": {
+        "ou_half_life_m15": 104357.1,
+        "kurtosis": 12.89
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.913
+      },
+      "sr": {
+        "round_bounce_rate": 0.492
+      }
+    },
+    "subtype": "Index",
+    "tendencia": {
+      "editorial_L": "++",
+      "editorial_S": "-",
+      "objective": "++",
+      "composite_score": 0.96,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": "++",
+      "objective": "-",
+      "composite_score": 0.152,
+      "diff_vs_best_editorial": -3,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": "++",
+      "objective": "++",
+      "composite_score": 0.909,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "+",
+      "composite_score": 0.697,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": "~",
+      "objective": "+",
+      "composite_score": 0.545,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "++",
+      "composite_score": 0.955,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "+",
+      "composite_score": 0.5,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    }
+  },
+  "USDCAD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.38,
+        "trend_efficiency_200": 0.0766,
+        "sma200_persistence_bars": 26.7
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.085
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0645,
+        "vol_of_vol": 0.556
+      },
+      "regimen": {
+        "sma200_persistence_bars": 26.7,
+        "hurst_dist": 0.014
+      },
+      "estadistico": {
+        "ou_half_life_m15": 70539.3,
+        "kurtosis": 6.28
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.901
+      },
+      "sr": {
+        "round_bounce_rate": 0.482
+      }
+    },
+    "subtype": "Major",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.419,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.667,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.273,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.462,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.333,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.682,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.167,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "USDCHF": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.66,
+        "trend_efficiency_200": 0.0779,
+        "sma200_persistence_bars": 27.8
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.041
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0737,
+        "vol_of_vol": 0.626
+      },
+      "regimen": {
+        "sma200_persistence_bars": 27.8,
+        "hurst_dist": 0.025
+      },
+      "estadistico": {
+        "ou_half_life_m15": 16027.6,
+        "kurtosis": 7.06
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.899
+      },
+      "sr": {
+        "round_bounce_rate": 0.486
+      }
+    },
+    "subtype": "Major",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.571,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.439,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.485,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.659,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.773,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.561,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.273,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    }
+  },
+  "USDJPY": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.98,
+        "trend_efficiency_200": 0.0826,
+        "sma200_persistence_bars": 30.3
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": -0.218
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.1124,
+        "vol_of_vol": 0.88
+      },
+      "regimen": {
+        "sma200_persistence_bars": 30.3,
+        "hurst_dist": 0.002
+      },
+      "estadistico": {
+        "ou_half_life_m15": 1854.4,
+        "kurtosis": 22.5
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.934
+      },
+      "sr": {
+        "round_bounce_rate": 0.481
+      }
+    },
+    "subtype": "Major",
+    "tendencia": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.813,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.03,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.848,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.485,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 1.0,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 1.0,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.121,
+      "diff_vs_best_editorial": -2,
+      "scope": "global"
+    }
+  },
+  "USDMXN": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 25.03,
+        "trend_efficiency_200": 0.077,
+        "sma200_persistence_bars": 28.4
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.114
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.0972,
+        "vol_of_vol": 0.827
+      },
+      "regimen": {
+        "sma200_persistence_bars": 28.4,
+        "hurst_dist": 0.01
+      },
+      "estadistico": {
+        "ou_half_life_m15": 56979.8,
+        "kurtosis": 8.01
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.906
+      },
+      "sr": {
+        "round_bounce_rate": 0.489
+      }
+    },
+    "subtype": "Exotic",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.702,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.803,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.773,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.508,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.591,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.818,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.318,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "USDZAR": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 24.98,
+        "trend_efficiency_200": 0.0759,
+        "sma200_persistence_bars": 27.8
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.12
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.1332,
+        "vol_of_vol": 0.614
+      },
+      "regimen": {
+        "sma200_persistence_bars": 27.8,
+        "hurst_dist": 0.026
+      },
+      "estadistico": {
+        "ou_half_life_m15": 62834.6,
+        "kurtosis": 4.88
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.899
+      },
+      "sr": {
+        "round_bounce_rate": 0.501
+      }
+    },
+    "subtype": "Exotic",
+    "tendencia": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.586,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.848,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.788,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.682,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "-",
+      "composite_score": 0.197,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "+",
+      "composite_score": 0.561,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": null,
+      "editorial_S": null,
+      "objective": "++",
+      "composite_score": 0.848,
+      "diff_vs_best_editorial": null,
+      "scope": "global"
+    }
+  },
+  "USTEC": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 26.43,
+        "trend_efficiency_200": 0.0905,
+        "sma200_persistence_bars": 32.8
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": -0.064
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.1617,
+        "vol_of_vol": 1.029
+      },
+      "regimen": {
+        "sma200_persistence_bars": 32.8,
+        "hurst_dist": 0.006
+      },
+      "estadistico": {
+        "ou_half_life_m15": 120000.0,
+        "kurtosis": 11.28
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.911
+      },
+      "sr": {
+        "round_bounce_rate": 0.5
+      }
+    },
+    "subtype": "Index",
+    "tendencia": {
+      "editorial_L": "++",
+      "editorial_S": "-",
+      "objective": "++",
+      "composite_score": 1.0,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "++",
+      "editorial_S": "++",
+      "objective": "-",
+      "composite_score": 0.061,
+      "diff_vs_best_editorial": -3,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": "++",
+      "objective": "++",
+      "composite_score": 0.985,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "+",
+      "composite_score": 0.591,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": "~",
+      "objective": "~",
+      "composite_score": 0.492,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "++",
+      "composite_score": 0.909,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "++",
+      "composite_score": 0.818,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    }
+  },
+  "XAUUSD": {
+    "metrics": {
+      "tendencia": {
+        "adx_mean": 25.62,
+        "trend_efficiency_200": 0.0833,
+        "sma200_persistence_bars": 29.6
+      },
+      "momentum": {
+        "rsi_edge_in_atrs": 0.011
+      },
+      "volatilidad": {
+        "atr_pct_mean": 0.1312,
+        "vol_of_vol": 1.174
+      },
+      "regimen": {
+        "sma200_persistence_bars": 29.6,
+        "hurst_dist": 0.007
+      },
+      "estadistico": {
+        "ou_half_life_m15": 120000.0,
+        "kurtosis": 9.72
+      },
+      "volumen": {
+        "vwap_rejection_rate": 0.897
+      },
+      "sr": {
+        "round_bounce_rate": 0.492
+      }
+    },
+    "subtype": "Oro",
+    "tendencia": {
+      "editorial_L": "++",
+      "editorial_S": "~",
+      "objective": "++",
+      "composite_score": 0.859,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "momentum": {
+      "editorial_L": "+",
+      "editorial_S": "++",
+      "objective": "-",
+      "composite_score": 0.182,
+      "diff_vs_best_editorial": -3,
+      "scope": "global"
+    },
+    "volatilidad": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "++",
+      "composite_score": 0.955,
+      "diff_vs_best_editorial": 1,
+      "scope": "global"
+    },
+    "regimen": {
+      "editorial_L": "+",
+      "editorial_S": "+",
+      "objective": "+",
+      "composite_score": 0.523,
+      "diff_vs_best_editorial": 0,
+      "scope": "global"
+    },
+    "estadistico": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.462,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "volumen": {
+      "editorial_L": "+",
+      "editorial_S": null,
+      "objective": "~",
+      "composite_score": 0.47,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    },
+    "sr": {
+      "editorial_L": "++",
+      "editorial_S": "+",
+      "objective": "+",
+      "composite_score": 0.5,
+      "diff_vs_best_editorial": -1,
+      "scope": "global"
+    }
+  }
+}

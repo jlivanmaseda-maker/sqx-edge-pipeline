@@ -1,0 +1,64 @@
+# ── Python ──────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ── Backups internos del refactor (NO commitear snapshots intermedios) ──
+*.bak
+*.old
+*.backup.html
+*.before-*.html
+
+# ── Debug / playwright / logs temporales ────────────
+.playwright-mcp/
+console_errors.txt
+console-*.log
+page-*.yml
+*.log
+
+# ── Screenshots de debug ────────────────────────────
+v6_*.png
+debug_*.png
+screenshot_*.png
+
+# ── ZIPs export al colega (regenerables) ────────────
+SQX_Dashboard_v*.zip
+SQX_Edge_Suite_v*.zip
+
+# ── Data masiva (regenerable con download_dukas_bulk.py) ──
+csv_for_sqx/*.csv
+data/ohlc/
+*_M1.csv
+*_M1_clean.csv
+*_M1.meta.txt
+
+# ── Outputs sqx-edge-tool (.cfx generados) ──────────
+sqx-edge-tool/output/*.cfx
+
+# ── State backups del dashboard (frecuentes, regenerables desde localStorage) ──
+analysis_output/state_backup_*.json
+
+# ── Config local (sensible) ─────────────────────────
+sqx-edge-tool/config.json
+
+# ── Sistema operativo ───────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDEs ────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Claude Code config local (privado, regenerable) ──
+.claude/
