@@ -171,6 +171,48 @@ async function loadAllScores() {
   });
   await Promise.all(tasks);
   SCORES = SCORES_ALL.H1 || {};
+  // Si tras fetch + fallback todo sigue vacío → modo file:// sin Flask + sin scores inline
+  if (!Object.keys(SCORES_ALL).length) {
+    window.SCORES_LOAD_FAILED = true;
+    _showNoScoresBanner();
+  }
+}
+
+function _showNoScoresBanner() {
+  // Banner full-width arriba del dashboard explicando qué pasa y cómo arreglarlo
+  const isFile = location.protocol === 'file:';
+  const banner = document.createElement('div');
+  banner.id = 'no-scores-banner';
+  banner.style.cssText = 'position:sticky;top:0;z-index:9999;background:linear-gradient(90deg,#7f1d1d,#991b1b);color:#fff;padding:14px 20px;border-bottom:3px solid #fbbf24;font-family:Segoe UI,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.4);';
+  banner.innerHTML =
+    '<div style="max-width:1400px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">' +
+      '<div style="font-size:32px;line-height:1;">⚠️</div>' +
+      '<div style="flex:1;min-width:300px;">' +
+        '<div style="font-size:15px;font-weight:800;margin-bottom:4px;">' +
+          (isFile ? 'Dashboard abierto como file:// — los scores no pueden cargarse' : 'No hay scores disponibles') +
+        '</div>' +
+        '<div style="font-size:13px;line-height:1.5;color:#fde68a;">' +
+          (isFile
+            ? 'El SQX Priority, Top Picks, Matriz Composite y demás vistas data-driven están vacíos porque <code style="background:rgba(0,0,0,.3);padding:1px 6px;border-radius:3px;">fetch()</code> no funciona en <code style="background:rgba(0,0,0,.3);padding:1px 6px;border-radius:3px;">file://</code>. ' +
+              '<strong style="color:#fff;">Arranca el backend para verlo todo:</strong> ' +
+              '<code style="background:rgba(0,0,0,.3);padding:2px 8px;border-radius:3px;color:#a7f3d0;">cd sqx-edge-tool &amp;&amp; run-web.bat</code> ' +
+              '→ abre <a href="http://127.0.0.1:5050/SQX_Dashboard_v6.html" style="color:#a7f3d0;font-weight:700;">http://127.0.0.1:5050/SQX_Dashboard_v6.html</a>'
+            : 'No se han podido cargar los <code>dashboard_scores*.json</code>. Comprueba que <code>analysis_output/</code> tenga los JSONs y que el backend esté arriba.'
+          ) +
+        '</div>' +
+      '</div>' +
+      '<button onclick="this.parentNode.parentNode.remove()" style="background:rgba(0,0,0,.3);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:6px 14px;cursor:pointer;font-weight:700;">✕ Cerrar</button>' +
+    '</div>';
+  // Insertar al inicio del body (con seguridad si el body no está aún listo)
+  if (document.body) {
+    document.body.insertBefore(banner, document.body.firstChild);
+  } else {
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.insertBefore(banner, document.body.firstChild);
+    });
+  }
+  console.error('[SQX Dashboard] Sin scores. ' +
+    (isFile ? 'Modo file:// — arranca run-web.bat y usa http://localhost:5050/' : 'Backend no responde + sin fallback inline.'));
 }
 
 // Promesa global — main.js espera a esto antes de renderizar
