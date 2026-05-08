@@ -879,3 +879,136 @@
   .tf-badge.fallback { background:rgba(234,179,8,.12); color:var(--yellow); border-color:rgba(234,179,8,.4); }
   .pg-autodetect-row { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; margin-bottom:6px; }
 
+  /* ============================================================
+     CHAMPION VS CHALLENGER tab
+     ============================================================ */
+  .cvc-intro { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:16px 20px; margin-bottom:18px; }
+  .cvc-intro h2 { font-size:18px; font-weight:700; }
+
+  .cvc-section { background:var(--surface); border:1px solid var(--border); border-radius:10px; margin-bottom:14px; overflow:hidden; }
+  .cvc-section-head { display:flex; align-items:center; gap:10px; padding:12px 18px; background:var(--surface2); border-bottom:1px solid var(--border); }
+  .cvc-section-title { font-size:14px; font-weight:700; color:var(--text); }
+  .cvc-section-body { padding:16px 20px; }
+
+  .cvc-step-num { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; font-weight:700; font-size:12px; }
+
+  .cvc-empty { color:var(--text2); font-size:13px; padding:18px; text-align:center; background:var(--surface2); border-radius:8px; }
+
+  /* Champion panel */
+  .cvc-card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px 18px; }
+  .cvc-champion-card { border-color:rgba(234,179,8,.4); background:rgba(234,179,8,.05); }
+  .cvc-card-head { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+  .cvc-card-name { font-size:15px; font-weight:700; color:var(--text); }
+  .cvc-tag { display:inline-block; padding:3px 10px; border-radius:4px; font-size:10px; font-weight:800; letter-spacing:.5px; }
+  .cvc-tag-champ { background:var(--yellow); color:#000; }
+  .cvc-mini-badge { display:inline-block; padding:2px 8px; border-radius:4px; background:var(--surface); border:1px solid var(--border); font-size:11px; font-weight:600; color:var(--text2); }
+
+  .cvc-metric-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(110px, 1fr)); gap:8px; margin-bottom:12px; }
+  .cvc-metric { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:8px 10px; }
+  .cvc-metric-label { font-size:10px; color:var(--text2); text-transform:uppercase; font-weight:600; letter-spacing:.4px; margin-bottom:3px; }
+  .cvc-metric-value { font-size:14px; font-weight:700; color:var(--text); }
+
+  .cvc-thresholds-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:10px 12px; background:rgba(59,130,246,.08); border:1px dashed rgba(59,130,246,.35); border-radius:6px; }
+  .cvc-thr-label { font-size:11px; color:var(--text2); text-transform:uppercase; font-weight:700; letter-spacing:.5px; margin-right:4px; }
+  .cvc-thr-pill { display:inline-block; padding:3px 10px; border-radius:4px; background:var(--surface2); border:1px solid var(--border); font-size:12px; font-weight:600; color:var(--accent); font-family:Consolas,monospace; }
+
+  /* Manual input grid */
+  .cvc-manual-grid { display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; }
+  .cvc-manual-field { display:flex; flex-direction:column; gap:4px; }
+  .cvc-manual-field label { font-size:11px; color:var(--text2); text-transform:uppercase; font-weight:600; letter-spacing:.4px; }
+
+  /* Multipliers */
+  .cvc-mult-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; }
+  .cvc-mult-field { display:flex; flex-direction:column; gap:4px; padding:12px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; }
+  .cvc-mult-field label { font-size:11px; color:var(--text2); text-transform:uppercase; font-weight:700; letter-spacing:.4px; }
+  .cvc-mult-help { font-size:10px; color:var(--text2); font-family:Consolas,monospace; }
+
+  /* Verdict */
+  .cvc-verdict { padding:14px 18px; border-radius:8px; font-size:14px; line-height:1.55; margin-bottom:14px; border:1px solid; }
+  .cvc-verdict-adopt { background:rgba(34,197,94,.10); border-color:rgba(34,197,94,.4); color:var(--green); }
+  .cvc-verdict-maybe { background:rgba(234,179,8,.10); border-color:rgba(234,179,8,.4); color:var(--yellow); }
+  .cvc-verdict-keep  { background:rgba(59,130,246,.10); border-color:rgba(59,130,246,.4); color:var(--accent); }
+  .cvc-verdict strong { color:var(--text); }
+
+  /* Top picks */
+  .cvc-toppicks-wrap { display:flex; flex-direction:column; gap:8px; margin-bottom:14px; }
+  .cvc-toppick { display:flex; gap:14px; padding:12px 16px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; }
+  .cvc-toppick-rank { font-size:18px; font-weight:800; color:var(--accent); min-width:32px; }
+  .cvc-toppick-body { flex:1; }
+  .cvc-toppick-name { font-size:13px; margin-bottom:4px; }
+  .cvc-toppick-stats { font-size:12px; color:var(--text2); font-family:Consolas,monospace; margin-bottom:4px; }
+  .cvc-toppick-just { font-size:12px; color:var(--text2); line-height:1.5; }
+  .cvc-toppick-fams { display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
+  .cvc-fam-pill { display:inline-block; padding:2px 8px; border-radius:4px; background:rgba(168,85,247,.12); color:var(--purple); border:1px solid rgba(168,85,247,.3); font-size:10px; font-weight:700; }
+
+  .cvc-next-steps { padding:14px 18px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; }
+  .cvc-next-steps strong { display:block; margin-bottom:8px; color:var(--text); }
+  .cvc-next-steps ol { margin:0; padding-left:22px; color:var(--text2); font-size:13px; line-height:1.7; }
+
+  /* Table */
+  .cvc-table-meta { font-size:12px; color:var(--text2); margin-bottom:8px; }
+  .cvc-table { font-size:12px; }
+  .cvc-table th { font-size:10px; padding:8px 10px; }
+  .cvc-table td { padding:8px 10px; vertical-align:middle; }
+
+  .cvc-score-pill { display:inline-block; padding:3px 9px; border-radius:4px; font-size:11px; font-weight:800; min-width:36px; text-align:center; font-family:Consolas,monospace; }
+  .cvc-score-5 { background:rgba(34,197,94,.18);  color:var(--green);  border:1px solid rgba(34,197,94,.45); }
+  .cvc-score-4 { background:rgba(34,197,94,.10);  color:var(--green);  border:1px solid rgba(34,197,94,.30); }
+  .cvc-score-3 { background:rgba(234,179,8,.12);  color:var(--yellow); border:1px solid rgba(234,179,8,.4); }
+  .cvc-score-2 { background:rgba(249,115,22,.10); color:var(--orange); border:1px solid rgba(249,115,22,.35); }
+  .cvc-score-1 { background:rgba(239,68,68,.10);  color:var(--red);    border:1px solid rgba(239,68,68,.35); }
+
+  .cvc-delta-pos { color:var(--green); font-size:10px; font-weight:700; }
+  .cvc-delta-neg { color:var(--red);   font-size:10px; font-weight:700; }
+
+  /* OOS por bloques */
+  .cvc-oos-pill { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:700; font-family:Consolas,monospace; min-width:36px; text-align:center; cursor:help; }
+  .cvc-oos-stable   { background:rgba(34,197,94,.18);  color:var(--green); border:1px solid rgba(34,197,94,.4); }
+  .cvc-oos-unstable { background:rgba(239,68,68,.15);  color:var(--red);   border:1px solid rgba(239,68,68,.4); }
+  .cvc-oos-decay    { background:rgba(234,179,8,.18);  color:var(--yellow); border:1px solid rgba(234,179,8,.4); }
+  .cvc-toppick-oos { font-size:11px; margin-top:5px; padding:5px 9px; border-radius:5px; font-family:Consolas,monospace; }
+  .cvc-toppick-oos.oos-ok   { background:rgba(34,197,94,.10); color:var(--green); border-left:3px solid var(--green); }
+  .cvc-toppick-oos.oos-warn { background:rgba(239,68,68,.10); color:var(--red);   border-left:3px solid var(--red); }
+  .cvc-toppick-warn { border-color:rgba(239,68,68,.3); }
+
+  /* Régime Analysis */
+  .cvc-regime-config { display:flex; flex-wrap:wrap; gap:14px; align-items:flex-end; padding:10px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; }
+  .cvc-regime-field { display:flex; flex-direction:column; gap:4px; }
+  .cvc-regime-field label { font-size:11px; color:var(--text2); text-transform:uppercase; font-weight:700; letter-spacing:.4px; }
+  .cvc-regime-pill { display:inline-block; padding:3px 9px; border-radius:4px; font-size:11px; font-weight:700; letter-spacing:.3px; }
+  .cvc-regime-bull  { background:rgba(34,197,94,.18);  color:var(--green); border:1px solid rgba(34,197,94,.4); }
+  .cvc-regime-bear  { background:rgba(239,68,68,.18);  color:var(--red);   border:1px solid rgba(239,68,68,.4); }
+  .cvc-regime-range { background:rgba(234,179,8,.18);  color:var(--yellow); border:1px solid rgba(234,179,8,.4); }
+
+  /* EGT */
+  .cvc-egt-summary-bar { display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; margin-bottom:8px; }
+  .cvc-egt-tag { display:inline-block; padding:4px 10px; border-radius:5px; font-size:11px; font-weight:700; letter-spacing:.3px; }
+  .cvc-egt-compliant { background:rgba(34,197,94,.15);  color:var(--green); border:1px solid rgba(34,197,94,.4); }
+  .cvc-egt-risk      { background:rgba(249,115,22,.12); color:var(--orange); border:1px solid rgba(249,115,22,.4); }
+  .cvc-egt-flat      { background:rgba(156,163,175,.12); color:var(--text2); border:1px solid rgba(156,163,175,.3); }
+
+  /* ============================================================
+     SQX VIEW CREATOR tab
+     ============================================================ */
+  .vc-cat-block { background:var(--surface2); border:1px solid var(--border); border-radius:8px; margin-bottom:10px; overflow:hidden; }
+  .vc-cat-head { padding:8px 14px; font-size:12px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; color:var(--text); border-bottom:1px solid var(--border); }
+  .vc-cat-body { padding:6px 0; }
+  .vc-cat-fixed    .vc-cat-head { background:rgba(234,179,8,.10);  color:var(--yellow); }
+  .vc-cat-core     .vc-cat-head { background:rgba(34,197,94,.10);  color:var(--green); }
+  .vc-cat-advanced .vc-cat-head { background:rgba(59,130,246,.10); color:var(--accent); }
+  .vc-cat-trades   .vc-cat-head { background:rgba(236,72,153,.10); color:var(--pink); }
+  .vc-cat-drawdown .vc-cat-head { background:rgba(239,68,68,.10);  color:var(--red); }
+  .vc-cat-return   .vc-cat-head { background:rgba(34,197,94,.07);  color:var(--green); }
+  .vc-cat-risk     .vc-cat-head { background:rgba(249,115,22,.10); color:var(--orange); }
+  .vc-cat-activity .vc-cat-head { background:rgba(168,85,247,.10); color:var(--purple); }
+  .vc-cat-extra    .vc-cat-head { background:rgba(156,163,175,.10); color:var(--text2); }
+  .vc-cat-counts   .vc-cat-head { background:rgba(156,163,175,.06); color:var(--text2); }
+
+  .vc-row { display:grid; grid-template-columns: 60px 80px 1fr 240px; align-items:center; gap:10px; padding:5px 14px; font-size:12px; border-bottom:1px solid rgba(255,255,255,.03); cursor:help; }
+  .vc-row:last-child { border-bottom:none; }
+  .vc-row:hover { background:rgba(255,255,255,.02); }
+  .vc-cell-sel, .vc-cell-an { display:inline-flex; align-items:center; gap:4px; font-size:10px; color:var(--text2); cursor:pointer; user-select:none; font-weight:600; }
+  .vc-cell-sel input, .vc-cell-an input { cursor:pointer; }
+  .vc-cell-name { color:var(--text); font-weight:500; }
+  .vc-cell-class { font-family:Consolas,monospace; font-size:10px; color:var(--text2); text-align:right; }
+
