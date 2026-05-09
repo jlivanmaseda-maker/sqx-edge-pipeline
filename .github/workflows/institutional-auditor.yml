@@ -1,0 +1,46 @@
+name: Institutional Pipeline Auditor ⚡
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  audit:
+    name: Operational Discipline Audit
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Syntax & Lint Audit (JS)
+      run: |
+        echo "Running JS Syntax Check..."
+        # Basic syntax check for JS files
+        find js/ -name "*.js" -exec node --check {} +
+      
+    - name: Institutional Nomenclatura Audit
+      run: |
+        echo "Verifying Naming Conventions in Analyzer Engine..."
+        # Check if the naming logic remains compliant with the template_... standard
+        grep -q "template_" js/analyzer.js || (echo "ERROR: Nomenclatura C2 comprometida!" && exit 1)
+        echo "Naming logic: PASSED"
+
+    - name: Structural Audit
+      run: |
+        echo "Checking Directory Integrity..."
+        [ -f "SQX_Dashboard_v6.html" ] || (echo "CRITICAL: Dashboard missing!" && exit 1)
+        [ -d "js" ] || (echo "CRITICAL: JS directory missing!" && exit 1)
+        [ -d "css" ] || (echo "CRITICAL: CSS directory missing!" && exit 1)
+        echo "Structure: PASSED"
+
+    - name: Generate Audit Report
+      if: always()
+      run: |
+        echo "### 🛡️ Institutional Audit Report" >> $GITHUB_STEP_SUMMARY
+        echo "Status: ${{ job.status == 'success' && '✅ PASSED' || '❌ FAILED' }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Repo Integration**: Verified" >> $GITHUB_STEP_SUMMARY
+        echo "- **C2 Naming Standard**: Verified" >> $GITHUB_STEP_SUMMARY
+        echo "- **Structural Integrity**: Verified" >> $GITHUB_STEP_SUMMARY

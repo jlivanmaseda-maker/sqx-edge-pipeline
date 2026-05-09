@@ -1,0 +1,12 @@
+# CODEOWNERS - SQX Edge Pipeline Institutional Workflow
+# Este archivo define quién debe revisar cambios en partes críticas del proyecto.
+
+# Por defecto, todo el repo requiere revisión del equipo
+*       @CryptoLeon78 @jlivanmaseda-maker
+
+# El motor del Analyzer y sus estilos son críticos para la Certificación C2
+/js/analyzer.js    @CryptoLeon78
+/css/analyzer.css  @CryptoLeon78
+
+# El Dashboard principal requiere supervisión de JoseLivan
+/SQX_Dashboard_v6.html @jlivanmaseda-maker @CryptoLeon78
