@@ -24,7 +24,13 @@ const VC_METRICS = [
   // CORE — Esenciales EGT (preseleccionadas)
   { d:"CAGR/Max DD %",           c:"AnnualPctReturnDDRatio",  an:true,  sel:true,  cat:"core",      t:"CAGR / Max DD% — métrica principal de régimen" },
   { d:"Net profit",              c:"NetProfit",               an:true,  sel:true,  cat:"core",      t:"Rentabilidad absoluta por periodo (NP$)" },
+  // NEW: NetProfit Long/Short para detectar dirección y desbalance
+  { d:"Net profit Long",         c:"NetProfit",               an:false, sel:false, cat:"core",      t:"NP solo trades LONG (direction=1) — detección de dirección + desbalance L/S", dir:1 },
+  { d:"Net profit Short",        c:"NetProfit",               an:false, sel:false, cat:"core",      t:"NP solo trades SHORT (direction=2) — detección de dirección + desbalance L/S", dir:2 },
   { d:"# of trades",             c:"NumberOfTrades",          an:true,  sel:true,  cat:"core",      t:"Número de trades — valida suficiencia de muestra" },
+  // NEW: Trades Long/Short para detección DETERMINISTA de dirección
+  { d:"# of trades Long",        c:"NumberOfTrades",          an:false, sel:true,  cat:"core",      t:"⭐ Trades solo LONG (direction=1) — detección DETERMINISTA: si >0 opera long", dir:1 },
+  { d:"# of trades Short",       c:"NumberOfTrades",          an:false, sel:true,  cat:"core",      t:"⭐ Trades solo SHORT (direction=2) — detección DETERMINISTA: si >0 opera short", dir:2 },
   { d:"Profit factor",           c:"ProfitFactor",            an:true,  sel:true,  cat:"core",      t:"PF — más resistente a outliers que CAGR/DD" },
   { d:"Max DD %",                c:"DrawdownPct",             an:true,  sel:true,  cat:"core",      t:"Drawdown máximo por periodo" },
   { d:"Sharpe Ratio",            c:"SharpeRatio",             an:true,  sel:true,  cat:"core",      t:"Consistencia ajustada por volatilidad" },
@@ -131,15 +137,24 @@ const VC_CATEGORY_LABELS = {
 };
 
 // ---------- ESTADO ----------
+// Genera id único por métrica (className + direction). Necesario porque
+// puede haber múltiples entradas con la misma className pero distinta direction
+// (ej. NumberOfTrades total/long/short).
+function vcMetricId(m) {
+  if (!m.dir) return m.c;
+  return m.c + (m.dir === 1 ? '_long' : m.dir === 2 ? '_short' : '_dir' + m.dir);
+}
+
 const VC_STATE = {
-  selected: {},   // {className: bool}
-  anual:    {},   // {className: bool}
+  selected: {},   // {metricId: bool}
+  anual:    {},   // {metricId: bool}
 };
 
 // Inicializar desde defaults
 VC_METRICS.forEach(m => {
-  VC_STATE.selected[m.c] = m.sel;
-  VC_STATE.anual[m.c] = m.an;
+  const id = vcMetricId(m);
+  VC_STATE.selected[id] = m.sel;
+  VC_STATE.anual[id] = m.an;
 });
 
 // ---------- GENERACIÓN XML ----------
@@ -150,35 +165,37 @@ function vcBuildXml(viewName, selected, yearCount, sampleStart, includeTotal, gr
     `<View name="${vcEsc(viewName)}" originalName="${vcEsc(viewName)}">`,
     '  <Columns>',
   ];
-  const colTpl = (cls, name, st) =>
-    `    <Column class="${cls}" name="${vcEsc(name)}" sampleType="${st}" direction="0" plType="10" resultType="main" confidenceLevel="50" market="1" subresult="30" showMainResult="true"/>`;
+  const colTpl = (cls, name, st, dir) =>
+    `    <Column class="${cls}" name="${vcEsc(name)}" sampleType="${st}" direction="${dir || 0}" plType="10" resultType="main" confidenceLevel="50" market="1" subresult="30" showMainResult="true"/>`;
 
   if (groupMode === "by_metric") {
     selected.forEach(m => {
+      const dir = m.dir || 0;
       if (!m.anual) {
-        lines.push(colTpl(m.c, m.d, 127));
+        lines.push(colTpl(m.c, m.d, 127, dir));
         return;
       }
-      for (let y = 0; y < yearCount; y++) lines.push(colTpl(m.c, m.d, sampleStart + y));
-      if (includeTotal) lines.push(colTpl(m.c, m.d, 127));
+      for (let y = 0; y < yearCount; y++) lines.push(colTpl(m.c, m.d, sampleStart + y, dir));
+      if (includeTotal) lines.push(colTpl(m.c, m.d, 127, dir));
     });
   } else {
     // by_year
     let emittedAnual = false;
     const anualList = selected.filter(m => m.anual);
     selected.forEach(m => {
+      const dir = m.dir || 0;
       if (m.anual) {
         if (!emittedAnual) {
           for (let y = 0; y < yearCount; y++) {
             const st = sampleStart + y;
-            anualList.forEach(am => lines.push(colTpl(am.c, am.d, st)));
+            anualList.forEach(am => lines.push(colTpl(am.c, am.d, st, am.dir || 0)));
           }
-          if (includeTotal) anualList.forEach(am => lines.push(colTpl(am.c, am.d, 127)));
+          if (includeTotal) anualList.forEach(am => lines.push(colTpl(am.c, am.d, 127, am.dir || 0)));
           emittedAnual = true;
         }
         return;
       }
-      lines.push(colTpl(m.c, m.d, 127));
+      lines.push(colTpl(m.c, m.d, 127, dir));
     });
   }
 
@@ -208,13 +225,17 @@ function vcRenderMetrics() {
     html += '<div class="vc-cat-body">';
     cats[cat].forEach(m => {
       const isFixed = m.cat === 'fixed';
-      const sel = VC_STATE.selected[m.c];
-      const an = VC_STATE.anual[m.c];
+      const id = vcMetricId(m);
+      const sel = VC_STATE.selected[id];
+      const an = VC_STATE.anual[id];
+      const dirBadge = m.dir === 1 ? ' <span style="color:var(--green);font-size:10px;">[LONG]</span>'
+                     : m.dir === 2 ? ' <span style="color:var(--red);font-size:10px;">[SHORT]</span>'
+                     : '';
       html += `<div class="vc-row" title="${vcEsc(m.t)}">` +
-        `<label class="vc-cell-sel"><input type="checkbox" data-vc-sel="${m.c}" ${sel ? 'checked' : ''}> SEL</label>` +
-        `<label class="vc-cell-an"><input type="checkbox" data-vc-an="${m.c}" ${an ? 'checked' : ''} ${isFixed ? 'disabled' : ''}> ANUAL</label>` +
-        `<span class="vc-cell-name">${vcEsc(m.d)}</span>` +
-        `<span class="vc-cell-class">${vcEsc(m.c)}</span>` +
+        `<label class="vc-cell-sel"><input type="checkbox" data-vc-sel="${id}" ${sel ? 'checked' : ''}> SEL</label>` +
+        `<label class="vc-cell-an"><input type="checkbox" data-vc-an="${id}" ${an ? 'checked' : ''} ${isFixed ? 'disabled' : ''}> ANUAL</label>` +
+        `<span class="vc-cell-name">${vcEsc(m.d)}${dirBadge}</span>` +
+        `<span class="vc-cell-class">${vcEsc(m.c)}${m.dir ? ' dir=' + m.dir : ''}</span>` +
       `</div>`;
     });
     html += '</div></div>';
@@ -245,8 +266,8 @@ function vcGetConfig() {
 function vcGetSelectedList() {
   // Mantenemos el orden del catálogo para coherencia con el script Python
   return VC_METRICS
-    .filter(m => VC_STATE.selected[m.c])
-    .map(m => ({ d: m.d, c: m.c, anual: VC_STATE.anual[m.c] && m.cat !== 'fixed' }));
+    .filter(m => VC_STATE.selected[vcMetricId(m)])
+    .map(m => ({ d: m.d, c: m.c, dir: m.dir || 0, anual: VC_STATE.anual[vcMetricId(m)] && m.cat !== 'fixed' }));
 }
 
 function vcUpdatePreview() {
@@ -290,17 +311,17 @@ function vcGenerate() {
 
 // ---------- PRESETS ----------
 function vcApplyPresetCore() {
-  VC_METRICS.forEach(m => { VC_STATE.selected[m.c] = m.sel; });
+  VC_METRICS.forEach(m => { VC_STATE.selected[vcMetricId(m)] = m.sel; });
   vcRenderMetrics();
   vcUpdatePreview();
 }
 function vcSelectAll() {
-  VC_METRICS.forEach(m => { VC_STATE.selected[m.c] = true; });
+  VC_METRICS.forEach(m => { VC_STATE.selected[vcMetricId(m)] = true; });
   vcRenderMetrics();
   vcUpdatePreview();
 }
 function vcSelectNone() {
-  VC_METRICS.forEach(m => { VC_STATE.selected[m.c] = (m.cat === 'fixed' && m.sel); });
+  VC_METRICS.forEach(m => { VC_STATE.selected[vcMetricId(m)] = (m.cat === 'fixed' && m.sel); });
   vcRenderMetrics();
   vcUpdatePreview();
 }

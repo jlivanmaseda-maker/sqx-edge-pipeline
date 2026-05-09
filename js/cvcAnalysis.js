@@ -14,6 +14,10 @@ const CVC_COLS = {
   dd_abs:  ['Drawdown', 'MaxDrawdown'],
   dd_pct:  ['Max DD %', 'MaxDDPct', 'Drawdown %', 'Max Drawdown %'],
   trades:  ['# of trades', 'NumTrades', 'Trades', 'Number of trades'],
+  trades_long:  ['# of trades Long', '# of Trades Long', 'NumberOfTrades Long', '# trades Long', 'Trades Long'],
+  trades_short: ['# of trades Short', '# of Trades Short', 'NumberOfTrades Short', '# trades Short', 'Trades Short'],
+  np_long:      ['Net profit Long', 'NetProfit Long', 'NP Long'],
+  np_short:     ['Net profit Short', 'NetProfit Short', 'NP Short'],
   win_pct: ['Winning Percent', 'Winning Percentage', 'WinPct'],
   r_exp:   ['R Expectancy', 'RExpectancy'],
   stag:    ['Stagnation', 'StagnationDays', 'Stagnation in Days'],
@@ -222,6 +226,67 @@ function cvcParseNum(v) {
   return isNaN(n) ? null : n;
 }
 
+// ===================================================================
+// DETECCIÓN DE DIRECCIÓN (long-only / short-only / long+short)
+// ===================================================================
+// Jerarquía de fuentes (de más fiable a menos):
+//   1. trades_long / trades_short del CSV (DETERMINISTA)
+//   2. np_long / np_short del CSV (CASI DETERMINISTA, fallback si falta trades split)
+//   3. Regex sobre el nombre del Champion ('LONG', 'SHORT', 'LS', etc) (heurística)
+//   4. Por símbolo del activo (long_only para índices/oro, long_short para forex)
+//   5. Default: long_only
+function cvcDetectDirection(strategy) {
+  if (!strategy) return { dir: 'long_only', source: 'default', confidence: 'low' };
+
+  // 1. Por trades split (DETERMINISTA)
+  const tL = strategy.trades_long, tS = strategy.trades_short;
+  if (tL != null && tS != null) {
+    if (tL > 0 && tS === 0) return { dir: 'long_only',  source: 'trades_split', confidence: 'high', tradesL: tL, tradesS: tS };
+    if (tL === 0 && tS > 0) return { dir: 'short_only', source: 'trades_split', confidence: 'high', tradesL: tL, tradesS: tS };
+    if (tL > 0 && tS > 0) {
+      // Detectar L+S desequilibrado (una dirección <30% de los trades)
+      const total = tL + tS;
+      const lsRatio = tL / total;
+      let imbalance = null;
+      if (lsRatio > 0.7) imbalance = 'long_dominated';
+      else if (lsRatio < 0.3) imbalance = 'short_dominated';
+      return { dir: 'long_short', source: 'trades_split', confidence: 'high', tradesL: tL, tradesS: tS, lsRatio, imbalance };
+    }
+    if (tL === 0 && tS === 0) return { dir: 'unknown', source: 'trades_split', confidence: 'low' };
+  }
+
+  // 2. Por NP split (casi determinista pero un trade en BE puede confundir)
+  const npL = strategy.np_long, npS = strategy.np_short;
+  if (npL != null && npS != null) {
+    if (npL !== 0 && npS === 0) return { dir: 'long_only',  source: 'np_split', confidence: 'medium' };
+    if (npL === 0 && npS !== 0) return { dir: 'short_only', source: 'np_split', confidence: 'medium' };
+    if (npL !== 0 && npS !== 0) return { dir: 'long_short', source: 'np_split', confidence: 'medium' };
+  }
+
+  // 3. Por nombre (regex). Sin word boundary porque los templates SQX
+  // típicos pegan letras: "NASDAQLONGH4", "EURUSDLS_Tendencia". Excluyo
+  // falsos positivos comunes: LONGEST, SHORTER/EST/AGE.
+  const name = (strategy.name || '').toUpperCase();
+  const hasLS = /L\+S|L\/S|\bLS[\s_]|[\s_]LS\b|\bBOTH\b/.test(name);
+  const hasLong = /LONG(?!EST)/.test(name);
+  const hasShort = /SHORT(?!ER|EST|AGE)/.test(name);
+  if (hasLS || (hasLong && hasShort)) return { dir: 'long_short', source: 'name', confidence: 'medium' };
+  if (hasLong)  return { dir: 'long_only',  source: 'name', confidence: 'medium' };
+  if (hasShort) return { dir: 'short_only', source: 'name', confidence: 'medium' };
+
+  // 4. Por símbolo (heurística)
+  const sym = (strategy.symbol || '').toUpperCase();
+  if (/NDX|NAS100|USTEC|SPX|SP500|US500|US30|DJ30|GER40|DAX|XAUUSD|GOLD|XAG/.test(sym)) {
+    return { dir: 'long_only', source: 'symbol', confidence: 'low' };
+  }
+  if (/EUR|GBP|AUD|NZD|JPY|CHF|CAD|USD/.test(sym)) {
+    return { dir: 'long_short', source: 'symbol', confidence: 'low' };
+  }
+
+  // 5. Default
+  return { dir: 'long_only', source: 'default', confidence: 'low' };
+}
+
 // Convierte una fila CSV en objeto strategy
 function cvcRowToStrategy(headers, row) {
   const get = (key) => {
@@ -240,6 +305,10 @@ function cvcRowToStrategy(headers, row) {
     dd_abs:     cvcParseNum(get('dd_abs')),
     dd_pct:     cvcParseNum(get('dd_pct')),
     trades:     cvcParseNum(get('trades')),
+    trades_long:  cvcParseNum(get('trades_long')),
+    trades_short: cvcParseNum(get('trades_short')),
+    np_long:      cvcParseNum(get('np_long')),
+    np_short:     cvcParseNum(get('np_short')),
     win_pct:    cvcParseNum(get('win_pct')),
     r_exp:      cvcParseNum(get('r_exp')),
     stag:       cvcParseNum(get('stag')),
@@ -270,6 +339,15 @@ async function cvcLoadChampionCSV(file) {
   const dataRow = rows.slice(1).find(r => r.some(c => c && c.trim()));
   if (!dataRow) { cvcShowError('champion', 'No se encontró ninguna fila de datos.'); return; }
   CVC_STATE.champion = cvcRowToStrategy(headers, dataRow);
+  // Detectar dirección automáticamente (si no hay override manual reciente)
+  const detected = cvcDetectDirection(CVC_STATE.champion);
+  CVC_STATE.directionDetected = detected;
+  // Aplicar al EGT thresholds si la confidence es alta o media (no override manual)
+  if (!CVC_STATE.directionManualOverride && detected.dir !== 'unknown') {
+    CVC_STATE.egtThresholds.direction = detected.dir === 'short_only' ? 'long_only' : detected.dir;
+    // Nota: short_only no tiene umbrales propios todavía; usar long_only como base
+    cvcSaveLS();
+  }
   cvcRenderAll();
 }
 
@@ -834,6 +912,31 @@ function cvcRenderChampion() {
   const c = CVC_STATE.champion;
   if (!c) { el.innerHTML = '<div class="cvc-empty">Sube un Champion (CSV o manual) para empezar.</div>'; return; }
   const t = cvcThresholds();
+
+  // Dirección detectada (auto)
+  const dir = CVC_STATE.directionDetected || cvcDetectDirection(c);
+  const dirLabels = { long_only: '🟢 Long-only', long_short: '🟡 Long+Short', short_only: '🔴 Short-only', unknown: '❓ Desconocida' };
+  const dirSourceLabels = {
+    trades_split: 'detectada por # trades Long/Short en CSV (DETERMINISTA)',
+    np_split:     'detectada por NetProfit Long/Short (alta fiabilidad)',
+    name:         'detectada por nombre del Champion',
+    symbol:       'detectada por símbolo (' + (c.symbol || '') + ')',
+    default:      'sin info, usando default',
+  };
+  const confidenceColor = { high: 'var(--green)', medium: 'var(--yellow)', low: 'var(--text2)' }[dir.confidence] || 'var(--text2)';
+  const imbalanceTxt = dir.imbalance ?
+    (dir.imbalance === 'long_dominated'  ? ' ⚠ Long >70% de trades — considerar adoptar como Long-only' :
+     dir.imbalance === 'short_dominated' ? ' ⚠ Short >70% de trades — considerar adoptar como Short-only' :
+     '') : '';
+  const dirRow =
+    '<div class="cvc-direction-row" style="margin-top:6px;padding:6px 10px;background:var(--surface2);border-radius:6px;font-size:12px;">' +
+      '<strong>Dirección:</strong> ' + (dirLabels[dir.dir] || dir.dir) +
+      ' <span style="color:' + confidenceColor + ';font-size:11px;">(' + dir.confidence + ')</span>' +
+      ' <span style="color:var(--text2);font-size:11px;margin-left:8px;">' + (dirSourceLabels[dir.source] || dir.source) + '</span>' +
+      (dir.tradesL != null ? ' <span style="color:var(--text2);font-size:11px;margin-left:8px;">L:' + dir.tradesL + ' / S:' + dir.tradesS + '</span>' : '') +
+      (imbalanceTxt ? ' <span style="color:var(--yellow);">' + imbalanceTxt + '</span>' : '') +
+    '</div>';
+
   el.innerHTML =
     '<div class="cvc-card cvc-champion-card">' +
       '<div class="cvc-card-head">' +
@@ -842,6 +945,7 @@ function cvcRenderChampion() {
         (c.tf ? '<span class="cvc-mini-badge">' + c.tf + '</span>' : '') +
         (c.symbol ? '<span class="cvc-mini-badge">' + c.symbol + '</span>' : '') +
       '</div>' +
+      dirRow +
       '<div class="cvc-metric-grid">' +
         cvcMetricBox('NP',         c.np != null ? '$' + cvcFmt(c.np) : '–') +
         cvcMetricBox('PF',         cvcFmt(c.pf, 2)) +
