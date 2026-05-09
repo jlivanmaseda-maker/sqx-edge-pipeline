@@ -1,0 +1,107 @@
+/* analyzer.css - Integrado en el Edge Pipeline de JoseLivan */
+:root {
+  --analyzer-accent: #3b82f6;
+  --analyzer-passed: #10b981;
+  --analyzer-failed: #ef4444;
+}
+
+/* Double Scroll Containers */
+.top-scroll-proxy {
+  overflow-x: auto;
+  overflow-y: hidden;
+  height: 12px;
+  margin-bottom: 5px;
+  background: var(--surface);
+  border-radius: 4px;
+}
+.top-scroll-proxy div {
+  height: 1px;
+}
+
+/* Analyzer Table */
+.analyzer-table-wrap {
+  overflow-x: auto;
+  margin-top: 15px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.analyzer-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.analyzer-table th {
+  background: var(--surface2);
+  color: var(--text3);
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.analyzer-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+}
+
+.analyzer-table tr:hover td {
+  background: rgba(59, 130, 246, 0.05);
+  color: var(--text);
+}
+
+/* Metrics Badges */
+.metric-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 11px;
+  display: inline-block;
+}
+
+.badge-passed { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.badge-failed { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+/* Modal Backdrop for Analyzer */
+.analyzer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+}
+
+.analyzer-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  border-radius: 12px;
+  max-width: 550px;
+  width: 90%;
+  padding: 25px;
+}
+
+.analyzer-input {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.analyzer-input:focus {
+  border-color: var(--analyzer-accent);
+  outline: none;
+}
