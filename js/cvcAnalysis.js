@@ -137,7 +137,7 @@ const CVC_STATE = {
   },
   egtMinTradesPerBlock: 0,                    // bloques con < N trades se ignoran del cálculo
   multipliers: { pf: 1.05, ret_dd: 0.95, dd_pct: 1.20, trades: 0.70 },
-  filters: { minScore: 0, family: 'all', search: '', oosStableOnly: false, egtCompliantOnly: false, noNegWorstYear: false, healthOK: false },
+  filters: { minScore: 0, family: 'all', search: '', oosStableOnly: false, egtCompliantOnly: false, noNegWorstYear: false, healthOK: false, coherenceOK: false },
   sortKey: 'score',
   sortDir: 'desc',
   forwardAssumePassed: true, // asumir que "PASSED" en CSV implica forward positivo
@@ -797,6 +797,295 @@ function cvcComputeEGT(name) {
 }
 
 // ===================================================================
+// COHERENCIA DIRECCIONAL — valida bot vs régimen del subyacente con NP
+// ===================================================================
+// Complementa al EGT v2: el EGT mira CAGR/DD por régimen (calidad relativa al riesgo).
+// Coherencia direccional mira NP relativo al avg anual del propio bot:
+// - Para Long-only: detecta "BEAR_SUSPICIOUS" (rebotes técnicos) que el EGT marca COMPLIANT.
+// - Para L+S: exige ganar en BULL Y BEAR, no solo "no perder".
+// - Para Short-only: espejo de Long-only.
+function cvcComputeDirectionalCoherence(name) {
+  const oos = cvcGetOOS(name);
+  if (!oos || !CVC_STATE.regimeReady) return null;
+  const regimeBlocks = CVC_STATE.regimeBlocks;
+  if (regimeBlocks.length !== oos.blocks.length) return null;
+
+  const npBlocks = oos.blocksAll['Net profit']
+                || oos.blocksAll['Net Profit']
+                || oos.blocksAll['NetProfit'];
+  if (!npBlocks || !npBlocks.length) return null;
+
+  // NPs por régimen
+  const groups = { BULL: [], BEAR: [], RANGE: [] };
+  npBlocks.forEach((np, i) => {
+    if (np == null) return;
+    const blk = regimeBlocks[i];
+    if (!blk || !blk.group) return;
+    groups[blk.group].push(np);
+  });
+
+  const sum = (arr) => arr.reduce((a, b) => a + b, 0);
+  const avg = (arr) => arr.length ? sum(arr) / arr.length : null;
+  const validNps = npBlocks.filter(v => v != null);
+  const avgAnnual = validNps.length ? sum(validNps) / validNps.length : null;
+  if (avgAnnual == null || Math.abs(avgAnnual) < 0.01) return null;
+
+  const stats = {
+    BULL:  { count: groups.BULL.length,  avg: avg(groups.BULL),  posRatio: groups.BULL.length ? groups.BULL.filter(v => v > 0).length / groups.BULL.length : null },
+    BEAR:  { count: groups.BEAR.length,  avg: avg(groups.BEAR),  posRatio: groups.BEAR.length ? groups.BEAR.filter(v => v > 0).length / groups.BEAR.length : null },
+    RANGE: { count: groups.RANGE.length, avg: avg(groups.RANGE), posRatio: groups.RANGE.length ? groups.RANGE.filter(v => v > 0).length / groups.RANGE.length : null },
+  };
+
+  // Ratios del avg por régimen vs avg anual del bot
+  const ratios = {
+    BULL:  stats.BULL.avg  != null ? stats.BULL.avg  / avgAnnual : null,
+    BEAR:  stats.BEAR.avg  != null ? stats.BEAR.avg  / avgAnnual : null,
+    RANGE: stats.RANGE.avg != null ? stats.RANGE.avg / avgAnnual : null,
+  };
+
+  // Determinar dirección efectiva (heredada del EGT)
+  const direction = (CVC_STATE.egtThresholds.direction || 'long_only');
+  // Mínimo bloques para evaluar un régimen específico
+  const minBlocks = 2;
+  const sufficientBULL = stats.BULL.count >= minBlocks;
+  const sufficientBEAR = stats.BEAR.count >= minBlocks;
+
+  // Veredictos posibles
+  // Long-only:
+  //   bull_pos_ratio ≥ 0.8 = OK; ≥0.5 = WEAK; <0.5 = BROKEN_BULL
+  //   ratio_BEAR entre -1 y +1 = EXPECTED; >+1.5 = BEAR_SUSPICIOUS; <-1.5 = BROKEN_BEAR
+  // L+S:
+  //   bull_ratio > 0 Y bear_ratio > 0 = OK
+  //   bull <= 0 = BROKEN_BULL ; bear <= 0 = BROKEN_BEAR
+  // Short-only:
+  //   espejo de long-only
+
+  let verdict = 'INSUFFICIENT_DATA';
+  const flags = [];
+  let bullCheck = null, bearCheck = null;
+
+  if (direction === 'long_only') {
+    // Bull check: bot debe ganar en BULL del activo
+    if (sufficientBULL) {
+      bullCheck = stats.BULL.posRatio >= 0.8 ? 'OK' :
+                  stats.BULL.posRatio >= 0.5 ? 'WEAK' : 'BROKEN';
+      if (bullCheck === 'BROKEN') flags.push('BROKEN_BULL');
+      else if (bullCheck === 'WEAK') flags.push('WEAK_BULL');
+    }
+    // Bear check: ratio debe estar acotado
+    if (sufficientBEAR) {
+      const r = ratios.BEAR;
+      if (r > 1.5)       { bearCheck = 'SUSPICIOUS'; flags.push('BEAR_SUSPICIOUS'); }
+      else if (r < -1.5) { bearCheck = 'BROKEN'; flags.push('BROKEN_BEAR'); }
+      else if (r < -1.0) { bearCheck = 'WEAK'; flags.push('WEAK_BEAR'); }
+      else               { bearCheck = 'OK'; }
+    }
+    // Veredicto agregado
+    if (flags.includes('BROKEN_BULL') || flags.includes('BROKEN_BEAR')) verdict = 'BROKEN';
+    else if (flags.includes('BEAR_SUSPICIOUS')) verdict = 'SUSPICIOUS';
+    else if (flags.includes('WEAK_BULL') || flags.includes('WEAK_BEAR')) verdict = 'WEAK';
+    else if (bullCheck === 'OK' && (bearCheck === 'OK' || !sufficientBEAR)) verdict = 'OK';
+    else verdict = 'INSUFFICIENT_DATA';
+
+  } else if (direction === 'long_short') {
+    // Bull check: NP en BULL > 0
+    if (sufficientBULL) {
+      bullCheck = stats.BULL.avg > 0 ? 'OK' : 'BROKEN';
+      if (bullCheck === 'BROKEN') flags.push('BROKEN_BULL');
+    }
+    // Bear check: NP en BEAR > 0 (KEY: el short debe ganar)
+    if (sufficientBEAR) {
+      bearCheck = stats.BEAR.avg > 0 ? 'OK' : 'BROKEN';
+      if (bearCheck === 'BROKEN') flags.push('BROKEN_BEAR');
+    }
+    if (flags.length) verdict = 'BROKEN';
+    else if (bullCheck === 'OK' && bearCheck === 'OK') verdict = 'OK';
+    else verdict = 'INSUFFICIENT_DATA';
+
+  } else if (direction === 'short_only') {
+    // Espejo de long_only: regimen esperado=BEAR
+    if (sufficientBEAR) {
+      bearCheck = stats.BEAR.posRatio >= 0.8 ? 'OK' :
+                  stats.BEAR.posRatio >= 0.5 ? 'WEAK' : 'BROKEN';
+      if (bearCheck === 'BROKEN') flags.push('BROKEN_BEAR');
+      else if (bearCheck === 'WEAK') flags.push('WEAK_BEAR');
+    }
+    if (sufficientBULL) {
+      const r = ratios.BULL;
+      if (r > 1.5)       { bullCheck = 'SUSPICIOUS'; flags.push('BULL_SUSPICIOUS'); }
+      else if (r < -1.5) { bullCheck = 'BROKEN'; flags.push('BROKEN_BULL'); }
+      else if (r < -1.0) { bullCheck = 'WEAK'; flags.push('WEAK_BULL'); }
+      else               { bullCheck = 'OK'; }
+    }
+    if (flags.includes('BROKEN_BEAR') || flags.includes('BROKEN_BULL')) verdict = 'BROKEN';
+    else if (flags.includes('BULL_SUSPICIOUS')) verdict = 'SUSPICIOUS';
+    else if (flags.length) verdict = 'WEAK';
+    else if (bearCheck === 'OK' && (bullCheck === 'OK' || !sufficientBULL)) verdict = 'OK';
+    else verdict = 'INSUFFICIENT_DATA';
+  }
+
+  return {
+    direction, verdict, flags,
+    stats, ratios, avgAnnual,
+    bullCheck, bearCheck,
+    sufficientBULL, sufficientBEAR,
+  };
+}
+
+// ===================================================================
+// SCORE CONSOLIDADO — combina todos los checks en un score 0-100
+// ===================================================================
+// Sistema de 2 fases:
+//   Fase 1: filtros HARD (descarta si falla alguno)
+//   Fase 2: score compuesto sobre las que pasaron
+// Devuelve: { passedHard, hardFails[], score, breakdown, badges, warnings }
+function cvcComputeConsolidatedScore(strategy, populationStats) {
+  if (!strategy) return null;
+  const ev = cvcEvaluate(strategy);
+  if (!ev) return null;
+  const egt = CVC_STATE.regimeReady ? cvcComputeEGT(strategy.name) : null;
+  const health = CVC_STATE.oosLoaded ? cvcComputeTemporalHealth(strategy.name) : null;
+  const coh = CVC_STATE.regimeReady ? cvcComputeDirectionalCoherence(strategy.name) : null;
+
+  // === FASE 1: filtros HARD ===
+  const hardFails = [];
+  // 1. CvC: debe pasar al menos los criterios numéricos aplicables
+  if (ev.formalCount > 0 && ev.formalScore < ev.formalCount) {
+    hardFails.push('CvC ' + ev.formalScore + '/' + ev.formalCount);
+  }
+  // 2. EGT: no puede ser RISK
+  if (egt && egt.verdict === 'RISK') {
+    hardFails.push('EGT-RISK');
+  }
+  // 3. Salud Temporal: no puede ser declining (DD@close >15%)
+  if (health && health.status === 'declining') {
+    hardFails.push('Salud declining (DD@close ' + (health.ddAtClose * 100).toFixed(1) + '%)');
+  }
+  // 4. Coherencia direccional: no puede ser BROKEN
+  if (coh && coh.verdict === 'BROKEN') {
+    hardFails.push('Coherencia BROKEN [' + coh.flags.join(', ') + ']');
+  }
+  const passedHard = hardFails.length === 0;
+
+  // === FASE 2: score compuesto ===
+  // Normalización dentro de la población (0..1) para cada métrica
+  const norm = (v, min, max) => {
+    if (v == null || min == null || max == null || max <= min) return 0;
+    return Math.max(0, Math.min(1, (v - min) / (max - min)));
+  };
+  const ps = populationStats || {};
+  const breakdown = {
+    np:      { weight: 25, value: strategy.np,     score: 25 * norm(strategy.np,     ps.npMin,     ps.npMax) },
+    pf:      { weight: 20, value: strategy.pf,     score: 20 * norm(strategy.pf,     ps.pfMin,     ps.pfMax) },
+    ret_dd:  { weight: 20, value: strategy.ret_dd, score: 20 * norm(strategy.ret_dd, ps.retddMin,  ps.retddMax) },
+    r_exp:   { weight: 15, value: strategy.r_exp,  score: 15 * norm(strategy.r_exp,  ps.rexpMin,   ps.rexpMax) },
+    trades:  { weight: 10, value: strategy.trades, score: 10 * norm(strategy.trades, ps.tradesMin, ps.tradesMax) },
+    sharpe:  { weight:  5, value: strategy.sharpe, score:  5 * norm(strategy.sharpe, ps.sharpeMin, ps.sharpeMax) },
+    win_pct: { weight:  5, value: strategy.win_pct,score:  5 * norm(strategy.win_pct, ps.winMin,   ps.winMax) },
+  };
+  let baseScore = 0;
+  Object.values(breakdown).forEach(b => { baseScore += b.score; });
+
+  // === Bonuses y penalizaciones ===
+  const bonuses = [];
+  let totalBonus = 0;
+  // EGT
+  if (egt) {
+    if (egt.verdict === 'STRONG')           { bonuses.push({ label: 'EGT STRONG',      delta: +15 }); totalBonus += 15; }
+    else if (egt.verdict === 'COMPLIANT')   { bonuses.push({ label: 'EGT COMPLIANT',   delta: +5  }); totalBonus +=  5; }
+    else if (egt.verdict === 'DEFENSIVE')   { bonuses.push({ label: 'EGT DEFENSIVE',   delta: -5  }); totalBonus -=  5; }
+    else if (egt.verdict === 'INSUFFICIENT'){ bonuses.push({ label: 'EGT INSUFFICIENT', delta: -3  }); totalBonus -=  3; }
+  }
+  // Salud Temporal
+  if (health) {
+    if (health.status === 'fresh')          { bonuses.push({ label: 'Peak fresh',         delta: +10 }); totalBonus += 10; }
+    else if (health.status === 'recovered') { bonuses.push({ label: 'Peak recuperado',    delta: +5  }); totalBonus +=  5; }
+    if (health.recoveryIndex != null && health.recoveryIndex >= 1.0) {
+      bonuses.push({ label: 'Recovery ≥100%', delta: +5 }); totalBonus += 5;
+    } else if (health.recoveryIndex != null && health.recoveryIndex < 0.7) {
+      bonuses.push({ label: 'Recovery <70%',  delta: -10 }); totalBonus -= 10;
+    }
+  }
+  // OOS estable
+  const oos = cvcGetOOS(strategy.name);
+  if (oos && oos.stable) {
+    bonuses.push({ label: 'OOS 9/9 positivos', delta: +5 }); totalBonus += 5;
+  }
+  if (oos && oos.hasNegWorstYear) {
+    bonuses.push({ label: 'Worst Year < 0', delta: -5 }); totalBonus -= 5;
+  }
+  // Coherencia direccional
+  if (coh) {
+    if (coh.verdict === 'OK')                 { bonuses.push({ label: 'Coherencia OK',         delta: +10 }); totalBonus += 10; }
+    else if (coh.verdict === 'SUSPICIOUS')    { bonuses.push({ label: 'BEAR_SUSPICIOUS',       delta: -15 }); totalBonus -= 15; }
+    else if (coh.verdict === 'WEAK')          { bonuses.push({ label: 'Coherencia WEAK',       delta: -3  }); totalBonus -=  3; }
+  }
+  // Stagnation extremo
+  if (strategy.stag != null && strategy.stag > 730) {
+    bonuses.push({ label: 'Stagnation >730d', delta: -5 }); totalBonus -= 5;
+  }
+
+  const finalScore = Math.max(0, Math.min(100, baseScore + totalBonus));
+
+  // === Badges visuales ===
+  const badges = [];
+  if (egt) badges.push({ type: 'egt', text: egt.verdict });
+  if (health) badges.push({ type: 'health', text: health.status });
+  if (coh) badges.push({ type: 'coh', text: coh.verdict });
+
+  // === Warnings (informativos, no descartan) ===
+  const warnings = [];
+  if (coh && coh.flags && coh.flags.length) {
+    coh.flags.forEach(f => warnings.push(f));
+  }
+  if (oos && oos.hasNegWorstYear) warnings.push('Worst Year Profit < 0');
+  if (strategy.stag != null && strategy.stag > 500) warnings.push('Stagnation ' + Math.round(strategy.stag) + 'd');
+
+  return {
+    passedHard, hardFails,
+    baseScore, totalBonus, score: finalScore,
+    breakdown, bonuses, badges, warnings,
+    egt, health, coh, oos,
+  };
+}
+
+// Calcula stats de la población (min/max) para normalizar el score
+function cvcComputePopulationStats(challengers) {
+  const stats = {};
+  const fields = [
+    ['np', 'np'], ['pf', 'pf'], ['ret_dd', 'retdd'], ['r_exp', 'rexp'],
+    ['trades', 'trades'], ['sharpe', 'sharpe'], ['win_pct', 'win'],
+  ];
+  fields.forEach(([key, alias]) => {
+    const values = challengers.map(c => c[key]).filter(v => v != null && !isNaN(v));
+    if (values.length) {
+      stats[alias + 'Min'] = Math.min(...values);
+      stats[alias + 'Max'] = Math.max(...values);
+    }
+  });
+  return stats;
+}
+
+// Genera el ranking Top N de las que pasan filtros HARD
+function cvcRankConsolidated(challengers, topN) {
+  topN = topN || 5;
+  const ps = cvcComputePopulationStats(challengers);
+  const scored = challengers.map(c => ({ strategy: c, scoreData: cvcComputeConsolidatedScore(c, ps) }))
+                            .filter(x => x.scoreData);
+  // Solo las que pasan filtros HARD entran al ranking; el resto se reportan aparte
+  const passedHard = scored.filter(x => x.scoreData.passedHard);
+  const failedHard = scored.filter(x => !x.scoreData.passedHard);
+  passedHard.sort((a, b) => b.scoreData.score - a.scoreData.score);
+  return {
+    top: passedHard.slice(0, topN),
+    rest: passedHard.slice(topN),
+    failedHard,
+    populationStats: ps,
+    totalEvaluated: scored.length,
+  };
+}
+
+// ===================================================================
 // CARGA CHALLENGERS (CSV multi-row)
 // ===================================================================
 async function cvcLoadChallengersCSV(file) {
@@ -1026,6 +1315,13 @@ function cvcRenderTable() {
       return h && h.passAll;
     });
   }
+  if (f.coherenceOK && CVC_STATE.regimeReady) {
+    rows = rows.filter(r => {
+      const c = cvcComputeDirectionalCoherence(r.strategy.name);
+      // Acepta OK, SUSPICIOUS, WEAK; descarta solo BROKEN e INSUFFICIENT
+      return c && c.verdict !== 'BROKEN' && c.verdict !== 'INSUFFICIENT_DATA';
+    });
+  }
   // Sort
   const sk = CVC_STATE.sortKey, sd = CVC_STATE.sortDir === 'asc' ? 1 : -1;
   rows.sort((a, b) => {
@@ -1067,6 +1363,7 @@ function cvcRenderTable() {
         '<th>C4<br>#t</th>' +
         (showOOS ? sortable('oos', 'OOS<br>blocks') : '') +
         (showOOS ? '<th>Salud<br>temporal</th>' : '') +
+        (CVC_STATE.regimeReady ? '<th>Coherencia<br>direccional</th>' : '') +
         '<th>Indicators</th>' +
       '</tr></thead><tbody>' +
       rows.map(r => cvcRenderRow(r)).join('') +
@@ -1126,6 +1423,7 @@ function cvcRenderRow(r) {
     '<td>' + cvcCheckMark(ev.checks.trades) + '</td>' +
     (CVC_STATE.oosLoaded ? '<td>' + cvcRenderOOSCell(s.name) + '</td>' : '') +
     (CVC_STATE.oosLoaded ? '<td>' + cvcRenderHealthCell(s.name) + '</td>' : '') +
+    (CVC_STATE.regimeReady ? '<td>' + cvcRenderCoherenceCell(s.name) + '</td>' : '') +
     '<td style="font-size:11px;color:var(--text2);">' + (s.indicators || '') + '</td>' +
   '</tr>';
 }
@@ -1176,6 +1474,36 @@ function cvcRenderOOSCell(name) {
 
   const tooltip = lines.join('\n').replace(/"/g, '&quot;');
   return '<span class="cvc-oos-pill ' + cls + '" title="' + tooltip + '">' + oos.positive + '/' + oos.total + '</span>';
+}
+
+// Render de la celda "Coherencia Direccional": pill con veredicto
+function cvcRenderCoherenceCell(name) {
+  const c = cvcComputeDirectionalCoherence(name);
+  if (!c) return '<span class="cvc-coh-pill cvc-coh-na" title="Sin datos régime">—</span>';
+
+  const verdictMap = {
+    OK:                { cls: 'cvc-coh-ok',         icon: '✓',  txt: 'OK' },
+    SUSPICIOUS:        { cls: 'cvc-coh-suspicious', icon: '⚠',  txt: 'SUSP.' },
+    WEAK:              { cls: 'cvc-coh-weak',       icon: '⚠',  txt: 'WEAK' },
+    BROKEN:            { cls: 'cvc-coh-broken',     icon: '❌', txt: 'BROKEN' },
+    INSUFFICIENT_DATA: { cls: 'cvc-coh-na',         icon: '❓', txt: 'N/A' },
+  };
+  const v = verdictMap[c.verdict] || verdictMap.INSUFFICIENT_DATA;
+
+  const fmt = (n) => n == null ? '–' : (typeof n === 'number' ? n.toFixed(2) : n);
+  const fmtPct = (n) => n == null ? '–' : (n * 100).toFixed(0) + '%';
+  const tip = [
+    'Coherencia Direccional — ' + (c.direction === 'long_short' ? 'Long+Short' : c.direction === 'short_only' ? 'Short-only' : 'Long-only'),
+    'Veredicto: ' + c.verdict + (c.flags.length ? ' [' + c.flags.join(', ') + ']' : ''),
+    '',
+    'Avg anual del bot: ' + fmt(c.avgAnnual),
+    '',
+    'BULL: avg ' + fmt(c.stats.BULL.avg) + ' (n=' + c.stats.BULL.count + ', ratio ' + fmt(c.ratios.BULL) + ', pos ' + fmtPct(c.stats.BULL.posRatio) + ')',
+    'BEAR: avg ' + fmt(c.stats.BEAR.avg) + ' (n=' + c.stats.BEAR.count + ', ratio ' + fmt(c.ratios.BEAR) + ', pos ' + fmtPct(c.stats.BEAR.posRatio) + ')',
+    'RANGE: avg ' + fmt(c.stats.RANGE.avg) + ' (n=' + c.stats.RANGE.count + ')',
+  ].join('\n').replace(/"/g, '&quot;');
+
+  return '<span class="cvc-coh-pill ' + v.cls + '" title="' + tip + '">' + v.icon + ' ' + v.txt + '</span>';
 }
 
 // Render de la celda "Salud Temporal": 3 mini-pills (peak, DD del peak, recovery)
@@ -1309,7 +1637,12 @@ function cvcRenderVerdict() {
     '</div>';
   }).join('');
 
+  // === Score Consolidado: Top 5 con justificación automática ===
+  const consolidated = cvcRankConsolidated(list, 5);
+  const consolidatedHtml = cvcRenderConsolidatedTop(consolidated);
+
   el.innerHTML =
+    consolidatedHtml +
     '<div class="cvc-verdict ' + vCls + '">' + veredict + '</div>' +
     '<div class="cvc-toppicks-wrap">' + tpHtml + '</div>' +
     '<div class="cvc-next-steps">' +
@@ -1321,6 +1654,97 @@ function cvcRenderVerdict() {
         '<li>Demo 30 días con sizing real antes de operativa real.</li>' +
       '</ol>' +
     '</div>';
+}
+
+// Render del panel "Top 5 Consolidado" con score y justificación automática
+function cvcRenderConsolidatedTop(consolidated) {
+  if (!consolidated || !consolidated.totalEvaluated) return '';
+  const { top, rest, failedHard, totalEvaluated } = consolidated;
+
+  // Header con resumen
+  const header =
+    '<div class="cvc-consolidated-head">' +
+      '<span class="cvc-consolidated-title">🏆 TOP CONSOLIDADO (Filtros HARD + Score 0-100)</span>' +
+      '<span class="cvc-consolidated-stats">' +
+        totalEvaluated + ' evaluadas · ' +
+        '<span style="color:var(--green);font-weight:700;">' + (top.length + rest.length) + ' pasan filtros HARD</span> · ' +
+        '<span style="color:var(--red);">' + failedHard.length + ' descartadas</span>' +
+      '</span>' +
+    '</div>';
+
+  if (!top.length) {
+    const failsSummary = failedHard.length
+      ? '<div class="cvc-consolidated-fails">⚠ Razones de descarte: ' +
+          [...new Set(failedHard.flatMap(f => f.scoreData.hardFails))].join(', ') +
+        '</div>'
+      : '';
+    return header +
+      '<div class="cvc-consolidated-empty">Ninguna estrategia pasa los filtros HARD. Revisar Champion o relajar criterios.</div>' +
+      failsSummary;
+  }
+
+  // Render Top
+  const fmt = (v, dec) => v == null ? '–' : (typeof dec === 'number' ? v.toFixed(dec) : Math.round(v).toLocaleString());
+  const scorePill = (sc) => {
+    const cls = sc >= 75 ? 'cvc-score-pill-top' : sc >= 60 ? 'cvc-score-pill-mid' : 'cvc-score-pill-low';
+    return '<span class="' + cls + '">' + sc.toFixed(0) + '</span>';
+  };
+
+  const rows = top.map((entry, i) => {
+    const s = entry.strategy;
+    const sd = entry.scoreData;
+    // Top 3 razones positivas (mayor score)
+    const topReasons = Object.entries(sd.breakdown)
+      .filter(([_, b]) => b.score > 0)
+      .sort((a, b) => b[1].score - a[1].score)
+      .slice(0, 3)
+      .map(([k, b]) => k.toUpperCase() + ' ' + fmt(b.value, 2));
+    // Bonuses positivos
+    const goodBonuses = sd.bonuses.filter(b => b.delta > 0).map(b => b.label);
+    const badBonuses = sd.bonuses.filter(b => b.delta < 0).map(b => b.label + ' (' + b.delta + ')');
+
+    return '<div class="cvc-consolidated-row">' +
+      '<div class="cvc-consolidated-rank">#' + (i+1) + '</div>' +
+      '<div class="cvc-consolidated-body">' +
+        '<div class="cvc-consolidated-name">' +
+          '<strong>' + (s.name || '–') + '</strong> ' +
+          scorePill(sd.score) +
+          ' <span style="color:var(--text2);font-size:11px;">base ' + sd.baseScore.toFixed(0) +
+          (sd.totalBonus !== 0 ? ' · ajuste ' + (sd.totalBonus > 0 ? '+' : '') + sd.totalBonus.toFixed(0) : '') + '</span>' +
+        '</div>' +
+        '<div class="cvc-consolidated-stats-row">' +
+          'NP $' + fmt(s.np) + ' · PF ' + fmt(s.pf, 2) + ' · R/DD ' + fmt(s.ret_dd, 2) +
+          ' · R Exp ' + fmt(s.r_exp, 2) + ' · ' + fmt(s.trades, 0) + ' trades' +
+        '</div>' +
+        (topReasons.length ? '<div class="cvc-consolidated-reasons">⭐ <strong>Top métricas:</strong> ' + topReasons.join(' · ') + '</div>' : '') +
+        (goodBonuses.length ? '<div class="cvc-consolidated-bonus-good">✓ ' + goodBonuses.join(' · ') + '</div>' : '') +
+        (badBonuses.length ? '<div class="cvc-consolidated-bonus-bad">⚠ ' + badBonuses.join(' · ') + '</div>' : '') +
+        (sd.warnings.length ? '<div class="cvc-consolidated-warnings">📋 A revisar: ' + sd.warnings.join(', ') + '</div>' : '') +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  // Resto de las que pasan HARD pero no entran al top
+  const restHtml = rest.length
+    ? '<div class="cvc-consolidated-rest">' +
+        '<strong>+' + rest.length + ' que pasan HARD fuera del top 5:</strong> ' +
+        rest.map(e => e.strategy.name + ' (' + e.scoreData.score.toFixed(0) + ')').join(' · ') +
+      '</div>'
+    : '';
+
+  // Resumen de descartadas (por razón)
+  const failReasons = {};
+  failedHard.forEach(f => {
+    f.scoreData.hardFails.forEach(r => { failReasons[r] = (failReasons[r] || 0) + 1; });
+  });
+  const failsSummary = Object.keys(failReasons).length
+    ? '<div class="cvc-consolidated-fails-summary">' +
+        '<strong>Descartadas por filtros HARD:</strong> ' +
+        Object.entries(failReasons).map(([r, n]) => r + ' (' + n + ')').join(' · ') +
+      '</div>'
+    : '';
+
+  return header + '<div class="cvc-consolidated-list">' + rows + '</div>' + restHtml + failsSummary;
 }
 
 // ===================================================================
@@ -1405,6 +1829,9 @@ function cvcRenderAll() {
   // Filtro salud temporal: requiere OOS con Net profit por bloque (siempre presente si hay OOS)
   const healthFilterWrap = document.getElementById('cvc-health-filter-wrap');
   if (healthFilterWrap) healthFilterWrap.style.display = CVC_STATE.oosLoaded ? '' : 'none';
+  // Filtro coherencia direccional: requiere régime calculado
+  const cohFilterWrap = document.getElementById('cvc-coherence-filter-wrap');
+  if (cohFilterWrap) cohFilterWrap.style.display = CVC_STATE.regimeReady ? '' : 'none';
 }
 
 // ===================================================================
@@ -1792,6 +2219,13 @@ function cvcExportMarkdown() {
   const healthFilter = document.getElementById('cvc-filter-health-ok');
   if (healthFilter) healthFilter.addEventListener('change', () => {
     CVC_STATE.filters.healthOK = healthFilter.checked;
+    cvcRenderTable();
+  });
+
+  // Filtro coherencia direccional OK
+  const cohFilter = document.getElementById('cvc-filter-coherence-ok');
+  if (cohFilter) cohFilter.addEventListener('change', () => {
+    CVC_STATE.filters.coherenceOK = cohFilter.checked;
     cvcRenderTable();
   });
 

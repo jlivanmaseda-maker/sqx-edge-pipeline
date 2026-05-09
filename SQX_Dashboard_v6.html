@@ -3144,6 +3144,12 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
               <span>Solo Salud temporal OK (peak reciente + DD bajo + recovery ≥70%)</span>
             </label>
           </div>
+          <div class="filter-group" id="cvc-coherence-filter-wrap" style="display:none;">
+            <label style="display:inline-flex;align-items:center;gap:6px;color:var(--text2);font-size:12px;cursor:pointer;" title="Coherencia direccional: bot coherente con régimen del activo. Long-only debe ganar en BULL del activo y no romper en BEAR. L+S debe ganar en ambos. Detecta BEAR_SUSPICIOUS (rebotes técnicos no replicables).">
+              <input type="checkbox" id="cvc-filter-coherence-ok">
+              <span>Solo Coherencia direccional OK (gana en su régimen esperado + acepta SUSPICIOUS)</span>
+            </label>
+          </div>
         </div>
         <div id="cvc-table-wrap"></div>
       </div>
@@ -3224,8 +3230,8 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
 <script src="js/strategies.js"></script>
 <script src="js/pipelineState.js"></script>
 <script src="js/stateBackup.js"></script>
-<script src="js/cvcAnalysis.js?v=20260509e"></script>
-<script src="js/sqxViewCreator.js?v=20260509e"></script>
+<script src="js/cvcAnalysis.js?v=20260509g"></script>
+<script src="js/sqxViewCreator.js?v=20260509g"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

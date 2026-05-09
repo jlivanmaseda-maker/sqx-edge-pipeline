@@ -999,6 +999,36 @@
   .cvc-health-bad  { background:rgba(239,68,68,.15);  color:var(--red);    border:1px solid rgba(239,68,68,.4); }
   .cvc-health-na   { background:rgba(156,163,175,.10); color:var(--text2); border:1px solid rgba(156,163,175,.3); }
 
+  /* Coherencia direccional */
+  .cvc-coh-pill        { display:inline-block; padding:3px 7px; border-radius:4px; font-size:11px; font-weight:700; cursor:help; }
+  .cvc-coh-ok          { background:rgba(34,197,94,.15);  color:var(--green);  border:1px solid rgba(34,197,94,.4); }
+  .cvc-coh-suspicious  { background:rgba(234,179,8,.18);  color:var(--yellow); border:1px solid rgba(234,179,8,.4); }
+  .cvc-coh-weak        { background:rgba(249,115,22,.12); color:var(--orange); border:1px solid rgba(249,115,22,.4); }
+  .cvc-coh-broken      { background:rgba(239,68,68,.15);  color:var(--red);    border:1px solid rgba(239,68,68,.4); }
+  .cvc-coh-na          { background:rgba(156,163,175,.10); color:var(--text2); border:1px solid rgba(156,163,175,.3); }
+
+  /* Score Consolidado — Top 5 con score 0-100 */
+  .cvc-consolidated-head     { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; background:linear-gradient(135deg, rgba(99,102,241,.15), rgba(139,92,246,.10)); border:1px solid rgba(99,102,241,.4); border-radius:8px 8px 0 0; }
+  .cvc-consolidated-title    { font-size:13px; font-weight:800; color:#a5b4fc; letter-spacing:.4px; }
+  .cvc-consolidated-stats    { font-size:11px; color:var(--text2); }
+  .cvc-consolidated-list     { background:var(--surface2); border:1px solid var(--border); border-top:none; border-radius:0 0 8px 8px; padding:8px; display:flex; flex-direction:column; gap:6px; }
+  .cvc-consolidated-row      { display:flex; gap:10px; padding:10px 12px; background:var(--surface); border:1px solid var(--border); border-radius:6px; align-items:flex-start; }
+  .cvc-consolidated-rank     { font-size:18px; font-weight:800; color:#a5b4fc; min-width:32px; }
+  .cvc-consolidated-body     { flex:1; font-size:12px; }
+  .cvc-consolidated-name     { font-size:13px; margin-bottom:3px; }
+  .cvc-consolidated-stats-row{ color:var(--text2); font-family:Consolas,monospace; font-size:11px; margin-bottom:4px; }
+  .cvc-consolidated-reasons  { color:var(--green); font-size:11px; margin-top:2px; }
+  .cvc-consolidated-bonus-good { color:var(--green); font-size:11px; margin-top:2px; }
+  .cvc-consolidated-bonus-bad  { color:var(--yellow); font-size:11px; margin-top:2px; }
+  .cvc-consolidated-warnings { color:var(--text2); font-size:11px; margin-top:3px; padding:3px 6px; background:rgba(234,179,8,.08); border-left:2px solid rgba(234,179,8,.5); border-radius:0 3px 3px 0; }
+  .cvc-consolidated-empty    { padding:14px; background:var(--surface2); border:1px solid var(--border); border-top:none; border-radius:0 0 8px 8px; text-align:center; color:var(--text2); }
+  .cvc-consolidated-fails    { padding:8px 14px; background:rgba(239,68,68,.05); border-radius:0 0 8px 8px; font-size:11px; color:var(--text2); }
+  .cvc-consolidated-fails-summary { padding:8px 14px; margin-top:6px; background:var(--surface2); border:1px solid var(--border); border-radius:6px; font-size:11px; color:var(--text2); }
+  .cvc-consolidated-rest     { padding:6px 14px; margin-top:6px; background:var(--surface2); border-left:3px solid #a5b4fc; border-radius:0 6px 6px 0; font-size:11px; color:var(--text2); }
+  .cvc-score-pill-top { display:inline-block; padding:3px 9px; background:linear-gradient(135deg,#22c55e,#16a34a); color:white; font-weight:800; border-radius:12px; font-size:13px; box-shadow:0 0 8px rgba(34,197,94,.4); }
+  .cvc-score-pill-mid { display:inline-block; padding:3px 9px; background:linear-gradient(135deg,#eab308,#ca8a04); color:white; font-weight:800; border-radius:12px; font-size:13px; }
+  .cvc-score-pill-low { display:inline-block; padding:3px 9px; background:linear-gradient(135deg,#f97316,#ea580c); color:white; font-weight:800; border-radius:12px; font-size:13px; }
+
   /* ============================================================
      SQX VIEW CREATOR tab
      ============================================================ */
