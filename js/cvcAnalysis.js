@@ -111,10 +111,29 @@ const CVC_STATE = {
   regimeBlocks: [],       // [{idx, regime, pctChange, vol, group}, ...]
   regimeReady: false,
   // EGT (Miguel Jiménez)
-  egtThresholds: { strong: 3.0, weak: 0.0 },  // CAGR/DD natural ≥ strong, contrario ≥ weak
+  // EGT v2: umbrales por régimen y dirección
+  // - direction='long_only' para índices/oro long, 'long_short' para forex L+S
+  // - umbrales por régimen (BULL, BEAR, RANGE) tipo MIN_PASS y MIN_STRONG
+  // - minBlocksPerRegime: si un régimen tiene menos bloques, se marca INSUFFICIENT (no descarta)
+  // - Compatibilidad: strong/weak conservados para no romper LS antiguo
+  egtThresholds: {
+    strong: 3.0, weak: 0.0,                 // legacy
+    direction: 'long_only',
+    minBlocksPerRegime: 2,
+    long_only: {
+      BULL:  { pass: 1.5, strong: 2.5 },
+      BEAR:  { pass: 0.0, strong: 1.0 },
+      RANGE: { pass: 0.0, strong: 1.0 },
+    },
+    long_short: {
+      BULL:  { pass: 1.0, strong: 2.0 },
+      BEAR:  { pass: 1.0, strong: 2.0 },
+      RANGE: { pass: 0.5, strong: 1.5 },
+    },
+  },
   egtMinTradesPerBlock: 0,                    // bloques con < N trades se ignoran del cálculo
   multipliers: { pf: 1.05, ret_dd: 0.95, dd_pct: 1.20, trades: 0.70 },
-  filters: { minScore: 0, family: 'all', search: '', oosStableOnly: false, egtCompliantOnly: false, noNegWorstYear: false },
+  filters: { minScore: 0, family: 'all', search: '', oosStableOnly: false, egtCompliantOnly: false, noNegWorstYear: false, healthOK: false },
   sortKey: 'score',
   sortDir: 'desc',
   forwardAssumePassed: true, // asumir que "PASSED" en CSV implica forward positivo
@@ -393,6 +412,87 @@ function cvcGetOOS(name) {
 }
 
 // ===================================================================
+// TEMPORAL HEALTH — análisis contextual de Stagnation/Peak/DD
+// ===================================================================
+// Reemplaza el filtro hard "Stagnation < 365d" por una lectura contextual:
+//   1. peak_block: en qué bloque OOS está el equity máximo
+//   2. dd_at_close: cuánto cae desde peak hasta cierre del backtest
+//   3. recovery_index: avg(últimos 3) / avg(histórico)
+// Permite detectar si el estancamiento es PASADO (ya recuperado) o RECIENTE.
+function cvcComputeTemporalHealth(name) {
+  const oos = cvcGetOOS(name);
+  if (!oos || !oos.blocksAll) return null;
+  // Buscar Net profit (preferido) o caer a CAGR/DD
+  const npBlocks = oos.blocksAll['Net profit']
+                || oos.blocksAll['Net Profit']
+                || oos.blocksAll['NetProfit']
+                || oos.blocks; // fallback métrica primaria
+  if (!npBlocks || !npBlocks.length) return null;
+  const valid = npBlocks.map(v => v == null ? 0 : v);
+  const n = valid.length;
+  if (n < 4) return null;
+
+  // Equity acumulada
+  const equity = [];
+  let acc = 0;
+  for (let i = 0; i < n; i++) { acc += valid[i]; equity.push(acc); }
+
+  // Peak block (incluye 0 = pre-OOS1, así que ajustamos a equity[0..n-1])
+  let peakIdx = 0;
+  let peakVal = equity[0];
+  for (let i = 1; i < n; i++) {
+    if (equity[i] > peakVal) { peakVal = equity[i]; peakIdx = i; }
+  }
+  const closeVal = equity[n - 1];
+  const ddAtClose = peakVal > 0 ? (peakVal - closeVal) / peakVal : 0;
+
+  // Recovery index: avg(últimos 3) / avg(histórico)
+  const last3 = valid.slice(Math.max(0, n - 3));
+  const avgHist = valid.reduce((a, b) => a + b, 0) / n;
+  const avgRecent = last3.reduce((a, b) => a + b, 0) / last3.length;
+  const recoveryIndex = avgHist !== 0 ? avgRecent / avgHist : null;
+
+  // Clasificación de status
+  // - fresh:     peak en últimos 3 bloques (estrategia activa en régimen reciente)
+  // - recovered: peak en 2ª mitad pero no en últimos 3 (tuvo bache pero recuperó)
+  // - old_peak:  peak en 1ª mitad y NO superado después
+  // - declining: dd_at_close > 0.15 (en bache profundo al cierre)
+  let status;
+  if (ddAtClose > 0.15) {
+    status = 'declining';
+  } else if (peakIdx >= n - 3) {
+    status = 'fresh';
+  } else if (peakIdx >= Math.floor(n / 2)) {
+    status = 'recovered';
+  } else {
+    status = 'old_peak';
+  }
+
+  // Pasa los 3 sub-filtros contextuales
+  const passPeak = peakIdx >= Math.floor(n / 2);     // peak en 2ª mitad
+  const passDD = ddAtClose < 0.15;                    // <15% DD del peak
+  const passRecovery = recoveryIndex == null || recoveryIndex >= 0.7;
+  const passAll = passPeak && passDD && passRecovery;
+
+  return {
+    peakIdx,                  // 0-based
+    peakBlock: peakIdx + 1,   // 1-based, OOS1..OOSn
+    peakVal,
+    closeVal,
+    ddAtClose,
+    avgHist,
+    avgRecent,
+    recoveryIndex,
+    status,                   // 'fresh' | 'recovered' | 'old_peak' | 'declining'
+    passPeak,
+    passDD,
+    passRecovery,
+    passAll,
+    nBlocks: n,
+  };
+}
+
+// ===================================================================
 // RÉGIME ANALYSIS — calcula régimen del activo por cada bloque OOS
 // ===================================================================
 // Lee historical-data inline del dashboard (datos mensuales de 32 activos).
@@ -498,50 +598,123 @@ function cvcComputeEGT(name) {
 
   const avg = (arr) => arr.length ? arr.reduce((a,b)=>a+b, 0) / arr.length : null;
   const min = (arr) => arr.length ? Math.min(...arr) : null;
+  const variance = (arr, mean) => {
+    if (!arr.length) return null;
+    return arr.reduce((s, v) => s + (v - mean) ** 2, 0) / arr.length;
+  };
   const stats = {
     BULL:  { count: groups.BULL.length,  avg: avg(groups.BULL),  min: min(groups.BULL) },
     BEAR:  { count: groups.BEAR.length,  avg: avg(groups.BEAR),  min: min(groups.BEAR) },
     RANGE: { count: groups.RANGE.length, avg: avg(groups.RANGE), min: min(groups.RANGE) },
   };
 
-  // Régimen natural = el que tiene mayor avg (entre los con count > 0)
+  // Régimen "asignado" (más representado, no "natural" por mejor avg)
   const candidates = ['BULL','BEAR','RANGE'].filter(k => stats[k].count > 0 && stats[k].avg != null);
   if (!candidates.length) return null;
+  const dominantRegime = candidates.reduce((best, k) =>
+    stats[k].count > stats[best].count ? k :
+    (stats[k].count === stats[best].count && stats[k].avg > stats[best].avg ? k : best),
+    candidates[0]
+  );
+
+  // Mantener "natural" (mayor avg) para compatibilidad legacy
   const natural = candidates.reduce((best, k) => stats[k].avg > stats[best].avg ? k : best, candidates[0]);
 
-  // Régimen contrario:
-  //   - si natural=BULL → opposite=BEAR
-  //   - si natural=BEAR → opposite=BULL
-  //   - si natural=RANGE → opposite=BULL+BEAR juntos (no-RANGE)
+  // Régimen contrario legacy
   let oppositeAvg, oppositeMin, oppositeKey;
   if (natural === 'BULL') {
-    oppositeKey = 'BEAR';
-    oppositeAvg = stats.BEAR.avg;
-    oppositeMin = stats.BEAR.min;
+    oppositeKey = 'BEAR'; oppositeAvg = stats.BEAR.avg; oppositeMin = stats.BEAR.min;
   } else if (natural === 'BEAR') {
-    oppositeKey = 'BULL';
-    oppositeAvg = stats.BULL.avg;
-    oppositeMin = stats.BULL.min;
-  } else { // RANGE
+    oppositeKey = 'BULL'; oppositeAvg = stats.BULL.avg; oppositeMin = stats.BULL.min;
+  } else {
     const trending = [...groups.BULL, ...groups.BEAR];
     oppositeKey = 'TRENDING';
     oppositeAvg = trending.length ? trending.reduce((a,b)=>a+b, 0) / trending.length : null;
     oppositeMin = trending.length ? Math.min(...trending) : null;
   }
 
+  // EGT v2: evaluación por régimen con umbrales según dirección
   const t = CVC_STATE.egtThresholds;
+  const direction = t.direction || 'long_only';
+  const dirThresholds = t[direction] || t.long_only;
+  const minBlocks = t.minBlocksPerRegime || 2;
+
+  // Por cada régimen evaluar: pass (≥ threshold.pass) y strong (≥ threshold.strong)
+  // Si count < minBlocks → INSUFFICIENT para ese régimen (no entra en veredicto pero se reporta)
+  const passByRegime = {}, strongByRegime = {}, sufficientByRegime = {};
+  ['BULL','BEAR','RANGE'].forEach(r => {
+    const s = stats[r];
+    const thr = dirThresholds[r];
+    sufficientByRegime[r] = s.count >= minBlocks;
+    if (!sufficientByRegime[r] || s.avg == null) {
+      passByRegime[r] = null;     // no evaluable
+      strongByRegime[r] = null;
+    } else {
+      passByRegime[r] = s.avg >= thr.pass;
+      strongByRegime[r] = s.avg >= thr.strong;
+    }
+  });
+
+  const insufficientRegimes = ['BULL','BEAR','RANGE'].filter(r => stats[r].count > 0 && !sufficientByRegime[r]);
+  const evaluatedRegimes    = ['BULL','BEAR','RANGE'].filter(r => sufficientByRegime[r]);
+  const failedRegimes       = evaluatedRegimes.filter(r => passByRegime[r] === false);
+  const strongRegimes       = evaluatedRegimes.filter(r => strongByRegime[r] === true);
+
+  // Veredicto v2:
+  // - INSUFFICIENT: no hay regímenes evaluables (todo n<2)
+  // - RISK:        algún régimen evaluado falla pass
+  // - STRONG:      pasa todos los evaluados Y régimen dominante es strong
+  // - DEFENSIVE:   pasa todos los evaluados pero NINGUNO llega a strong
+  // - COMPLIANT:   pasa todos los evaluados y al menos uno (no dominante) es strong
+  let verdict;
+  if (!evaluatedRegimes.length) {
+    verdict = 'INSUFFICIENT';
+  } else if (failedRegimes.length > 0) {
+    verdict = 'RISK';
+  } else if (strongByRegime[dominantRegime]) {
+    verdict = 'STRONG';
+  } else if (strongRegimes.length > 0) {
+    verdict = 'COMPLIANT';
+  } else {
+    verdict = 'DEFENSIVE';
+  }
+
+  // Tiebreakers para ordenar entre estrategias del mismo veredicto
+  const dominantAvg = stats[dominantRegime].avg;
+  const evalAvgs = evaluatedRegimes.map(r => stats[r].avg);
+  const meanAcrossRegimes = evalAvgs.length ? evalAvgs.reduce((a,b)=>a+b, 0) / evalAvgs.length : null;
+  const varianceAcrossRegimes = meanAcrossRegimes != null ? variance(evalAvgs, meanAcrossRegimes) : null;
+  const worstRegimeAvg = evalAvgs.length ? Math.min(...evalAvgs) : null;
+
+  // Compatibilidad legacy: mapear verdict → label antigua
+  // STRONG / COMPLIANT → 'COMPLIANT' (para no romper filtros existentes)
+  // DEFENSIVE → 'FLAT' (legacy compat)
+  // RISK → 'RISK'
+  // INSUFFICIENT → 'FLAT' (legacy compat)
+  const legacyLabel = (verdict === 'STRONG' || verdict === 'COMPLIANT') ? 'COMPLIANT'
+                    : (verdict === 'RISK') ? 'RISK'
+                    : 'FLAT';
+
+  // Compat legacy: naturalOk, oppositeOk
   const naturalOk  = stats[natural].avg != null && stats[natural].avg >= t.strong;
   const oppositeOk = oppositeAvg != null && oppositeAvg >= t.weak;
-  let label;
-  if (naturalOk && oppositeOk) label = 'COMPLIANT';
-  else if (naturalOk && !oppositeOk) label = 'RISK';
-  else label = 'FLAT';
 
   return {
-    stats, natural, naturalAvg: stats[natural].avg,
+    stats,
+    // Legacy fields (mantener)
+    natural, naturalAvg: stats[natural].avg,
     oppositeKey, oppositeAvg, oppositeMin,
-    naturalOk, oppositeOk, label,
+    naturalOk, oppositeOk,
+    label: legacyLabel,
     skippedDueToTrades,
+    // EGT v2 fields
+    verdict,
+    direction,
+    dominantRegime, dominantAvg,
+    passByRegime, strongByRegime, sufficientByRegime,
+    insufficientRegimes, evaluatedRegimes, failedRegimes, strongRegimes,
+    worstRegimeAvg, varianceAcrossRegimes,
+    thresholds: dirThresholds,
   };
 }
 
@@ -743,6 +916,12 @@ function cvcRenderTable() {
       return !oos || !oos.hasNegWorstYear;
     });
   }
+  if (f.healthOK && CVC_STATE.oosLoaded) {
+    rows = rows.filter(r => {
+      const h = cvcComputeTemporalHealth(r.strategy.name);
+      return h && h.passAll;
+    });
+  }
   // Sort
   const sk = CVC_STATE.sortKey, sd = CVC_STATE.sortDir === 'asc' ? 1 : -1;
   rows.sort((a, b) => {
@@ -783,6 +962,7 @@ function cvcRenderTable() {
         '<th>C3<br>DD%</th>' +
         '<th>C4<br>#t</th>' +
         (showOOS ? sortable('oos', 'OOS<br>blocks') : '') +
+        (showOOS ? '<th>Salud<br>temporal</th>' : '') +
         '<th>Indicators</th>' +
       '</tr></thead><tbody>' +
       rows.map(r => cvcRenderRow(r)).join('') +
@@ -841,6 +1021,7 @@ function cvcRenderRow(r) {
     '<td>' + cvcCheckMark(ev.checks.dd_pct) + '</td>' +
     '<td>' + cvcCheckMark(ev.checks.trades) + '</td>' +
     (CVC_STATE.oosLoaded ? '<td>' + cvcRenderOOSCell(s.name) + '</td>' : '') +
+    (CVC_STATE.oosLoaded ? '<td>' + cvcRenderHealthCell(s.name) + '</td>' : '') +
     '<td style="font-size:11px;color:var(--text2);">' + (s.indicators || '') + '</td>' +
   '</tr>';
 }
@@ -891,6 +1072,55 @@ function cvcRenderOOSCell(name) {
 
   const tooltip = lines.join('\n').replace(/"/g, '&quot;');
   return '<span class="cvc-oos-pill ' + cls + '" title="' + tooltip + '">' + oos.positive + '/' + oos.total + '</span>';
+}
+
+// Render de la celda "Salud Temporal": 3 mini-pills (peak, DD del peak, recovery)
+function cvcRenderHealthCell(name) {
+  const h = cvcComputeTemporalHealth(name);
+  if (!h) return '<span class="cvc-oos-pill cvc-health-na" title="Sin datos OOS">—</span>';
+
+  // Pill 1: Peak block
+  const peakCls = h.peakIdx >= h.nBlocks - 3 ? 'cvc-health-good' :
+                  h.peakIdx >= Math.floor(h.nBlocks / 2) ? 'cvc-health-warn' :
+                  'cvc-health-bad';
+  const peakPill = '<span class="cvc-health-pill ' + peakCls +
+    '" title="Peak en OOS' + h.peakBlock + ' de ' + h.nBlocks + '">P:' + h.peakBlock + '</span>';
+
+  // Pill 2: DD desde peak al cierre
+  const ddPct = (h.ddAtClose * 100);
+  const ddCls = ddPct < 5 ? 'cvc-health-good' :
+                ddPct < 15 ? 'cvc-health-warn' :
+                'cvc-health-bad';
+  const ddPill = '<span class="cvc-health-pill ' + ddCls +
+    '" title="DD desde peak al cierre del backtest">DD:' + ddPct.toFixed(1) + '%</span>';
+
+  // Pill 3: Recovery index
+  let recPill = '';
+  if (h.recoveryIndex != null) {
+    const recPct = h.recoveryIndex * 100;
+    const recCls = recPct >= 100 ? 'cvc-health-good' :
+                   recPct >= 70 ? 'cvc-health-warn' :
+                   'cvc-health-bad';
+    recPill = '<span class="cvc-health-pill ' + recCls +
+      '" title="avg(últimos 3 OOS) / avg(histórico)">R:' + recPct.toFixed(0) + '%</span>';
+  }
+
+  // Wrapper con status global
+  const statusLabel = {
+    'fresh':     'Peak fresh ✓',
+    'recovered': 'Recuperada (peak en 2ª mitad)',
+    'old_peak':  'Peak antiguo ⚠',
+    'declining': 'En DD profundo ❌',
+  }[h.status] || h.status;
+  const wrapTitle = 'Salud Temporal: ' + statusLabel +
+    '\nPeak: OOS' + h.peakBlock + ' / ' + h.nBlocks +
+    '\nDD desde peak al cierre: ' + ddPct.toFixed(2) + '%' +
+    (h.recoveryIndex != null ? '\nRecovery: ' + (h.recoveryIndex * 100).toFixed(1) + '% del avg histórico' : '') +
+    '\nPasa filtros contextuales: ' + (h.passAll ? 'SÍ' : 'NO');
+
+  return '<span class="cvc-health-wrap" title="' + wrapTitle.replace(/"/g, '&quot;') + '">' +
+    peakPill + recPill + ddPill +
+    '</span>';
 }
 
 // ===================================================================
@@ -1068,6 +1298,9 @@ function cvcRenderAll() {
   const worstYearWrap = document.getElementById('cvc-worst-year-wrap');
   const hasWorstYear = sample && sample.blocksAll && sample.blocksAll['Worst Year Profit'];
   if (worstYearWrap) worstYearWrap.style.display = hasWorstYear ? '' : 'none';
+  // Filtro salud temporal: requiere OOS con Net profit por bloque (siempre presente si hay OOS)
+  const healthFilterWrap = document.getElementById('cvc-health-filter-wrap');
+  if (healthFilterWrap) healthFilterWrap.style.display = CVC_STATE.oosLoaded ? '' : 'none';
 }
 
 // ===================================================================
@@ -1159,55 +1392,107 @@ function cvcRenderEGTSummary() {
     return { strategy: c, egt };
   }).filter(x => x.egt);
 
-  // Ordenar: COMPLIANT primero, luego por avg natural desc
+  // Ordenar: STRONG primero, luego COMPLIANT, DEFENSIVE, INSUFFICIENT, RISK al final
   evaluated.sort((a, b) => {
-    const lblOrder = { COMPLIANT: 0, RISK: 1, FLAT: 2 };
-    if (lblOrder[a.egt.label] !== lblOrder[b.egt.label]) return lblOrder[a.egt.label] - lblOrder[b.egt.label];
-    return (b.egt.naturalAvg || 0) - (a.egt.naturalAvg || 0);
+    const vOrder = { STRONG: 0, COMPLIANT: 1, DEFENSIVE: 2, INSUFFICIENT: 3, RISK: 4 };
+    const va = vOrder[a.egt.verdict] != null ? vOrder[a.egt.verdict] : 5;
+    const vb = vOrder[b.egt.verdict] != null ? vOrder[b.egt.verdict] : 5;
+    if (va !== vb) return va - vb;
+    // Tiebreaker: avg en régimen dominante (más representativo)
+    return (b.egt.dominantAvg || 0) - (a.egt.dominantAvg || 0);
   });
 
-  const counts = { COMPLIANT: 0, RISK: 0, FLAT: 0 };
-  evaluated.forEach(e => counts[e.egt.label]++);
+  const counts = { STRONG: 0, COMPLIANT: 0, DEFENSIVE: 0, INSUFFICIENT: 0, RISK: 0 };
+  evaluated.forEach(e => { if (counts[e.egt.verdict] != null) counts[e.egt.verdict]++; });
+
+  const t = CVC_STATE.egtThresholds;
+  const dirLabel = t.direction === 'long_short' ? 'L+S' : 'Long-only';
+  const dirThr = t[t.direction || 'long_only'];
+  const thrSummary = 'BULL≥' + dirThr.BULL.pass + '·BEAR≥' + dirThr.BEAR.pass + '·RANGE≥' + dirThr.RANGE.pass + ' (' + dirLabel + ')';
 
   const summary =
     '<div class="cvc-egt-summary-bar">' +
-      '<span class="cvc-egt-tag cvc-egt-compliant">' + counts.COMPLIANT + ' EGT-COMPLIANT</span>' +
-      '<span class="cvc-egt-tag cvc-egt-risk">' + counts.RISK + ' EGT-RISK</span>' +
-      '<span class="cvc-egt-tag cvc-egt-flat">' + counts.FLAT + ' EGT-FLAT</span>' +
-      '<span style="margin-left:auto;font-size:11px;color:var(--text2);">Umbrales: natural ≥ ' + CVC_STATE.egtThresholds.strong + ' · contrario ≥ ' + CVC_STATE.egtThresholds.weak + '</span>' +
+      '<span class="cvc-egt-tag cvc-egt-strong" title="Pasa todos los regímenes Y dominante ≥ strong">⭐ ' + counts.STRONG + ' STRONG</span>' +
+      '<span class="cvc-egt-tag cvc-egt-compliant" title="Pasa todos los regímenes con n≥2">✓ ' + counts.COMPLIANT + ' COMPLIANT</span>' +
+      '<span class="cvc-egt-tag cvc-egt-defensive" title="No pierde en ningún régimen pero ninguno llega a strong">⚠ ' + counts.DEFENSIVE + ' DEFENSIVE</span>' +
+      '<span class="cvc-egt-tag cvc-egt-insufficient" title="Algún régimen tiene <2 bloques (data insuficiente)">❓ ' + counts.INSUFFICIENT + ' INSUFFICIENT</span>' +
+      '<span class="cvc-egt-tag cvc-egt-risk" title="Pierde en algún régimen evaluado">❌ ' + counts.RISK + ' RISK</span>' +
+      '<span style="margin-left:auto;font-size:11px;color:var(--text2);">Umbrales: ' + thrSummary + '</span>' +
     '</div>';
 
   const tbl =
     '<table class="cat-table cvc-table" style="margin-top:10px;">' +
       '<thead><tr>' +
         '<th>Strategy</th>' +
-        '<th>BULL avg</th>' +
-        '<th>BEAR avg</th>' +
-        '<th>RANGE avg</th>' +
-        '<th>Régimen natural</th>' +
-        '<th>Avg natural</th>' +
-        '<th>Régimen contrario</th>' +
-        '<th>Avg contrario</th>' +
-        '<th>Veredicto EGT</th>' +
+        '<th>BULL avg (n)</th>' +
+        '<th>BEAR avg (n)</th>' +
+        '<th>RANGE avg (n)</th>' +
+        '<th>Dominante</th>' +
+        '<th>Avg dom.</th>' +
+        '<th>Falla en</th>' +
+        '<th>Insuficientes</th>' +
+        '<th>Veredicto EGT v2</th>' +
       '</tr></thead><tbody>' +
       evaluated.map(({strategy, egt}) => {
-        const lblCls = egt.label === 'COMPLIANT' ? 'cvc-egt-compliant' :
-                       egt.label === 'RISK'      ? 'cvc-egt-risk'      :
-                                                    'cvc-egt-flat';
-        const lblTxt = egt.label === 'COMPLIANT' ? '⭐ COMPLIANT' :
-                       egt.label === 'RISK'      ? '⚠ RISK (direccional encubierta)' :
-                                                    'FLAT';
-        const fmt = (v) => v == null ? '–' : v.toFixed(2);
-        return '<tr>' +
+        const verdictMap = {
+          STRONG:       { cls: 'cvc-egt-strong',       icon: '⭐', txt: 'STRONG' },
+          COMPLIANT:    { cls: 'cvc-egt-compliant',    icon: '✓',  txt: 'COMPLIANT' },
+          DEFENSIVE:    { cls: 'cvc-egt-defensive',    icon: '⚠',  txt: 'DEFENSIVE' },
+          INSUFFICIENT: { cls: 'cvc-egt-insufficient', icon: '❓', txt: 'INSUFFICIENT' },
+          RISK:         { cls: 'cvc-egt-risk',         icon: '❌', txt: 'RISK' },
+        };
+        const v = verdictMap[egt.verdict] || verdictMap.INSUFFICIENT;
+        const fmt = (val) => val == null ? '–' : val.toFixed(2);
+
+        // Render por régimen con badge de status
+        const regimeCell = (r) => {
+          const s = egt.stats[r];
+          if (s.count === 0) return '<span style="color:var(--text2);">–</span>';
+          const sufficient = egt.sufficientByRegime[r];
+          const passed = egt.passByRegime[r];
+          const strong = egt.strongByRegime[r];
+          let color = 'var(--text)';
+          let icon = '';
+          if (!sufficient) { color = 'var(--text2)'; icon = ' <span title="n<min" style="font-size:10px;">❓</span>'; }
+          else if (passed === false) { color = 'var(--red)'; icon = ' <span style="font-size:10px;">❌</span>'; }
+          else if (strong) { color = 'var(--green)'; icon = ' <span style="font-size:10px;">⭐</span>'; }
+          else if (passed) { color = 'var(--green)'; icon = ' <span style="font-size:10px;">✓</span>'; }
+          return '<span style="color:' + color + ';">' + fmt(s.avg) + icon +
+            ' <span style="color:var(--text2);font-size:10px;">(' + s.count + ')</span></span>';
+        };
+
+        // Tooltip enriquecido
+        const tip = [
+          'EGT v2 — Veredicto: ' + egt.verdict,
+          'Dirección: ' + (egt.direction === 'long_short' ? 'Long+Short' : 'Long-only'),
+          'Régimen dominante: ' + egt.dominantRegime + ' (avg ' + fmt(egt.dominantAvg) + ')',
+          '',
+          'Por régimen:',
+          ...['BULL','BEAR','RANGE'].map(r => {
+            const s = egt.stats[r];
+            if (s.count === 0) return '  ' + r + ': sin bloques';
+            const thr = egt.thresholds[r];
+            const status = !egt.sufficientByRegime[r] ? 'INSUFICIENTE n<' + (CVC_STATE.egtThresholds.minBlocksPerRegime || 2)
+              : egt.passByRegime[r] === false ? 'FALLA pass<' + thr.pass
+              : egt.strongByRegime[r] ? 'STRONG ≥' + thr.strong
+              : 'PASS ≥' + thr.pass;
+            return '  ' + r + ': avg ' + fmt(s.avg) + ' (n=' + s.count + ') — ' + status;
+          }),
+          '',
+          'Worst régimen evaluado: ' + fmt(egt.worstRegimeAvg),
+          'Varianza entre regímenes: ' + fmt(egt.varianceAcrossRegimes),
+        ].join('\n').replace(/"/g, '&quot;');
+
+        return '<tr title="' + tip + '">' +
           '<td><strong>' + (strategy.name || '–') + '</strong></td>' +
-          '<td>' + fmt(egt.stats.BULL.avg) + ' <span style="color:var(--text2);font-size:10px;">(' + egt.stats.BULL.count + ')</span></td>' +
-          '<td>' + fmt(egt.stats.BEAR.avg) + ' <span style="color:var(--text2);font-size:10px;">(' + egt.stats.BEAR.count + ')</span></td>' +
-          '<td>' + fmt(egt.stats.RANGE.avg) + ' <span style="color:var(--text2);font-size:10px;">(' + egt.stats.RANGE.count + ')</span></td>' +
-          '<td><span class="cvc-regime-pill cvc-regime-' + egt.natural.toLowerCase() + '">' + egt.natural + '</span></td>' +
-          '<td><strong>' + fmt(egt.naturalAvg) + '</strong></td>' +
-          '<td>' + egt.oppositeKey + '</td>' +
-          '<td style="color:' + (egt.oppositeOk ? 'var(--green)' : 'var(--red)') + ';">' + fmt(egt.oppositeAvg) + '</td>' +
-          '<td><span class="cvc-egt-tag ' + lblCls + '">' + lblTxt + '</span></td>' +
+          '<td>' + regimeCell('BULL') + '</td>' +
+          '<td>' + regimeCell('BEAR') + '</td>' +
+          '<td>' + regimeCell('RANGE') + '</td>' +
+          '<td><span class="cvc-regime-pill cvc-regime-' + egt.dominantRegime.toLowerCase() + '">' + egt.dominantRegime + '</span></td>' +
+          '<td><strong>' + fmt(egt.dominantAvg) + '</strong></td>' +
+          '<td>' + (egt.failedRegimes.length ? egt.failedRegimes.join(', ') : '–') + '</td>' +
+          '<td style="color:var(--text2);font-size:11px;">' + (egt.insufficientRegimes.length ? egt.insufficientRegimes.join(', ') + ' (n<2)' : '–') + '</td>' +
+          '<td><span class="cvc-egt-tag ' + v.cls + '">' + v.icon + ' ' + v.txt + '</span></td>' +
         '</tr>';
       }).join('') +
       '</tbody></table>';
@@ -1399,6 +1684,13 @@ function cvcExportMarkdown() {
     cvcRenderTable();
   });
 
+  // Filtro salud temporal OK (reemplaza el filtro hard "Stagnation < X días")
+  const healthFilter = document.getElementById('cvc-filter-health-ok');
+  if (healthFilter) healthFilter.addEventListener('change', () => {
+    CVC_STATE.filters.healthOK = healthFilter.checked;
+    cvcRenderTable();
+  });
+
   // Régime Analysis: cargar settings de localStorage al inicio
   cvcLoadLS();
 
@@ -1425,6 +1717,28 @@ function cvcExportMarkdown() {
     const v = parseFloat(egtWeakInp.value);
     if (!isNaN(v)) CVC_STATE.egtThresholds.weak = v;
   });
+  // EGT v2: dirección y min bloques por régimen
+  const egtDirSel = document.getElementById('cvc-egt-direction');
+  if (egtDirSel) {
+    egtDirSel.value = CVC_STATE.egtThresholds.direction || 'long_only';
+    egtDirSel.addEventListener('change', () => {
+      CVC_STATE.egtThresholds.direction = egtDirSel.value;
+      cvcSaveLS();
+      cvcRenderAll();
+    });
+  }
+  const egtMinBlocksInp = document.getElementById('cvc-egt-min-blocks');
+  if (egtMinBlocksInp) {
+    egtMinBlocksInp.value = CVC_STATE.egtThresholds.minBlocksPerRegime || 2;
+    egtMinBlocksInp.addEventListener('change', () => {
+      const v = parseInt(egtMinBlocksInp.value, 10);
+      if (!isNaN(v) && v >= 1) {
+        CVC_STATE.egtThresholds.minBlocksPerRegime = v;
+        cvcSaveLS();
+        cvcRenderAll();
+      }
+    });
+  }
 
   // Botón Aplicar régime analysis
   const regimeApplyBtn = document.getElementById('cvc-regime-apply');

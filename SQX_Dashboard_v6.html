@@ -3138,6 +3138,12 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
               <span>Excluir con año perdedor (WorstYear &lt; 0)</span>
             </label>
           </div>
+          <div class="filter-group" id="cvc-health-filter-wrap" style="display:none;">
+            <label style="display:inline-flex;align-items:center;gap:6px;color:var(--text2);font-size:12px;cursor:pointer;" title="Salud temporal contextual: peak en 2ª mitad del backtest (no obsoleto), DD desde peak al cierre < 15%, avg últimos 3 OOS ≥ 70% del histórico. Reemplaza al filtro hard 'Stagnation < X días'.">
+              <input type="checkbox" id="cvc-filter-health-ok">
+              <span>Solo Salud temporal OK (peak reciente + DD bajo + recovery ≥70%)</span>
+            </label>
+          </div>
         </div>
         <div id="cvc-table-wrap"></div>
       </div>
@@ -3165,12 +3171,25 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
             <input type="date" id="cvc-regime-end" class="search-input" style="width:160px;">
           </div>
           <div class="cvc-regime-field">
-            <label>EGT umbral fuerte (natural)</label>
+            <label>EGT dirección</label>
+            <select id="cvc-egt-direction" class="search-input" style="width:140px;">
+              <option value="long_only">Long-only (índice/oro)</option>
+              <option value="long_short">Long+Short (forex)</option>
+            </select>
+            <span class="cvc-mult-help">define umbrales por régimen</span>
+          </div>
+          <div class="cvc-regime-field">
+            <label>Min bloques/régimen</label>
+            <input type="number" id="cvc-egt-min-blocks" step="1" min="1" max="5" value="2" class="search-input" style="width:80px;">
+            <span class="cvc-mult-help">n &lt; min → INSUFFICIENT</span>
+          </div>
+          <div class="cvc-regime-field" style="display:none;">
+            <label>EGT umbral fuerte (legacy)</label>
             <input type="number" id="cvc-egt-strong" step="0.5" min="0" max="20" class="search-input" style="width:80px;">
             <span class="cvc-mult-help">CAGR/DD natural ≥ n</span>
           </div>
-          <div class="cvc-regime-field">
-            <label>EGT umbral mín (contrario)</label>
+          <div class="cvc-regime-field" style="display:none;">
+            <label>EGT umbral mín (legacy)</label>
             <input type="number" id="cvc-egt-weak" step="0.1" min="-2" max="5" class="search-input" style="width:80px;">
             <span class="cvc-mult-help">CAGR/DD contrario ≥ n</span>
           </div>
@@ -3205,8 +3224,8 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
 <script src="js/strategies.js"></script>
 <script src="js/pipelineState.js"></script>
 <script src="js/stateBackup.js"></script>
-<script src="js/cvcAnalysis.js"></script>
-<script src="js/sqxViewCreator.js"></script>
+<script src="js/cvcAnalysis.js?v=20260509c"></script>
+<script src="js/sqxViewCreator.js?v=20260509c"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
