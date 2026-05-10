@@ -3045,7 +3045,7 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
       </div>
     </div>
 
-    <!-- STEP 3: Multiplicadores -->
+    <!-- STEP 3: Multiplicadores (config avanzada) -->
     <div class="cvc-section">
       <div class="cvc-section-head">
         <span class="cvc-step-num">3</span>
@@ -3075,16 +3075,6 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
             <span class="cvc-mult-help">Challenger.#trades ≥ Champion × n</span>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- VEREDICTO + TOP PICKS -->
-    <div class="cvc-section">
-      <div class="cvc-section-head">
-        <span class="cvc-section-title">Veredicto y Top Picks</span>
-      </div>
-      <div class="cvc-section-body">
-        <div id="cvc-verdict-panel"></div>
       </div>
     </div>
 
@@ -3178,11 +3168,12 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
           </div>
           <div class="cvc-regime-field">
             <label>EGT dirección</label>
-            <select id="cvc-egt-direction" class="search-input" style="width:140px;">
-              <option value="long_only">Long-only (índice/oro)</option>
-              <option value="long_short">Long+Short (forex)</option>
+            <select id="cvc-egt-direction" class="search-input" style="width:160px;">
+              <option value="long_only">Long-only</option>
+              <option value="short_only">Short-only</option>
+              <option value="long_short">Long+Short</option>
             </select>
-            <span class="cvc-mult-help">define umbrales por régimen</span>
+            <span class="cvc-mult-help">auto-detectado por # trades L/S del CSV</span>
           </div>
           <div class="cvc-regime-field">
             <label>Min bloques/régimen</label>
@@ -3204,6 +3195,17 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
         <div id="cvc-regime-msg" style="margin-top:8px;font-size:13px;"></div>
         <div id="cvc-regime-blocks-panel" style="margin-top:14px;"></div>
         <div id="cvc-egt-summary-panel" style="margin-top:14px;"></div>
+      </div>
+    </div>
+
+    <!-- ⭐ VEREDICTO + TOP PICKS — resultado consolidado tras Ranking + Régime -->
+    <div class="cvc-section cvc-section-primary">
+      <div class="cvc-section-head">
+        <span class="cvc-section-title">⭐ Veredicto y Top Picks</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text2);">resultado consolidado (tras Ranking + Régime)</span>
+      </div>
+      <div class="cvc-section-body">
+        <div id="cvc-verdict-panel"></div>
       </div>
     </div>
 
@@ -3230,8 +3232,8 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
 <script src="js/strategies.js"></script>
 <script src="js/pipelineState.js"></script>
 <script src="js/stateBackup.js"></script>
-<script src="js/cvcAnalysis.js?v=20260509g"></script>
-<script src="js/sqxViewCreator.js?v=20260509g"></script>
+<script src="js/cvcAnalysis.js?v=20260511c"></script>
+<script src="js/sqxViewCreator.js?v=20260509l"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

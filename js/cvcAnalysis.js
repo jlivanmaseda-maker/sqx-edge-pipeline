@@ -14,10 +14,10 @@ const CVC_COLS = {
   dd_abs:  ['Drawdown', 'MaxDrawdown'],
   dd_pct:  ['Max DD %', 'MaxDDPct', 'Drawdown %', 'Max Drawdown %'],
   trades:  ['# of trades', 'NumTrades', 'Trades', 'Number of trades'],
-  trades_long:  ['# of trades Long', '# of Trades Long', 'NumberOfTrades Long', '# trades Long', 'Trades Long'],
-  trades_short: ['# of trades Short', '# of Trades Short', 'NumberOfTrades Short', '# trades Short', 'Trades Short'],
-  np_long:      ['Net profit Long', 'NetProfit Long', 'NP Long'],
-  np_short:     ['Net profit Short', 'NetProfit Short', 'NP Short'],
+  trades_long:  ['# of trades Long', '# of trades (Long)', '# of Trades Long', '# of Trades (Long)', 'NumberOfTrades Long', '# trades Long', 'Trades Long'],
+  trades_short: ['# of trades Short', '# of trades (Short)', '# of Trades Short', '# of Trades (Short)', 'NumberOfTrades Short', '# trades Short', 'Trades Short'],
+  np_long:      ['Net profit Long', 'Net profit (Long)', 'NetProfit Long', 'NP Long'],
+  np_short:     ['Net profit Short', 'Net profit (Short)', 'NetProfit Short', 'NP Short'],
   win_pct: ['Winning Percent', 'Winning Percentage', 'WinPct'],
   r_exp:   ['R Expectancy', 'RExpectancy'],
   stag:    ['Stagnation', 'StagnationDays', 'Stagnation in Days'],
@@ -125,8 +125,15 @@ const CVC_STATE = {
     direction: 'long_only',
     minBlocksPerRegime: 2,
     long_only: {
+      // Régimen propio: BULL. Bots LONG-only deben ganar en BULL.
       BULL:  { pass: 1.5, strong: 2.5 },
       BEAR:  { pass: 0.0, strong: 1.0 },
+      RANGE: { pass: 0.0, strong: 1.0 },
+    },
+    short_only: {
+      // Espejo de long_only: régimen propio es BEAR. Bots SHORT-only deben ganar en BEAR.
+      BULL:  { pass: 0.0, strong: 1.0 },
+      BEAR:  { pass: 1.5, strong: 2.5 },
       RANGE: { pass: 0.0, strong: 1.0 },
     },
     long_short: {
@@ -138,6 +145,7 @@ const CVC_STATE = {
   egtMinTradesPerBlock: 0,                    // bloques con < N trades se ignoran del cálculo
   multipliers: { pf: 1.05, ret_dd: 0.95, dd_pct: 1.20, trades: 0.70 },
   filters: { minScore: 0, family: 'all', search: '', oosStableOnly: false, egtCompliantOnly: false, noNegWorstYear: false, healthOK: false, coherenceOK: false },
+  ddHardMax: 1.5,  // DD% máximo absoluto para pasar filtros HARD del Score Consolidado
   sortKey: 'score',
   sortDir: 'desc',
   forwardAssumePassed: true, // asumir que "PASSED" en CSV implica forward positivo
@@ -153,6 +161,7 @@ function cvcLoadLS() {
     if (s.regimeStartDate) CVC_STATE.regimeStartDate = s.regimeStartDate;
     if (s.regimeEndDate) CVC_STATE.regimeEndDate = s.regimeEndDate;
     if (s.egtThresholds) CVC_STATE.egtThresholds = Object.assign(CVC_STATE.egtThresholds, s.egtThresholds);
+    if (s.ddHardMax != null) CVC_STATE.ddHardMax = s.ddHardMax;
   } catch(e) {}
 }
 function cvcSaveLS() {
@@ -162,6 +171,7 @@ function cvcSaveLS() {
       regimeStartDate: CVC_STATE.regimeStartDate,
       regimeEndDate: CVC_STATE.regimeEndDate,
       egtThresholds: CVC_STATE.egtThresholds,
+      ddHardMax: CVC_STATE.ddHardMax,
     }));
   } catch(e) {}
 }
@@ -343,9 +353,9 @@ async function cvcLoadChampionCSV(file) {
   const detected = cvcDetectDirection(CVC_STATE.champion);
   CVC_STATE.directionDetected = detected;
   // Aplicar al EGT thresholds si la confidence es alta o media (no override manual)
+  // Soporta long_only, short_only, long_short (los 3 con umbrales propios)
   if (!CVC_STATE.directionManualOverride && detected.dir !== 'unknown') {
-    CVC_STATE.egtThresholds.direction = detected.dir === 'short_only' ? 'long_only' : detected.dir;
-    // Nota: short_only no tiene umbrales propios todavía; usar long_only como base
+    CVC_STATE.egtThresholds.direction = detected.dir;
     cvcSaveLS();
   }
   cvcRenderAll();
@@ -593,6 +603,34 @@ function cvcMonthIndex(dateStr, startStr) {
   return (parseInt(m[1], 10) - parseInt(ms[1], 10)) * 12 + (parseInt(m[2], 10) - parseInt(ms[2], 10));
 }
 
+// Convierte índice mensual → 'YYYY-MM' dado el start del catálogo
+function cvcMonthLabel(idx, startStr) {
+  const ms = (startStr || '').match(/^(\d{4})-(\d{2})/);
+  if (!ms) return '';
+  let y = parseInt(ms[1], 10);
+  let m = parseInt(ms[2], 10) + idx;
+  y += Math.floor((m - 1) / 12);
+  m = ((m - 1) % 12) + 1;
+  if (m <= 0) { m += 12; y -= 1; }
+  return y + '-' + String(m).padStart(2, '0');
+}
+
+// ===================================================================
+// Defaults inteligentes de rango de mining según tipo de activo
+// ===================================================================
+// Convención Reformia Algotrading:
+//   Índices (NDX, US30, US500, GER40, SPX, USTEC): 2018-01-01 → 2026-04-01
+//   Forex Majors/Minors + Oro:                    2017-01-01 → 2026-04-01
+// El usuario puede sobreescribir en los inputs y persistir vía localStorage.
+function cvcDefaultMiningRange(symbol) {
+  const s = (symbol || '').toUpperCase();
+  // Índices: data desde 2018-01
+  const isIndex = /(?:USTEC|NDX|US30|US500|SPX|GER40|DAX|UK100|JP225|FRA40|NAS100|SPI|HK50|ES35)/.test(s);
+  if (isIndex) return { start: '2018-01-01', end: '2026-04-01', kind: 'index' };
+  // Forex + Oro: data desde 2017-01
+  return { start: '2017-01-01', end: '2026-04-01', kind: 'fx_gold' };
+}
+
 // Calcula bloques de régimen dado un activo, periodo y N bloques.
 // Devuelve [{idx, startDate, endDate, pctChange, vol, regime, group}, ...]
 function cvcComputeRegimeBlocks() {
@@ -622,8 +660,10 @@ function cvcComputeRegimeBlocks() {
   for (let i = 0; i < nBlocks; i++) {
     const s = sIdx + Math.round(i * blockMonths);
     const e = sIdx + Math.round((i + 1) * blockMonths);
+    const sLabel = cvcMonthLabel(s, data.start);
+    const eLabel = cvcMonthLabel(e, data.start);
     if (e >= data.v.length || data.v[s] == null || data.v[e] == null) {
-      blocks.push({ idx: i+1, pctChange: null, vol: null, regime: null, group: null });
+      blocks.push({ idx: i+1, startMonth: sLabel, endMonth: eLabel, pctChange: null, vol: null, regime: null, group: null });
       continue;
     }
     const pct = ((data.v[e] / data.v[s]) - 1) * 100;
@@ -637,7 +677,7 @@ function cvcComputeRegimeBlocks() {
     const vol = Math.sqrt(variance) * Math.sqrt(12) * 100;
     const regime = cvcClassifyRegime(pct);
     const group = cvcRegimeGroup(regime);
-    blocks.push({ idx: i+1, pctChange: pct, vol, regime, group });
+    blocks.push({ idx: i+1, startMonth: sLabel, endMonth: eLabel, pctChange: pct, vol, regime, group });
   }
   CVC_STATE.regimeBlocks = blocks;
   CVC_STATE.regimeReady = true;
@@ -965,6 +1005,12 @@ function cvcComputeConsolidatedScore(strategy, populationStats) {
   if (coh && coh.verdict === 'BROKEN') {
     hardFails.push('Coherencia BROKEN [' + coh.flags.join(', ') + ']');
   }
+  // 5. DD% absoluto: no puede superar el umbral hard configurable
+  // (default 1.5% — diseñado para portfolios de prop firms con DD límite ~10%)
+  const ddHardMax = (CVC_STATE.ddHardMax != null) ? CVC_STATE.ddHardMax : 1.5;
+  if (strategy.dd_pct != null && strategy.dd_pct > ddHardMax) {
+    hardFails.push('DD% ' + strategy.dd_pct.toFixed(2) + '% > ' + ddHardMax + '% hard');
+  }
   const passedHard = hardFails.length === 0;
 
   // === FASE 2: score compuesto ===
@@ -973,13 +1019,20 @@ function cvcComputeConsolidatedScore(strategy, populationStats) {
     if (v == null || min == null || max == null || max <= min) return 0;
     return Math.max(0, Math.min(1, (v - min) / (max - min)));
   };
+  // DD% se invierte: menor DD% → score mayor
+  const normInverted = (v, min, max) => {
+    if (v == null || min == null || max == null || max <= min) return 0;
+    return Math.max(0, Math.min(1, 1 - (v - min) / (max - min)));
+  };
   const ps = populationStats || {};
   const breakdown = {
-    np:      { weight: 25, value: strategy.np,     score: 25 * norm(strategy.np,     ps.npMin,     ps.npMax) },
+    np:      { weight: 20, value: strategy.np,     score: 20 * norm(strategy.np,     ps.npMin,     ps.npMax) },
     pf:      { weight: 20, value: strategy.pf,     score: 20 * norm(strategy.pf,     ps.pfMin,     ps.pfMax) },
-    ret_dd:  { weight: 20, value: strategy.ret_dd, score: 20 * norm(strategy.ret_dd, ps.retddMin,  ps.retddMax) },
+    ret_dd:  { weight: 15, value: strategy.ret_dd, score: 15 * norm(strategy.ret_dd, ps.retddMin,  ps.retddMax) },
     r_exp:   { weight: 15, value: strategy.r_exp,  score: 15 * norm(strategy.r_exp,  ps.rexpMin,   ps.rexpMax) },
     trades:  { weight: 10, value: strategy.trades, score: 10 * norm(strategy.trades, ps.tradesMin, ps.tradesMax) },
+    // DD% invertido: menor DD% (mejor) → score mayor
+    dd_pct:  { weight: 10, value: strategy.dd_pct, score: 10 * normInverted(strategy.dd_pct, ps.ddpctMin, ps.ddpctMax), inverted: true },
     sharpe:  { weight:  5, value: strategy.sharpe, score:  5 * norm(strategy.sharpe, ps.sharpeMin, ps.sharpeMax) },
     win_pct: { weight:  5, value: strategy.win_pct,score:  5 * norm(strategy.win_pct, ps.winMin,   ps.winMax) },
   };
@@ -1055,6 +1108,7 @@ function cvcComputePopulationStats(challengers) {
   const fields = [
     ['np', 'np'], ['pf', 'pf'], ['ret_dd', 'retdd'], ['r_exp', 'rexp'],
     ['trades', 'trades'], ['sharpe', 'sharpe'], ['win_pct', 'win'],
+    ['dd_pct', 'ddpct'],
   ];
   fields.forEach(([key, alias]) => {
     const values = challengers.map(c => c[key]).filter(v => v != null && !isNaN(v));
@@ -1451,16 +1505,40 @@ function cvcRenderOOSCell(name) {
   if (oos.maxNegStreak) lines.push('Streak negativo máx: ' + oos.maxNegStreak);
   if (oos.hasNegWorstYear) lines.push('⚠ Año perdedor real: Worst Year Profit min = ' + (oos.minWorstYear != null ? oos.minWorstYear.toFixed(2) : '?'));
 
+  // Si hay regimeBlocks con fechas, mostrar mapa antiguo/reciente de los OOS negativos
+  const rb = CVC_STATE.regimeReady ? CVC_STATE.regimeBlocks : null;
+  if (rb && rb.length === oos.total && oos.blocks) {
+    const curYear = new Date().getFullYear();
+    const negOld = [], negRecent = [];
+    oos.blocks.forEach((v, i) => {
+      if (v == null || v >= 0) return;
+      const blk = rb[i];
+      const endYear = blk && blk.endMonth ? parseInt(blk.endMonth.slice(0,4), 10) : null;
+      const yearsAgo = endYear ? (curYear - endYear) : null;
+      const tag = 'OOS' + (i+1) + (blk && blk.startMonth ? ' (' + blk.startMonth + '→' + blk.endMonth + ', -' + yearsAgo + 'a)' : '');
+      if (yearsAgo != null && yearsAgo >= 5) negOld.push(tag); else negRecent.push(tag);
+    });
+    if (negOld.length || negRecent.length) {
+      lines.push('');
+      if (negOld.length) lines.push('Bloques negativos ANTIGUOS (>=5a): ' + negOld.join(', '));
+      if (negRecent.length) lines.push('⚠ Bloques negativos RECIENTES (<5a): ' + negRecent.join(', '));
+    }
+  }
+
   // Render por bloque si hay multi-métrica
   const all = oos.blocksAll;
   if (all && Object.keys(all).length > 1) {
     lines.push('');
     lines.push('Por bloque:');
     const metricsToShow = oos.availableMetrics.slice(0, 6); // limitar a 6 para no saturar
-    const headerLine = 'Block | ' + metricsToShow.map(m => m.slice(0, 12).padEnd(12)).join(' | ');
+    const hasPeriod = rb && rb.length === oos.total;
+    const headerLine = 'Block | ' + (hasPeriod ? 'Periodo         | ' : '') + metricsToShow.map(m => m.slice(0, 12).padEnd(12)).join(' | ');
     lines.push(headerLine);
     for (let i = 0; i < oos.total; i++) {
+      const blk = hasPeriod ? rb[i] : null;
+      const periodo = blk && blk.startMonth ? (blk.startMonth + '→' + blk.endMonth).padEnd(15) : '';
       const row = ('OOS' + (i+1)).padEnd(5) + ' | ' +
+        (hasPeriod ? periodo + ' | ' : '') +
         metricsToShow.map(m => {
           const v = (all[m] || [])[i];
           return v == null ? '—'.padEnd(12)
@@ -1641,15 +1719,20 @@ function cvcRenderVerdict() {
   const consolidated = cvcRankConsolidated(list, 5);
   const consolidatedHtml = cvcRenderConsolidatedTop(consolidated);
 
+  // Veredicto resumido (1 línea, sin duplicar info del Top Consolidado)
+  const veredictShort =
+    fullPass.length > 0 ? '<span style="color:var(--green);">✓ ADOPTAR Challenger.</span> ' + fullPass.length + ' pasa(n) todos los criterios aplicables.' :
+    formalAll.length > 0 ? '<span style="color:var(--yellow);">~ Posible adopción.</span> ' + formalAll.length + ' pasa(n) criterios formales (revisar Forward).' :
+    '<span style="color:var(--red);">✗ MANTENER CHAMPION.</span> Ninguna pasa los criterios.';
+
   el.innerHTML =
     consolidatedHtml +
-    '<div class="cvc-verdict ' + vCls + '">' + veredict + '</div>' +
-    '<div class="cvc-toppicks-wrap">' + tpHtml + '</div>' +
+    '<div class="cvc-verdict-short">' + veredictShort + naWarn + '</div>' +
     '<div class="cvc-next-steps">' +
       '<strong>Próximos pasos pendientes:</strong>' +
       '<ol>' +
-        '<li>Test de Descomposición sobre las top candidatas (Coef_Emergencia ≤ 1.25, PF_solo_edge ≥ 1.20).</li>' +
-        '<li>Filter by Correlation entre Champion + top picks (threshold 0.7).</li>' +
+        '<li>Test de Descomposición sobre la candidata adoptada (Coef_Emergencia ≤ 1.25, PF_solo_edge ≥ 1.20).</li>' +
+        '<li>Filter by Correlation con strategies del stock (threshold 0.7).</li>' +
         '<li>Verificación final en MT5 con datos reales del bróker (discrepancia &lt;10% en NP, PF, DD%).</li>' +
         '<li>Demo 30 días con sizing real antes de operativa real.</li>' +
       '</ol>' +
@@ -1661,11 +1744,15 @@ function cvcRenderConsolidatedTop(consolidated) {
   if (!consolidated || !consolidated.totalEvaluated) return '';
   const { top, rest, failedHard, totalEvaluated } = consolidated;
 
-  // Header con resumen
+  // Header con resumen + control DD% hard max
+  const ddMaxVal = CVC_STATE.ddHardMax != null ? CVC_STATE.ddHardMax : 1.5;
   const header =
     '<div class="cvc-consolidated-head">' +
       '<span class="cvc-consolidated-title">🏆 TOP CONSOLIDADO (Filtros HARD + Score 0-100)</span>' +
       '<span class="cvc-consolidated-stats">' +
+        '<label style="font-size:11px;color:var(--text2);margin-right:10px;" title="DD% máximo absoluto para pasar filtros HARD. Default 1.5% para portfolios prop firm con DD límite ~10%.">' +
+          'DD% máx: <input type="number" id="cvc-dd-hard-max" min="0" max="20" step="0.1" value="' + ddMaxVal + '" style="width:55px;padding:2px 5px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:11px;border-radius:3px;">' +
+        '</label>' +
         totalEvaluated + ' evaluadas · ' +
         '<span style="color:var(--green);font-weight:700;">' + (top.length + rest.length) + ' pasan filtros HARD</span> · ' +
         '<span style="color:var(--red);">' + failedHard.length + ' descartadas</span>' +
@@ -1690,36 +1777,52 @@ function cvcRenderConsolidatedTop(consolidated) {
     return '<span class="' + cls + '">' + sc.toFixed(0) + '</span>';
   };
 
+  // Color del DD% relativo a la población: verde si en mejor 33%, rojo si en peor 33%
+  const ddMin = consolidated.populationStats.ddpctMin;
+  const ddMax = consolidated.populationStats.ddpctMax;
+  const ddTier = (dd) => {
+    if (dd == null || ddMin == null || ddMax == null || ddMax <= ddMin) return 'mid';
+    const r = (dd - ddMin) / (ddMax - ddMin);
+    return r < 0.33 ? 'good' : r > 0.66 ? 'bad' : 'mid';
+  };
+
   const rows = top.map((entry, i) => {
     const s = entry.strategy;
     const sd = entry.scoreData;
-    // Top 3 razones positivas (mayor score)
-    const topReasons = Object.entries(sd.breakdown)
-      .filter(([_, b]) => b.score > 0)
-      .sort((a, b) => b[1].score - a[1].score)
-      .slice(0, 3)
-      .map(([k, b]) => k.toUpperCase() + ' ' + fmt(b.value, 2));
-    // Bonuses positivos
-    const goodBonuses = sd.bonuses.filter(b => b.delta > 0).map(b => b.label);
-    const badBonuses = sd.bonuses.filter(b => b.delta < 0).map(b => b.label + ' (' + b.delta + ')');
+    const ddCls = 'cvc-cons-dd-' + ddTier(s.dd_pct);
+    // Bonuses ordenados: positivos primero, luego negativos
+    const goodB = sd.bonuses.filter(b => b.delta > 0).map(b => b.label);
+    const badB  = sd.bonuses.filter(b => b.delta < 0).map(b => b.label);
+    const badges = [];
+    if (sd.egt) badges.push('EGT:' + sd.egt.verdict);
+    if (sd.coh) badges.push('Coh:' + sd.coh.verdict);
+    if (sd.health) badges.push('Salud:' + sd.health.status);
 
     return '<div class="cvc-consolidated-row">' +
       '<div class="cvc-consolidated-rank">#' + (i+1) + '</div>' +
       '<div class="cvc-consolidated-body">' +
+        // Línea 1: nombre + score + indicators
         '<div class="cvc-consolidated-name">' +
           '<strong>' + (s.name || '–') + '</strong> ' +
           scorePill(sd.score) +
-          ' <span style="color:var(--text2);font-size:11px;">base ' + sd.baseScore.toFixed(0) +
-          (sd.totalBonus !== 0 ? ' · ajuste ' + (sd.totalBonus > 0 ? '+' : '') + sd.totalBonus.toFixed(0) : '') + '</span>' +
+          ' <span class="cvc-cons-edge">' + (s.indicators || '–') + '</span>' +
         '</div>' +
-        '<div class="cvc-consolidated-stats-row">' +
-          'NP $' + fmt(s.np) + ' · PF ' + fmt(s.pf, 2) + ' · R/DD ' + fmt(s.ret_dd, 2) +
-          ' · R Exp ' + fmt(s.r_exp, 2) + ' · ' + fmt(s.trades, 0) + ' trades' +
+        // Línea 2: métricas clave en grid (DD% destacado por color)
+        '<div class="cvc-consolidated-metrics">' +
+          '<span><span class="cvc-cons-lbl">NP</span> $' + fmt(s.np) + '</span>' +
+          '<span><span class="cvc-cons-lbl">PF</span> ' + fmt(s.pf, 2) + '</span>' +
+          '<span><span class="cvc-cons-lbl">R/DD</span> ' + fmt(s.ret_dd, 2) + '</span>' +
+          '<span class="' + ddCls + '"><span class="cvc-cons-lbl">DD%</span> ' + fmt(s.dd_pct, 2) + '%</span>' +
+          '<span><span class="cvc-cons-lbl">RExp</span> ' + fmt(s.r_exp, 2) + '</span>' +
+          '<span><span class="cvc-cons-lbl">T</span> ' + fmt(s.trades, 0) + '</span>' +
         '</div>' +
-        (topReasons.length ? '<div class="cvc-consolidated-reasons">⭐ <strong>Top métricas:</strong> ' + topReasons.join(' · ') + '</div>' : '') +
-        (goodBonuses.length ? '<div class="cvc-consolidated-bonus-good">✓ ' + goodBonuses.join(' · ') + '</div>' : '') +
-        (badBonuses.length ? '<div class="cvc-consolidated-bonus-bad">⚠ ' + badBonuses.join(' · ') + '</div>' : '') +
-        (sd.warnings.length ? '<div class="cvc-consolidated-warnings">📋 A revisar: ' + sd.warnings.join(', ') + '</div>' : '') +
+        // Línea 3: badges (EGT, Coh, Salud) + bonuses positivos/negativos compactos
+        '<div class="cvc-consolidated-badges">' +
+          badges.map(b => '<span class="cvc-cons-badge">' + b + '</span>').join('') +
+          (goodB.length ? '<span class="cvc-cons-good">+ ' + goodB.join(', ') + '</span>' : '') +
+          (badB.length ? '<span class="cvc-cons-bad">− ' + badB.join(', ') + '</span>' : '') +
+        '</div>' +
+        (sd.warnings.length ? '<div class="cvc-consolidated-warnings">⚠ ' + sd.warnings.join(' · ') + '</div>' : '') +
       '</div>' +
     '</div>';
   }).join('');
@@ -1853,22 +1956,36 @@ function cvcRenderRegimeSection() {
   }
 
   // Auto-detect del activo desde el Symbol del primer challenger (si aún no está seteado)
-  if (!CVC_STATE.regimeAsset && CVC_STATE.challengers.length) {
-    const sym = CVC_STATE.challengers[0].symbol || (CVC_STATE.champion && CVC_STATE.champion.symbol);
-    const detected = cvcResolveAsset(sym, cvcCatalogKeys());
+  const symbolDetected = (CVC_STATE.challengers[0] && CVC_STATE.challengers[0].symbol) ||
+                         (CVC_STATE.champion && CVC_STATE.champion.symbol) || '';
+  if (!CVC_STATE.regimeAsset && symbolDetected) {
+    const detected = cvcResolveAsset(symbolDetected, cvcCatalogKeys());
     if (detected) CVC_STATE.regimeAsset = detected;
   }
   if (sel && CVC_STATE.regimeAsset) sel.value = CVC_STATE.regimeAsset;
+
+  // Auto-setear rango de mining según tipo de activo (índices 2018, FX/oro 2017)
+  // Solo si el usuario aún no lo ha configurado manualmente
+  if (symbolDetected && (!CVC_STATE.regimeStartDate || !CVC_STATE.regimeEndDate)) {
+    const def = cvcDefaultMiningRange(symbolDetected);
+    if (!CVC_STATE.regimeStartDate) CVC_STATE.regimeStartDate = def.start;
+    if (!CVC_STATE.regimeEndDate) CVC_STATE.regimeEndDate = def.end;
+  }
 
   // Sincronizar inputs de fecha y EGT thresholds
   const startInp = document.getElementById('cvc-regime-start');
   const endInp = document.getElementById('cvc-regime-end');
   const strongInp = document.getElementById('cvc-egt-strong');
   const weakInp = document.getElementById('cvc-egt-weak');
+  const dirSelSync = document.getElementById('cvc-egt-direction');
   if (startInp && CVC_STATE.regimeStartDate) startInp.value = CVC_STATE.regimeStartDate;
   if (endInp && CVC_STATE.regimeEndDate) endInp.value = CVC_STATE.regimeEndDate;
   if (strongInp && !strongInp.value) strongInp.value = CVC_STATE.egtThresholds.strong;
   if (weakInp && weakInp.value === '') weakInp.value = CVC_STATE.egtThresholds.weak;
+  // Sincronizar dropdown de dirección con la auto-detectada (a no ser que el usuario haya hecho override)
+  if (dirSelSync && CVC_STATE.egtThresholds.direction) {
+    dirSelSync.value = CVC_STATE.egtThresholds.direction;
+  }
 
   // Info del activo
   const info = document.getElementById('cvc-regime-asset-info');
@@ -1890,17 +2007,30 @@ function cvcRenderRegimeBlocks() {
     return;
   }
   const blocks = CVC_STATE.regimeBlocks;
+  // Año actual para etiquetar "antiguo" vs "reciente"
+  const curYear = new Date().getFullYear();
   const html =
-    '<div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Régimen del activo <strong style="color:var(--accent);">' + CVC_STATE.regimeAsset + '</strong> en cada bloque OOS (' + blocks.length + ' bloques)</div>' +
+    '<div style="font-size:12px;color:var(--text2);margin-bottom:6px;">Régimen del activo <strong style="color:var(--accent);">' + CVC_STATE.regimeAsset + '</strong> en cada bloque OOS (' + blocks.length + ' bloques · rango ' + (CVC_STATE.regimeStartDate || '?') + ' → ' + (CVC_STATE.regimeEndDate || '?') + ')</div>' +
     '<table class="cat-table cvc-table">' +
-      '<thead><tr><th>Bloque</th><th>%change</th><th>Vol anual</th><th>Régimen</th><th>Grupo EGT</th></tr></thead>' +
+      '<thead><tr><th>Bloque</th><th>Periodo</th><th>Antig.</th><th>%change</th><th>Vol anual</th><th>Régimen</th><th>Grupo EGT</th></tr></thead>' +
       '<tbody>' +
       blocks.map(b => {
         const cls = b.group === 'BULL' ? 'cvc-regime-bull' :
                     b.group === 'BEAR' ? 'cvc-regime-bear' :
                     b.group === 'RANGE' ? 'cvc-regime-range' : '';
+        // Calcular antigüedad del bloque (años desde el fin del bloque)
+        let antig = '';
+        if (b.endMonth) {
+          const endYear = parseInt(b.endMonth.slice(0,4), 10);
+          const yearsAgo = curYear - endYear;
+          const ageCls = yearsAgo >= 5 ? 'cvc-age-old' : (yearsAgo >= 2 ? 'cvc-age-mid' : 'cvc-age-recent');
+          antig = '<span class="cvc-age-tag ' + ageCls + '" title="Hace ' + yearsAgo + ' años desde el final del bloque">' + (yearsAgo === 0 ? 'actual' : '−' + yearsAgo + 'a') + '</span>';
+        }
+        const periodo = b.startMonth && b.endMonth ? b.startMonth + ' → ' + b.endMonth : '–';
         return '<tr>' +
           '<td><strong>OOS' + b.idx + '</strong></td>' +
+          '<td style="font-size:11px;color:var(--text2);">' + periodo + '</td>' +
+          '<td>' + antig + '</td>' +
           '<td>' + (b.pctChange != null ? (b.pctChange > 0 ? '+' : '') + b.pctChange.toFixed(1) + '%' : '–') + '</td>' +
           '<td>' + (b.vol != null ? b.vol.toFixed(1) + '%' : '–') + '</td>' +
           '<td><span class="cvc-regime-pill ' + cls + '">' + (b.regime || '–') + '</span></td>' +
@@ -1937,7 +2067,8 @@ function cvcRenderEGTSummary() {
   evaluated.forEach(e => { if (counts[e.egt.verdict] != null) counts[e.egt.verdict]++; });
 
   const t = CVC_STATE.egtThresholds;
-  const dirLabel = t.direction === 'long_short' ? 'L+S' : 'Long-only';
+  const dirLabel = t.direction === 'long_short' ? 'L+S' :
+                   t.direction === 'short_only' ? 'Short-only' : 'Long-only';
   const dirThr = t[t.direction || 'long_only'];
   const thrSummary = 'BULL≥' + dirThr.BULL.pass + '·BEAR≥' + dirThr.BEAR.pass + '·RANGE≥' + dirThr.RANGE.pass + ' (' + dirLabel + ')';
 
@@ -2227,6 +2358,19 @@ function cvcExportMarkdown() {
   if (cohFilter) cohFilter.addEventListener('change', () => {
     CVC_STATE.filters.coherenceOK = cohFilter.checked;
     cvcRenderTable();
+  });
+
+  // Control DD% hard max (delegado por evento change en document porque
+  // el input está dentro de un panel renderizado dinámicamente)
+  document.addEventListener('change', (e) => {
+    if (e.target && e.target.id === 'cvc-dd-hard-max') {
+      const v = parseFloat(e.target.value);
+      if (!isNaN(v) && v >= 0) {
+        CVC_STATE.ddHardMax = v;
+        cvcSaveLS();
+        cvcRenderAll();
+      }
+    }
   });
 
   // Régime Analysis: cargar settings de localStorage al inicio
