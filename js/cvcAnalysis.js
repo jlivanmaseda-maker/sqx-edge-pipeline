@@ -927,6 +927,28 @@ function cvcComputeDirectionalCoherence(name) {
     else if (bullCheck === 'OK' && (bearCheck === 'OK' || !sufficientBEAR)) verdict = 'OK';
     else verdict = 'INSUFFICIENT_DATA';
 
+    // OK_MEAN_REVERT (LONG): bot LONG que gana sistemáticamente en RANGE (no en BULL).
+    // Reclasifica si:
+    //   - RANGE n>=4 + pos% >= 80% (régime dominante real)
+    //   - RANGE avg > BULL avg (RANGE es donde realmente gana)
+    //   - BULL "adverso" no es catastrófico:
+    //       · si BULL n>=2: BULL avg >= 0 (no pierde sistemáticamente)
+    //       · si BULL n=1: pérdida no supera 50% del avgAnnual
+    //   - No es BROKEN ni SUSPICIOUS
+    // Aplica independientemente de WEAK / INSUFFICIENT_DATA.
+    const lossCapMR_L = -0.5 * Math.abs(avgAnnual);
+    const bullCheckMR = stats.BULL.count === 0 ? true :
+                        stats.BULL.count >= 2 ? (stats.BULL.avg != null && stats.BULL.avg >= 0) :
+                        (stats.BULL.avg != null && stats.BULL.avg >= lossCapMR_L);
+    if (verdict !== 'BROKEN' && verdict !== 'SUSPICIOUS' &&
+        stats.RANGE.count >= 4 && stats.RANGE.posRatio >= 0.8 &&
+        stats.RANGE.avg != null && stats.RANGE.avg > 0 &&
+        (stats.BULL.avg == null || stats.RANGE.avg > stats.BULL.avg) &&
+        bullCheckMR) {
+      verdict = 'OK_MEAN_REVERT';
+      flags.push('MEAN_REVERT_LONG');
+    }
+
   } else if (direction === 'long_short') {
     // Bull check: NP en BULL > 0
     if (sufficientBULL) {
@@ -962,6 +984,31 @@ function cvcComputeDirectionalCoherence(name) {
     else if (flags.length) verdict = 'WEAK';
     else if (bearCheck === 'OK' && (bullCheck === 'OK' || !sufficientBULL)) verdict = 'OK';
     else verdict = 'INSUFFICIENT_DATA';
+
+    // OK_MEAN_REVERT (SHORT): bot SHORT que gana sistemáticamente en RANGE (no en BEAR).
+    // Edge real: fade de rebotes técnicos en lateralidad y bull suave — su régime propio
+    // es RANGE, no BEAR (trend-following).
+    // Reclasifica si:
+    //   - RANGE n>=4 + pos% >= 80% (régime dominante real)
+    //   - RANGE avg > BEAR avg (RANGE es donde realmente gana, no BEAR)
+    //   - BEAR "adverso" no es catastrófico:
+    //       · si BEAR n>=2: BEAR avg >= 0 (no pierde sistemáticamente en BEAR)
+    //       · si BEAR n=1: pérdida no supera 50% del avgAnnual (un bloque malo OK,
+    //         pero NO si la pérdida es catastrófica indicando vulnerabilidad real)
+    //   - No es BROKEN ni SUSPICIOUS
+    // Aplica independientemente de WEAK / INSUFFICIENT_DATA.
+    const lossCapMR_S = -0.5 * Math.abs(avgAnnual);
+    const bearCheckMR = stats.BEAR.count === 0 ? true :
+                        stats.BEAR.count >= 2 ? (stats.BEAR.avg != null && stats.BEAR.avg >= 0) :
+                        (stats.BEAR.avg != null && stats.BEAR.avg >= lossCapMR_S);
+    if (verdict !== 'BROKEN' && verdict !== 'SUSPICIOUS' &&
+        stats.RANGE.count >= 4 && stats.RANGE.posRatio >= 0.8 &&
+        stats.RANGE.avg != null && stats.RANGE.avg > 0 &&
+        (stats.BEAR.avg == null || stats.RANGE.avg > stats.BEAR.avg) &&
+        bearCheckMR) {
+      verdict = 'OK_MEAN_REVERT';
+      flags.push('MEAN_REVERT_SHORT');
+    }
   }
 
   return {
@@ -1069,9 +1116,10 @@ function cvcComputeConsolidatedScore(strategy, populationStats) {
   }
   // Coherencia direccional
   if (coh) {
-    if (coh.verdict === 'OK')                 { bonuses.push({ label: 'Coherencia OK',         delta: +10 }); totalBonus += 10; }
-    else if (coh.verdict === 'SUSPICIOUS')    { bonuses.push({ label: 'BEAR_SUSPICIOUS',       delta: -15 }); totalBonus -= 15; }
-    else if (coh.verdict === 'WEAK')          { bonuses.push({ label: 'Coherencia WEAK',       delta: -3  }); totalBonus -=  3; }
+    if (coh.verdict === 'OK')                  { bonuses.push({ label: 'Coherencia OK',         delta: +10 }); totalBonus += 10; }
+    else if (coh.verdict === 'OK_MEAN_REVERT') { bonuses.push({ label: 'Coh OK mean-revert 🌊', delta: +5  }); totalBonus +=  5; }
+    else if (coh.verdict === 'SUSPICIOUS')     { bonuses.push({ label: 'Coh SUSPICIOUS',        delta: -15 }); totalBonus -= 15; }
+    else if (coh.verdict === 'WEAK')           { bonuses.push({ label: 'Coherencia WEAK',       delta: -3  }); totalBonus -=  3; }
   }
   // Stagnation extremo
   if (strategy.stag != null && strategy.stag > 730) {
@@ -1560,26 +1608,38 @@ function cvcRenderCoherenceCell(name) {
   if (!c) return '<span class="cvc-coh-pill cvc-coh-na" title="Sin datos régime">—</span>';
 
   const verdictMap = {
-    OK:                { cls: 'cvc-coh-ok',         icon: '✓',  txt: 'OK' },
-    SUSPICIOUS:        { cls: 'cvc-coh-suspicious', icon: '⚠',  txt: 'SUSP.' },
-    WEAK:              { cls: 'cvc-coh-weak',       icon: '⚠',  txt: 'WEAK' },
-    BROKEN:            { cls: 'cvc-coh-broken',     icon: '❌', txt: 'BROKEN' },
-    INSUFFICIENT_DATA: { cls: 'cvc-coh-na',         icon: '❓', txt: 'N/A' },
+    OK:                { cls: 'cvc-coh-ok',         icon: '✓',  txt: 'OK',          subtitle: 'trend-following coherente' },
+    OK_MEAN_REVERT:    { cls: 'cvc-coh-mean-revert',icon: '🌊', txt: 'OK 🌊',        subtitle: 'mean-revert: gana en RANGE (no en régimen direccional)' },
+    SUSPICIOUS:        { cls: 'cvc-coh-suspicious', icon: '⚠',  txt: 'SUSP.',       subtitle: 'patrón mixto, datos contradictorios' },
+    WEAK:              { cls: 'cvc-coh-weak',       icon: '⚠',  txt: 'WEAK',        subtitle: 'gana menos en régimen propio que en contrario' },
+    BROKEN:            { cls: 'cvc-coh-broken',     icon: '❌', txt: 'BROKEN',      subtitle: 'pierde sistemáticamente en su régimen propio' },
+    INSUFFICIENT_DATA: { cls: 'cvc-coh-na',         icon: '❓', txt: 'N/A',         subtitle: 'datos insuficientes' },
   };
   const v = verdictMap[c.verdict] || verdictMap.INSUFFICIENT_DATA;
 
   const fmt = (n) => n == null ? '–' : (typeof n === 'number' ? n.toFixed(2) : n);
   const fmtPct = (n) => n == null ? '–' : (n * 100).toFixed(0) + '%';
-  const tip = [
-    'Coherencia Direccional — ' + (c.direction === 'long_short' ? 'Long+Short' : c.direction === 'short_only' ? 'Short-only' : 'Long-only'),
+  const dirLabel = c.direction === 'long_short' ? 'Long+Short' :
+                   c.direction === 'short_only' ? 'Short-only' : 'Long-only';
+  const tipLines = [
+    'Coherencia Direccional — ' + dirLabel,
     'Veredicto: ' + c.verdict + (c.flags.length ? ' [' + c.flags.join(', ') + ']' : ''),
-    '',
-    'Avg anual del bot: ' + fmt(c.avgAnnual),
-    '',
-    'BULL: avg ' + fmt(c.stats.BULL.avg) + ' (n=' + c.stats.BULL.count + ', ratio ' + fmt(c.ratios.BULL) + ', pos ' + fmtPct(c.stats.BULL.posRatio) + ')',
-    'BEAR: avg ' + fmt(c.stats.BEAR.avg) + ' (n=' + c.stats.BEAR.count + ', ratio ' + fmt(c.ratios.BEAR) + ', pos ' + fmtPct(c.stats.BEAR.posRatio) + ')',
-    'RANGE: avg ' + fmt(c.stats.RANGE.avg) + ' (n=' + c.stats.RANGE.count + ')',
-  ].join('\n').replace(/"/g, '&quot;');
+  ];
+  if (v.subtitle) tipLines.push('→ ' + v.subtitle);
+  if (c.verdict === 'OK_MEAN_REVERT') {
+    tipLines.push('');
+    tipLines.push('💡 NOTA: este bot opera en dirección ' + (c.direction === 'short_only' ? 'SHORT' : 'LONG'));
+    tipLines.push('pero su edge real es mean-revert (fade en lateralidad).');
+    tipLines.push('Régime favorable: RANGE.');
+    tipLines.push('Régime adverso: ' + (c.direction === 'short_only' ? 'BEAR' : 'BULL') + ' fuerte sostenido (poco frecuente históricamente).');
+  }
+  tipLines.push('');
+  tipLines.push('Avg anual del bot: ' + fmt(c.avgAnnual));
+  tipLines.push('');
+  tipLines.push('BULL: avg ' + fmt(c.stats.BULL.avg) + ' (n=' + c.stats.BULL.count + ', ratio ' + fmt(c.ratios.BULL) + ', pos ' + fmtPct(c.stats.BULL.posRatio) + ')');
+  tipLines.push('BEAR: avg ' + fmt(c.stats.BEAR.avg) + ' (n=' + c.stats.BEAR.count + ', ratio ' + fmt(c.ratios.BEAR) + ', pos ' + fmtPct(c.stats.BEAR.posRatio) + ')');
+  tipLines.push('RANGE: avg ' + fmt(c.stats.RANGE.avg) + ' (n=' + c.stats.RANGE.count + ', pos ' + fmtPct(c.stats.RANGE.posRatio) + ')');
+  const tip = tipLines.join('\n').replace(/"/g, '&quot;');
 
   return '<span class="cvc-coh-pill ' + v.cls + '" title="' + tip + '">' + v.icon + ' ' + v.txt + '</span>';
 }
