@@ -30,6 +30,8 @@ const CVC_COLS = {
   avg_trade: ['Average Trade', 'AvgTrade'],
   exposure: ['Exposure Position', 'Exposure'],
   payout: ['Payout ratio', 'Payout Ratio', 'PayoutRatio'],
+  avg_bars: ['Avg. Bars in Trade', 'Avg Bars in Trade', 'Average # of Bars in Trade', 'Avg. # of Bars in Trade'],
+  avg_trades_per_month: ['Avg. Trades Per Month', 'Avg Trades Per Month', 'Average Trades Per Month'],
 };
 
 // ---------- Familias de indicadores (detección por substring, ampliable) ----------
@@ -297,6 +299,97 @@ function cvcDetectDirection(strategy) {
   return { dir: 'long_only', source: 'default', confidence: 'low' };
 }
 
+// ===================================================================
+// DETECCIÓN DE ARQUETIPO DEL EDGE
+// ===================================================================
+// Determina si el bot es trend-following, mean-revert, scalper o breakout.
+// Esto cambia cómo se debe interpretar la Coherencia Direccional:
+//   - Trend-following → debe ganar en su régime propio (prescriptivo)
+//   - Mean-revert     → gana en RANGE, no en régime direccional (informativo)
+//   - Scalper         → régime macro irrelevante, importa la volatilidad intradía
+//   - Breakout        → gana en alta volatilidad, régime macro secundario
+//
+// Inputs: strategy (con avg_bars, avg_trades_per_month, indicators, etc.)
+// Output: { archetype, confidence, reasons[] }
+function cvcDetectArchetype(strategy) {
+  if (!strategy) return { archetype: 'UNKNOWN', confidence: 'low', reasons: [] };
+
+  const avgBars = strategy.avg_bars;
+  const tradesPerMonth = strategy.avg_trades_per_month;
+  const indicators = (strategy.indicators || '').toLowerCase();
+  const name = (strategy.name || '').toLowerCase();
+  const reasons = [];
+
+  // ---------- 1. SCALPER detector ----------
+  // Trades muy cortos (<5 bars) Y alta frecuencia (>30 trades/mes) → scalper
+  if (avgBars != null && avgBars < 5 && tradesPerMonth != null && tradesPerMonth > 30) {
+    reasons.push('avg_bars=' + avgBars.toFixed(1) + ' < 5');
+    reasons.push('trades_per_month=' + tradesPerMonth.toFixed(1) + ' > 30');
+    return { archetype: 'SCALPER', confidence: 'high', reasons };
+  }
+  if (avgBars != null && avgBars < 3) {
+    reasons.push('avg_bars=' + avgBars.toFixed(1) + ' < 3 (muy corto)');
+    return { archetype: 'SCALPER', confidence: 'medium', reasons };
+  }
+
+  // ---------- 2. MEAN-REVERT detector ----------
+  // Patrones típicos:
+  //   - SuperTrend "is rising" + dirección SHORT (fade del rebote)
+  //   - SuperTrend "is falling" + dirección LONG (fade de la caída)
+  //   - Indicadores de soporte/resistencia + breakout reversal
+  //   - Bars cortos a medios (5-50) con frecuencia alta
+  const hasSuperTrend = /supertrend/.test(indicators);
+  const hasRsi = /\brsi\b/.test(indicators);
+  const hasStoch = /stoch/.test(indicators);
+  const hasBollinger = /bollinger|bb\b/.test(indicators);
+  const hasMeanRevertIndicator = hasRsi || hasStoch || hasBollinger;
+  // Heurística: SuperTrend en M5/M15/M30 con avg_bars corto típicamente es mean-revert fade
+  // (lo confirmamos también con verificación de coherencia OK_MEAN_REVERT en el caller)
+  if (avgBars != null && avgBars >= 5 && avgBars <= 30) {
+    if (hasSuperTrend) {
+      reasons.push('SuperTrend + avg_bars ' + avgBars.toFixed(1) + ' en zona intradía');
+      reasons.push('patrón típico de fade (SuperTrend rising/falling como señal contraria)');
+      return { archetype: 'MEAN_REVERT', confidence: 'medium', reasons };
+    }
+    if (hasMeanRevertIndicator) {
+      reasons.push('indicador mean-revert (RSI/Stoch/Bollinger)');
+      reasons.push('avg_bars ' + avgBars.toFixed(1) + ' en zona intradía');
+      return { archetype: 'MEAN_REVERT', confidence: 'medium', reasons };
+    }
+  }
+
+  // ---------- 3. BREAKOUT detector ----------
+  // ATR + Highest/Lowest (rupturas de rango)
+  const hasAtr = /\batr\b/.test(indicators);
+  const hasHighestLowest = /highest|lowest/.test(indicators);
+  if (hasAtr && hasHighestLowest && avgBars != null && avgBars >= 10 && avgBars <= 100) {
+    reasons.push('ATR + Highest/Lowest (señales de breakout)');
+    reasons.push('avg_bars ' + avgBars.toFixed(1));
+    return { archetype: 'BREAKOUT', confidence: 'medium', reasons };
+  }
+
+  // ---------- 4. TREND-FOLLOWING detector ----------
+  // Bars largos (>50) o indicadores claros de tendencia (MA cross, MACD, ADX>30)
+  // O símbolo de TF alto (H4, D1) con bars medios
+  if (avgBars != null && avgBars > 50) {
+    reasons.push('avg_bars ' + avgBars.toFixed(1) + ' > 50 (swing/posicional)');
+    return { archetype: 'TREND_FOLLOWING', confidence: 'medium', reasons };
+  }
+  const hasMa = /\bsma\b|\bema\b|\bma\b|moving\s*average/.test(indicators);
+  const hasMacd = /macd/.test(indicators);
+  const hasIchimoku = /ichimoku|kumo|tenkan|kijun/.test(indicators);
+  const hasLinReg = /linearregression|linreg/.test(indicators);
+  if (hasMa || hasMacd || hasIchimoku || hasLinReg) {
+    reasons.push('indicador tendencial (MA/MACD/Ichimoku/LinReg)');
+    if (avgBars != null) reasons.push('avg_bars ' + avgBars.toFixed(1));
+    return { archetype: 'TREND_FOLLOWING', confidence: 'medium', reasons };
+  }
+
+  // ---------- 5. Default ----------
+  if (avgBars != null) reasons.push('avg_bars ' + avgBars.toFixed(1) + ' sin patrón claro');
+  return { archetype: 'UNKNOWN', confidence: 'low', reasons };
+}
+
 // Convierte una fila CSV en objeto strategy
 function cvcRowToStrategy(headers, row) {
   const get = (key) => {
@@ -327,6 +420,8 @@ function cvcRowToStrategy(headers, row) {
     avg_trade:  cvcParseNum(get('avg_trade')),
     exposure:   cvcParseNum(get('exposure')),
     payout:     cvcParseNum(get('payout')),
+    avg_bars:             cvcParseNum(get('avg_bars')),
+    avg_trades_per_month: cvcParseNum(get('avg_trades_per_month')),
     indicators: get('indicators') || '',
     filters_result: get('filters') || '',
   };
@@ -1020,6 +1115,76 @@ function cvcComputeDirectionalCoherence(name) {
 }
 
 // ===================================================================
+// COHERENCIA CON VOLATILIDAD INTRADÍA
+// ===================================================================
+// Para bots SCALPER / MEAN_REVERT / BREAKOUT: el régime macro BULL/BEAR/RANGE
+// es menos relevante que la volatilidad intradía del activo.
+// Esta función calcula la correlación entre NP por bloque y vol anual por bloque.
+//
+// Veredictos:
+//   - VOL_POSITIVE: gana más en alta volatilidad (correlación > 0.3)
+//                   → coherente con scalper/breakout
+//   - VOL_NEGATIVE: gana más en baja volatilidad (correlación < -0.3)
+//                   → coherente con carry/mean-revert tranquilo
+//   - VOL_NEUTRAL:  correlación entre -0.3 y +0.3 (sin patrón claro)
+//   - INSUFFICIENT_DATA: < 4 bloques con datos válidos
+function cvcComputeVolatilityCoherence(name) {
+  const oos = cvcGetOOS(name);
+  if (!oos || !CVC_STATE.regimeReady) return null;
+  const regimeBlocks = CVC_STATE.regimeBlocks;
+  if (regimeBlocks.length !== oos.blocks.length) return null;
+
+  const npBlocks = oos.blocksAll['Net profit']
+                || oos.blocksAll['Net Profit']
+                || oos.blocksAll['NetProfit'];
+  if (!npBlocks || !npBlocks.length) return null;
+
+  // Pares (vol, np) válidos
+  const pairs = [];
+  npBlocks.forEach((np, i) => {
+    if (np == null) return;
+    const blk = regimeBlocks[i];
+    if (!blk || blk.vol == null) return;
+    pairs.push({ vol: blk.vol, np });
+  });
+  if (pairs.length < 4) return { verdict: 'INSUFFICIENT_DATA', correlation: null, n: pairs.length };
+
+  // Correlación de Pearson
+  const n = pairs.length;
+  const sumVol = pairs.reduce((s, p) => s + p.vol, 0);
+  const sumNp  = pairs.reduce((s, p) => s + p.np, 0);
+  const meanVol = sumVol / n;
+  const meanNp  = sumNp / n;
+  let num = 0, denomVol = 0, denomNp = 0;
+  pairs.forEach(p => {
+    const dv = p.vol - meanVol;
+    const dn = p.np - meanNp;
+    num += dv * dn;
+    denomVol += dv * dv;
+    denomNp += dn * dn;
+  });
+  const corr = (denomVol > 0 && denomNp > 0) ? num / Math.sqrt(denomVol * denomNp) : 0;
+
+  let verdict;
+  if (corr > 0.3)      verdict = 'VOL_POSITIVE';
+  else if (corr < -0.3) verdict = 'VOL_NEGATIVE';
+  else                  verdict = 'VOL_NEUTRAL';
+
+  // Stats: avg NP en cuartiles de vol (Q1 = baja, Q4 = alta)
+  const sorted = [...pairs].sort((a, b) => a.vol - b.vol);
+  const q1 = sorted.slice(0, Math.ceil(n / 2));
+  const q2 = sorted.slice(Math.floor(n / 2));
+  const avgLowVol  = q1.reduce((s, p) => s + p.np, 0) / q1.length;
+  const avgHighVol = q2.reduce((s, p) => s + p.np, 0) / q2.length;
+
+  return {
+    verdict, correlation: corr, n,
+    avgLowVol, avgHighVol,
+    minVol: sorted[0].vol, maxVol: sorted[n-1].vol,
+  };
+}
+
+// ===================================================================
 // SCORE CONSOLIDADO — combina todos los checks en un score 0-100
 // ===================================================================
 // Sistema de 2 fases:
@@ -1033,6 +1198,8 @@ function cvcComputeConsolidatedScore(strategy, populationStats) {
   const egt = CVC_STATE.regimeReady ? cvcComputeEGT(strategy.name) : null;
   const health = CVC_STATE.oosLoaded ? cvcComputeTemporalHealth(strategy.name) : null;
   const coh = CVC_STATE.regimeReady ? cvcComputeDirectionalCoherence(strategy.name) : null;
+  const arch = cvcDetectArchetype(strategy);
+  const volCoh = CVC_STATE.regimeReady ? cvcComputeVolatilityCoherence(strategy.name) : null;
 
   // === FASE 1: filtros HARD ===
   const hardFails = [];
@@ -1040,17 +1207,27 @@ function cvcComputeConsolidatedScore(strategy, populationStats) {
   if (ev.formalCount > 0 && ev.formalScore < ev.formalCount) {
     hardFails.push('CvC ' + ev.formalScore + '/' + ev.formalCount);
   }
-  // 2. EGT: no puede ser RISK
+  // 2. EGT: no puede ser RISK (relajado para no-trend-following)
   if (egt && egt.verdict === 'RISK') {
-    hardFails.push('EGT-RISK');
+    // EGT mide CAGR/DD por régime. Para SCALPER/BREAKOUT/MEAN_REVERT este test puede ser
+    // engañoso porque mide en escala mensual lo que el bot opera intradía.
+    if (arch.archetype === 'TREND_FOLLOWING' || arch.archetype === 'UNKNOWN') {
+      hardFails.push('EGT-RISK');
+    }
+    // Para mean-revert/scalper/breakout, EGT-RISK es solo penalización, no descalifica.
   }
   // 3. Salud Temporal: no puede ser declining (DD@close >15%)
   if (health && health.status === 'declining') {
     hardFails.push('Salud declining (DD@close ' + (health.ddAtClose * 100).toFixed(1) + '%)');
   }
-  // 4. Coherencia direccional: no puede ser BROKEN
+  // 4. Coherencia direccional BROKEN solo descalifica si el arquetipo es TREND_FOLLOWING.
+  // Para MEAN_REVERT/SCALPER/BREAKOUT, el régime macro BULL/BEAR no es el factor predictivo
+  // correcto — la verdadera coherencia se mide vs volatilidad intradía (cvcComputeVolatilityCoherence).
   if (coh && coh.verdict === 'BROKEN') {
-    hardFails.push('Coherencia BROKEN [' + coh.flags.join(', ') + ']');
+    if (arch.archetype === 'TREND_FOLLOWING' || arch.archetype === 'UNKNOWN') {
+      hardFails.push('Coherencia BROKEN [' + coh.flags.join(', ') + ']');
+    }
+    // Para mean-revert/scalper/breakout, BROKEN se reporta como warning, no descalifica.
   }
   // 5. DD% absoluto: no puede superar el umbral hard configurable
   // (default 1.5% — diseñado para portfolios de prop firms con DD límite ~10%)
@@ -1114,12 +1291,32 @@ function cvcComputeConsolidatedScore(strategy, populationStats) {
   if (oos && oos.hasNegWorstYear) {
     bonuses.push({ label: 'Worst Year < 0', delta: -5 }); totalBonus -= 5;
   }
-  // Coherencia direccional
+  // Coherencia direccional (peso ajustado según arquetipo)
+  // Para TREND_FOLLOWING la coherencia direccional pesa al máximo.
+  // Para MEAN_REVERT/SCALPER/BREAKOUT pesa la mitad (régime macro menos relevante).
   if (coh) {
-    if (coh.verdict === 'OK')                  { bonuses.push({ label: 'Coherencia OK',         delta: +10 }); totalBonus += 10; }
-    else if (coh.verdict === 'OK_MEAN_REVERT') { bonuses.push({ label: 'Coh OK mean-revert 🌊', delta: +5  }); totalBonus +=  5; }
-    else if (coh.verdict === 'SUSPICIOUS')     { bonuses.push({ label: 'Coh SUSPICIOUS',        delta: -15 }); totalBonus -= 15; }
-    else if (coh.verdict === 'WEAK')           { bonuses.push({ label: 'Coherencia WEAK',       delta: -3  }); totalBonus -=  3; }
+    const cohWeight = (arch.archetype === 'TREND_FOLLOWING' || arch.archetype === 'UNKNOWN') ? 1.0 : 0.5;
+    if (coh.verdict === 'OK')                  { const d = Math.round(10 * cohWeight); bonuses.push({ label: 'Coherencia OK',         delta: +d }); totalBonus += d; }
+    else if (coh.verdict === 'OK_MEAN_REVERT') { const d = Math.round( 5 * cohWeight); bonuses.push({ label: 'Coh OK mean-revert 🌊', delta: +d }); totalBonus += d; }
+    else if (coh.verdict === 'SUSPICIOUS')     { const d = Math.round(15 * cohWeight); bonuses.push({ label: 'Coh SUSPICIOUS',        delta: -d }); totalBonus -= d; }
+    else if (coh.verdict === 'WEAK')           { const d = Math.round( 3 * cohWeight); bonuses.push({ label: 'Coherencia WEAK',       delta: -d }); totalBonus -= d; }
+    else if (coh.verdict === 'BROKEN' && arch.archetype !== 'TREND_FOLLOWING' && arch.archetype !== 'UNKNOWN') {
+      // BROKEN no descalifica para no-trend-following pero penaliza fuerte como warning
+      bonuses.push({ label: 'Coh BROKEN (warn)', delta: -8 }); totalBonus -= 8;
+    }
+  }
+  // Coherencia con volatilidad intradía (peso inverso al direccional)
+  // Para SCALPER/BREAKOUT/MEAN_REVERT pesa más. Para TREND_FOLLOWING es secundaria.
+  if (volCoh && volCoh.verdict !== 'INSUFFICIENT_DATA') {
+    const volWeight = (arch.archetype === 'SCALPER' || arch.archetype === 'BREAKOUT') ? 1.0 :
+                      (arch.archetype === 'MEAN_REVERT') ? 0.5 :
+                      0.3;
+    // Bonus si la dependencia de vol es coherente con el arquetipo
+    if ((arch.archetype === 'SCALPER' || arch.archetype === 'BREAKOUT') && volCoh.verdict === 'VOL_POSITIVE') {
+      const d = Math.round(8 * volWeight); bonuses.push({ label: 'Vol-coh POSITIVE ↑', delta: +d }); totalBonus += d;
+    } else if (arch.archetype === 'MEAN_REVERT' && volCoh.verdict === 'VOL_NEGATIVE') {
+      const d = Math.round(5 * volWeight); bonuses.push({ label: 'Vol-coh NEGATIVE ↓', delta: +d }); totalBonus += d;
+    }
   }
   // Stagnation extremo
   if (strategy.stag != null && strategy.stag > 730) {
@@ -1465,7 +1662,9 @@ function cvcRenderTable() {
         '<th>C4<br>#t</th>' +
         (showOOS ? sortable('oos', 'OOS<br>blocks') : '') +
         (showOOS ? '<th>Salud<br>temporal</th>' : '') +
+        '<th>Arquetipo</th>' +
         (CVC_STATE.regimeReady ? '<th>Coherencia<br>direccional</th>' : '') +
+        (CVC_STATE.regimeReady ? '<th>Coh. Vol<br>intradía</th>' : '') +
         '<th>Indicators</th>' +
       '</tr></thead><tbody>' +
       rows.map(r => cvcRenderRow(r)).join('') +
@@ -1525,9 +1724,76 @@ function cvcRenderRow(r) {
     '<td>' + cvcCheckMark(ev.checks.trades) + '</td>' +
     (CVC_STATE.oosLoaded ? '<td>' + cvcRenderOOSCell(s.name) + '</td>' : '') +
     (CVC_STATE.oosLoaded ? '<td>' + cvcRenderHealthCell(s.name) + '</td>' : '') +
+    '<td>' + cvcRenderArchetypeCell(s) + '</td>' +
     (CVC_STATE.regimeReady ? '<td>' + cvcRenderCoherenceCell(s.name) + '</td>' : '') +
+    (CVC_STATE.regimeReady ? '<td>' + cvcRenderVolCoherenceCell(s.name) + '</td>' : '') +
     '<td style="font-size:11px;color:var(--text2);">' + (s.indicators || '') + '</td>' +
   '</tr>';
+}
+
+// Renderiza celda Arquetipo: pill con icono según TREND_FOLLOWING / MEAN_REVERT / SCALPER / BREAKOUT
+function cvcRenderArchetypeCell(strategy) {
+  const a = cvcDetectArchetype(strategy);
+  const map = {
+    TREND_FOLLOWING: { cls: 'cvc-arch-trend',    icon: '📈', txt: 'Trend' },
+    MEAN_REVERT:     { cls: 'cvc-arch-meanrev',  icon: '🌊', txt: 'Mean-rev' },
+    SCALPER:         { cls: 'cvc-arch-scalper',  icon: '⚡', txt: 'Scalper' },
+    BREAKOUT:        { cls: 'cvc-arch-breakout', icon: '💥', txt: 'Breakout' },
+    UNKNOWN:         { cls: 'cvc-arch-unknown',  icon: '❓', txt: 'N/A' },
+  };
+  const v = map[a.archetype] || map.UNKNOWN;
+  const conf = a.confidence === 'high' ? '' :
+               a.confidence === 'medium' ? ' (med)' :
+               ' (low)';
+  const tip = [
+    'Arquetipo: ' + a.archetype + ' (' + a.confidence + ')',
+    '',
+    'Razones detectadas:',
+    ...a.reasons.map(r => '  • ' + r),
+    '',
+    'Implicación sobre Coherencia Direccional:',
+    a.archetype === 'TREND_FOLLOWING'
+      ? '  → debe ganar en su régime propio (BULL para LONG, BEAR para SHORT)'
+      : a.archetype === 'MEAN_REVERT'
+      ? '  → gana en RANGE (fade en lateralidad). Régime direccional es secundario.'
+      : a.archetype === 'SCALPER'
+      ? '  → régime macro irrelevante. Coherencia con volatilidad intradía es lo que importa.'
+      : a.archetype === 'BREAKOUT'
+      ? '  → gana en alta volatilidad. Régime macro secundario.'
+      : '  → no clasificable, evaluar manualmente.',
+  ].join('\n').replace(/"/g, '&quot;');
+  return '<span class="cvc-arch-pill ' + v.cls + '" title="' + tip + '">' + v.icon + ' ' + v.txt + conf + '</span>';
+}
+
+// Renderiza celda Coherencia con volatilidad intradía
+function cvcRenderVolCoherenceCell(name) {
+  const v = cvcComputeVolatilityCoherence(name);
+  if (!v) return '<span class="cvc-coh-pill cvc-coh-na" title="Sin datos">—</span>';
+
+  const map = {
+    VOL_POSITIVE:      { cls: 'cvc-vol-pos',   icon: '↑', txt: 'Alta vol' },
+    VOL_NEGATIVE:      { cls: 'cvc-vol-neg',   icon: '↓', txt: 'Baja vol' },
+    VOL_NEUTRAL:       { cls: 'cvc-vol-neu',   icon: '~', txt: 'Neutro' },
+    INSUFFICIENT_DATA: { cls: 'cvc-coh-na',    icon: '❓', txt: 'N/A' },
+  };
+  const m = map[v.verdict] || map.INSUFFICIENT_DATA;
+  const fmt = (n) => n == null ? '–' : (typeof n === 'number' ? n.toFixed(2) : n);
+  const tip = [
+    'Coherencia con volatilidad intradía',
+    'Veredicto: ' + v.verdict,
+    'Correlación NP/Vol: ' + fmt(v.correlation),
+    '',
+    'Avg NP en bloques de baja vol: ' + fmt(v.avgLowVol),
+    'Avg NP en bloques de alta vol: ' + fmt(v.avgHighVol),
+    'Rango vol: ' + fmt(v.minVol) + '% — ' + fmt(v.maxVol) + '%',
+    'N bloques válidos: ' + v.n,
+    '',
+    'Interpretación:',
+    '  VOL_POSITIVE = gana más en alta volatilidad (scalper/breakout)',
+    '  VOL_NEGATIVE = gana más en baja volatilidad (carry/mean-revert tranquilo)',
+    '  VOL_NEUTRAL  = sin patrón claro de dependencia a la volatilidad',
+  ].join('\n').replace(/"/g, '&quot;');
+  return '<span class="cvc-vol-pill ' + m.cls + '" title="' + tip + '">' + m.icon + ' ' + m.txt + '</span>';
 }
 
 // Renderiza celda OOS — pill X/N coloreada según estabilidad/decay/worst-year.
