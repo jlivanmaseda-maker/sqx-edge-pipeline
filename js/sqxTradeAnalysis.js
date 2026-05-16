@@ -400,6 +400,178 @@
     return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0');
   }
 
+  // ====================================================================
+  // DETECCIÓN CAPA 1 / CAPA 2 — clasifica cada .sqx según metodología Nesnidal
+  // ====================================================================
+  //
+  // CAPA 1 (edge puro):
+  //   - ExitAfterBars=20 ON · Sin PT/SL/Trailing
+  //   - 100% trades cierran por EAB (close_type=19)
+  //   - avg_bars ≈ 20 (forzado por EAB)
+  //
+  // CAPA 2 (edge + filtros + gestión):
+  //   - ExitAfterBars OFF · PT + SL configurados con ATR (a veces Trailing)
+  //   - Trades cierran por SL (id=2) / PT (id=3) / TR (id=6)
+  //   - avg_bars varía libre (5-100)
+  //
+  // Híbrido / mixed: combinaciones raras (PT+EAB juntos, sin SL, etc.)
+  function detectLayer(parsed) {
+    if (!parsed || !parsed.trades || !parsed.trades.length) {
+      return { layer: 'unknown', confidence: 'low', reasons: ['sin trades'] };
+    }
+    const audit = (global.SQXParser && parsed.strategy_xml)
+      ? global.SQXParser.auditStrategyXml(parsed.strategy_xml)
+      : { exitAfterBars: 'NOT_FOUND', profitTarget: null, stopLoss: null };
+
+    // Señal 1: Auditoría XML
+    const eabRaw = String(audit.exitAfterBars || '');
+    const eabOn = eabRaw.startsWith('ON') || eabRaw === 'PRESENT_UNKNOWN';
+    const hasPT = audit.profitTarget && audit.profitTarget !== 'OFF' && audit.profitTarget !== 'None';
+    const hasSL = audit.stopLoss && audit.stopLoss !== 'OFF' && audit.stopLoss !== 'None';
+
+    // Señal 2: Distribución de close types
+    const closeCounts = {};
+    for (const t of parsed.trades) {
+      closeCounts[t.close_type] = (closeCounts[t.close_type] || 0) + 1;
+    }
+    const total = parsed.trades.length;
+    const eabPct = (closeCounts['EAB'] || 0) / total;
+    const slPct = (closeCounts['SL'] || 0) / total;
+    const ptPct = (closeCounts['PT'] || 0) / total;
+    const trPct = (closeCounts['TR'] || 0) / total;
+    const slPtTrPct = slPct + ptPct + trPct;
+
+    // Señal 3: Duración promedio de trades en bars (necesita TF)
+    const tfMin = detectTimeframeMinutes(parsed.header.chart_name);
+    const avgBars = (parsed.trades.reduce((s, t) => s + t.duration_seconds, 0) / total) / (tfMin * 60);
+
+    // Clasificación con confianza
+    const reasons = [];
+    let layer, confidence;
+
+    if (eabPct >= 0.95 && !hasPT && !hasSL) {
+      layer = 'capa1';
+      confidence = 'high';
+      reasons.push('EAB en ' + (eabPct * 100).toFixed(0) + '% de trades');
+      reasons.push('Sin PT/SL en XML');
+      reasons.push('avg_bars ' + avgBars.toFixed(1));
+    } else if (slPtTrPct >= 0.95 && hasPT && hasSL) {
+      layer = 'capa2';
+      confidence = 'high';
+      reasons.push('SL/PT/TR en ' + (slPtTrPct * 100).toFixed(0) + '% de trades');
+      reasons.push('PT=' + audit.profitTarget + ' · SL=' + audit.stopLoss);
+      reasons.push('avg_bars ' + avgBars.toFixed(1));
+    } else if (eabPct >= 0.7 && !hasPT) {
+      layer = 'capa1';
+      confidence = 'medium';
+      reasons.push('EAB en ' + (eabPct * 100).toFixed(0) + '% (no llega a 95%)');
+      reasons.push('Sin PT pero podría tener SL');
+    } else if (slPtTrPct >= 0.7 && (hasPT || hasSL)) {
+      layer = 'capa2';
+      confidence = 'medium';
+      reasons.push('SL/PT en ' + (slPtTrPct * 100).toFixed(0) + '% (no llega a 95%)');
+      reasons.push('Gestión configurada parcialmente');
+    } else {
+      layer = 'mixed';
+      confidence = 'low';
+      reasons.push('señales contradictorias: EAB ' + (eabPct * 100).toFixed(0) + '% · SL/PT ' + (slPtTrPct * 100).toFixed(0) + '% · hasPT=' + !!hasPT + ' · hasSL=' + !!hasSL);
+    }
+
+    return {
+      layer,
+      confidence,
+      reasons,
+      audit,
+      closeCounts,
+      eabPct, slPtTrPct, slPct, ptPct, trPct,
+      avgBars,
+      timeframeMin: tfMin,
+    };
+  }
+
+  // Detecta el "modo del mining" cargado a partir de las layers de cada .sqx
+  function detectMiningMode(parsedList) {
+    const layers = parsedList.map(p => ({ name: p.header.strategy_name || p.file_name, ...detectLayer(p) }));
+    const nCapa1 = layers.filter(l => l.layer === 'capa1').length;
+    const nCapa2 = layers.filter(l => l.layer === 'capa2').length;
+    const nMixed = layers.filter(l => l.layer === 'mixed').length;
+    const nUnknown = layers.filter(l => l.layer === 'unknown').length;
+
+    let mode, modeIcon, modeLabel, description, recommendation;
+    if (nCapa1 === 1 && nCapa2 >= 1 && nMixed === 0 && nUnknown === 0) {
+      mode = 'cvc_classic';
+      modeIcon = '🏆';
+      modeLabel = 'Champion vs Challenger (clásico Nesnidal)';
+      description = '1 template Capa 1 (= Champion) + ' + nCapa2 + ' candidatas Capa 2 (= Challengers)';
+      recommendation = 'Aplicar los 5 filtros consolidados (CvC + EGT v2 + Salud + 9/9 OOS + Recovery)';
+    } else if (nCapa1 >= 2 && nCapa2 === 0 && nMixed === 0) {
+      mode = 'portfolio_capa1';
+      modeIcon = '🧩';
+      modeLabel = 'Portfolio puro Capa 1';
+      description = nCapa1 + ' edges puros (todas con EAB · sin SL/TP)';
+      recommendation = 'Seleccionar por descorrelación NP-bloque. Útiles solo en prop firms SIN obligación de SL/TP.';
+    } else if (nCapa2 >= 2 && nCapa1 === 0 && nMixed === 0) {
+      mode = 'portfolio_capa2';
+      modeIcon = '🧩';
+      modeLabel = 'Portfolio puro Capa 2';
+      description = nCapa2 + ' candidatas con edge + filtros + gestión (SL/TP/Trailing)';
+      recommendation = 'Seleccionar por descorrelación + filtros 2-5 (EGT, Salud, OOS, Recovery)';
+    } else if (nUnknown > 0 || nMixed > 0) {
+      mode = 'mixed';
+      modeIcon = '⚠';
+      modeLabel = 'Mining mixto (revisar)';
+      description = nCapa1 + ' Capa 1 + ' + nCapa2 + ' Capa 2 + ' + nMixed + ' mixed + ' + nUnknown + ' unknown';
+      recommendation = 'Revisar individualmente. Las mixed suelen ser bugs de configuración del template.';
+    } else {
+      mode = 'unknown';
+      modeIcon = '❓';
+      modeLabel = 'Modo desconocido';
+      description = 'No se pudo clasificar';
+      recommendation = '';
+    }
+
+    return { mode, modeIcon, modeLabel, description, recommendation, layers, counts: { capa1: nCapa1, capa2: nCapa2, mixed: nMixed, unknown: nUnknown } };
+  }
+
+  // ─── HTML helpers ───────────────────────────────────────────────
+  function renderLayerBadge(layerInfo) {
+    if (!layerInfo) return '';
+    const map = {
+      capa1: { icon: '🔵', label: 'CAPA 1', cls: 'cvc-layer-capa1', color: '#3b82f6' },
+      capa2: { icon: '🟣', label: 'CAPA 2', cls: 'cvc-layer-capa2', color: '#a855f7' },
+      mixed: { icon: '⚠', label: 'MIXED', cls: 'cvc-layer-mixed', color: '#f59e0b' },
+      unknown: { icon: '❓', label: 'UNK', cls: 'cvc-layer-unknown', color: '#6b7280' },
+    };
+    const m = map[layerInfo.layer] || map.unknown;
+    const conf = layerInfo.confidence === 'high' ? '' : ' · ' + layerInfo.confidence;
+    const tooltip = (layerInfo.reasons || []).join(' · ');
+    return `<span class="cvc-layer-badge ${m.cls}" title="${tooltip}">${m.icon} ${m.label}${conf}</span>`;
+  }
+
+  function renderMiningModeBanner(modeInfo) {
+    if (!modeInfo) return '';
+    const colorMap = {
+      cvc_classic: { bg: 'rgba(34,197,94,.10)', border: 'rgba(34,197,94,.4)', txt: '#22c55e' },
+      portfolio_capa1: { bg: 'rgba(59,130,246,.10)', border: 'rgba(59,130,246,.4)', txt: '#60a5fa' },
+      portfolio_capa2: { bg: 'rgba(168,85,247,.10)', border: 'rgba(168,85,247,.4)', txt: '#c084fc' },
+      mixed: { bg: 'rgba(245,158,11,.10)', border: 'rgba(245,158,11,.4)', txt: '#f59e0b' },
+      unknown: { bg: 'rgba(107,114,128,.10)', border: 'rgba(107,114,128,.4)', txt: '#9ca3af' },
+    };
+    const c = colorMap[modeInfo.mode] || colorMap.unknown;
+    const counts = modeInfo.counts;
+    return `
+      <div style="padding:10px 14px;background:${c.bg};border:1px solid ${c.border};border-radius:6px;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span style="font-size:18px;">${modeInfo.modeIcon}</span>
+          <strong style="color:${c.txt};font-size:14px;">${modeInfo.modeLabel}</strong>
+          <span style="font-size:11px;color:var(--text2);">${counts.capa1} Capa 1 · ${counts.capa2} Capa 2${counts.mixed ? ' · ' + counts.mixed + ' mixed' : ''}${counts.unknown ? ' · ' + counts.unknown + ' unknown' : ''}</span>
+        </div>
+        <div style="font-size:12px;color:var(--text2);margin-top:4px;">${modeInfo.description}</div>
+        ${modeInfo.recommendation ? '<div style="font-size:11px;color:var(--text);margin-top:4px;"><strong>💡 Recomendación:</strong> ' + modeInfo.recommendation + '</div>' : ''}
+      </div>
+    `;
+  }
+
   /**
    * Análisis ONGOING DD trade-by-trade (complemento al filtro salud temporal por bloques).
    *
@@ -1285,11 +1457,16 @@
 
     const firstT = parsed.trades[0].open_time;
     const lastT = parsed.trades[parsed.trades.length - 1].close_time;
+    const layerInfo = detectLayer(parsed);
+    const badge = renderLayerBadge(layerInfo);
 
     return `
       <div class="cvc-forensics-header">
         <div>
-          <div style="font-size:14px;font-weight:600;color:var(--text);">${parsed.header.strategy_name || parsed.file_name}</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span>${parsed.header.strategy_name || parsed.file_name}</span>
+            ${badge}
+          </div>
           <div style="font-size:12px;color:var(--text2);">${parsed.header.symbol || '—'} · ${parsed.header.chart_name || '—'}</div>
           <div style="font-size:11px;color:var(--text2);">${firstT.toISOString().slice(0, 10)} → ${lastT.toISOString().slice(0, 10)} · ${parsed.trades.length} trades</div>
         </div>
@@ -1347,11 +1524,19 @@
       container.innerHTML = '<div class="cvc-empty-state">Carga uno o más archivos .sqx.</div>';
       return;
     }
+    // Detectar modo del mining + layer por strategy
+    const modeInfo = detectMiningMode(parsedList);
+    const layerByIdx = modeInfo.layers;
+
     const tabs = parsedList.map((p, i) => {
       const name = (p.header.strategy_name || p.file_name).replace(/^Strategy\s+/i, 'S_');
-      return `<button class="cvc-forensics-tab${i === 0 ? ' active' : ''}" data-fidx="${i}">${name}</button>`;
+      const layer = layerByIdx[i]?.layer;
+      const layerDot = layer === 'capa1' ? '🔵' : layer === 'capa2' ? '🟣' : layer === 'mixed' ? '⚠' : '';
+      return `<button class="cvc-forensics-tab${i === 0 ? ' active' : ''}" data-fidx="${i}" title="${layerByIdx[i]?.layer?.toUpperCase()}: ${(layerByIdx[i]?.reasons||[]).join(' · ')}">${layerDot} ${name}</button>`;
     }).join('');
+
     container.innerHTML = `
+      ${renderMiningModeBanner(modeInfo)}
       <div class="cvc-forensics-tabs">${tabs}</div>
       <div class="cvc-forensics-panel" id="cvc-forensics-panel"></div>
     `;
@@ -1386,5 +1571,10 @@
     selectDecorrelatedPortfolio,
     renderDecorrelationSection,
     wireDecorrelationSection,
+    // Detección Capa 1 / Capa 2
+    detectLayer,
+    detectMiningMode,
+    renderLayerBadge,
+    renderMiningModeBanner,
   };
 })(typeof window !== 'undefined' ? window : globalThis);

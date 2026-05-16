@@ -16,19 +16,21 @@
 (function (global) {
   'use strict';
 
-  // Los 4 magic markers observados son permutaciones de {1,2,3,4} terminados en 01.
-  // SQX usa diferentes permutaciones según versión del generador.
+  // Los magic markers observados son permutaciones de {1,2,3,4} terminados en 01.
+  // SQX usa diferentes permutaciones según versión del generador (5 observadas).
   const MAGIC_A = [0x04, 0x03, 0x02, 0x01];
   const MAGIC_B = [0x03, 0x02, 0x04, 0x01];
   const MAGIC_C = [0x02, 0x03, 0x04, 0x01];
   const MAGIC_D = [0x03, 0x04, 0x02, 0x01];
+  const MAGIC_E = [0x02, 0x04, 0x03, 0x01];
 
   const CLOSE_TYPE_MAP = {
-    2: 'SL',
-    3: 'PT',
-    4: 'XC',
-    6: 'TR',
-    19: 'EAB',
+    2: 'SL',    // Stop Loss
+    3: 'PT',    // Profit Target
+    4: 'XC',    // X-Close (cierre forzado fin de periodo)
+    6: 'TR',    // Trailing Stop (variante antigua)
+    19: 'EAB',  // Exit After Bars
+    21: 'TR',   // Trailing Stop (variante observada en mining WS30 FINALES con trailing activo)
   };
 
   // ---------- helpers ----------
@@ -44,6 +46,7 @@
     if (arraysEqual(stream, MAGIC_B, offset)) return 'B';
     if (arraysEqual(stream, MAGIC_C, offset)) return 'C';
     if (arraysEqual(stream, MAGIC_D, offset)) return 'D';
+    if (arraysEqual(stream, MAGIC_E, offset)) return 'E';
     return null;
   }
 
@@ -391,5 +394,6 @@
     MAGIC_B,
     MAGIC_C,
     MAGIC_D,
+    MAGIC_E,
   };
 })(typeof window !== 'undefined' ? window : globalThis);
