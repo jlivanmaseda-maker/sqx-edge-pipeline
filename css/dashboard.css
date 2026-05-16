@@ -1088,3 +1088,26 @@
   .vc-cell-name { color:var(--text); font-weight:500; }
   .vc-cell-class { font-family:Consolas,monospace; font-size:10px; color:var(--text2); text-align:right; }
 
+
+  /* ============================================================
+     🔬 FORENSICS — análisis trade-by-trade desde .sqx
+     ============================================================ */
+  .cvc-forensics-tabs { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+  .cvc-forensics-tab { padding:5px 12px; background:var(--surface2); border:1px solid var(--border); border-radius:5px; color:var(--text2); font-size:12px; font-weight:600; cursor:pointer; }
+  .cvc-forensics-tab:hover { background:var(--surface); color:var(--text); }
+  .cvc-forensics-tab.active { background:linear-gradient(135deg, rgba(99,102,241,.20), rgba(139,92,246,.10)); color:#a5b4fc; border-color:rgba(99,102,241,.5); }
+  .cvc-forensics-header { padding:10px 14px; background:linear-gradient(135deg, rgba(99,102,241,.10), rgba(139,92,246,.05)); border:1px solid rgba(99,102,241,.3); border-radius:6px; margin-bottom:12px; }
+  .cvc-forensics-section { background:var(--surface2); border:1px solid var(--border); border-radius:6px; margin-bottom:8px; overflow:hidden; }
+  .cvc-forensics-section > summary { padding:8px 14px; cursor:pointer; user-select:none; font-size:13px; color:var(--text); list-style:none; }
+  .cvc-forensics-section > summary::-webkit-details-marker { display:none; }
+  .cvc-forensics-section > summary::before { content:'▶ '; color:var(--text2); font-size:9px; margin-right:6px; transition:transform .15s; display:inline-block; }
+  .cvc-forensics-section[open] > summary::before { content:'▼ '; }
+  .cvc-forensics-section[open] > summary { background:rgba(99,102,241,.05); border-bottom:1px solid var(--border); }
+  .cvc-forensics-body { padding:12px 14px; }
+  .cvc-grid-2col { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:8px; }
+  .cvc-stat-card { background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:8px 10px; }
+  .cvc-stat-label { font-size:10px; color:var(--text2); text-transform:uppercase; letter-spacing:.4px; font-weight:600; }
+  .cvc-stat-value { font-size:18px; font-weight:700; color:var(--text); margin-top:2px; font-family:Consolas,monospace; }
+  .cvc-stat-sub { font-size:10px; color:var(--text2); margin-top:2px; }
+  .cvc-table-compact td, .cvc-table-compact th { padding:4px 8px; font-size:11px; }
+  .cvc-empty-state { padding:30px; text-align:center; color:var(--text2); font-size:13px; }

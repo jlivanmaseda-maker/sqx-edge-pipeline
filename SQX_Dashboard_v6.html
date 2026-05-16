@@ -3198,6 +3198,17 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
       </div>
     </div>
 
+    <!-- 🧩 PORTFOLIO DESCORRELACIONADO — auto-greedy por correlación NP-bloque -->
+    <div class="cvc-section" id="cvc-decorrelation-section" style="display:none;">
+      <div class="cvc-section-head">
+        <span class="cvc-section-title">🧩 Portfolio descorrelacionado</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text2);">detecta clones funcionales · greedy por correlación NP/bloque</span>
+      </div>
+      <div class="cvc-section-body">
+        <div id="cvc-decorrelation-panel"></div>
+      </div>
+    </div>
+
     <!-- ⭐ VEREDICTO + TOP PICKS — resultado consolidado tras Ranking + Régime -->
     <div class="cvc-section cvc-section-primary">
       <div class="cvc-section-head">
@@ -3219,6 +3230,22 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
       </div>
     </div>
 
+    <!-- 🔬 FORENSICS — análisis trade-by-trade desde .sqx -->
+    <div class="cvc-section">
+      <div class="cvc-section-head">
+        <span class="cvc-section-title">🔬 Forensics — Análisis trade-by-trade desde .sqx</span>
+        <span style="margin-left:auto;font-size:11px;color:var(--text2);">parser binario in-browser · auditoría exits + reglas</span>
+      </div>
+      <div class="cvc-section-body">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:10px;">
+          <input type="file" id="cvc-sqx-files" accept=".sqx" multiple style="font-size:13px;">
+          <span style="color:var(--text2);font-size:12px;">Carga uno o más .sqx para auditoría profunda. El parser extrae trade list + source code XML sin salir del navegador.</span>
+        </div>
+        <div id="cvc-sqx-msg" style="margin-top:4px;font-size:13px;"></div>
+        <div id="cvc-forensics-container" style="margin-top:14px;"></div>
+      </div>
+    </div>
+
   </div>
 
 </div>
@@ -3232,8 +3259,11 @@ Ret/DD > 1.0          ← más estricto que Capa 1 (era 0.5)</pre>
 <script src="js/strategies.js"></script>
 <script src="js/pipelineState.js"></script>
 <script src="js/stateBackup.js"></script>
-<script src="js/cvcAnalysis.js?v=20260511g"></script>
+<script src="js/cvcAnalysis.js?v=20260515c"></script>
 <script src="js/sqxViewCreator.js?v=20260509l"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="js/sqxParser.js?v=20260515b"></script>
+<script src="js/sqxTradeAnalysis.js?v=20260515d"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

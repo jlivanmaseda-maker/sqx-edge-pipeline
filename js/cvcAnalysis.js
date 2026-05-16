@@ -2563,6 +2563,165 @@ function cvcExportMarkdown() {
 }
 
 // ===================================================================
+// AUTO-POBLAR desde .sqx — convierte parsed.sqx en objetos strategy
+// y rellena CVC_STATE.champion + challengers + oosByStrategy +
+// regimeBlocks, luego dispara cvcRenderAll() para que TODO el dashboard
+// CvC se renderice (ranking, veredicto, patrones).
+// ===================================================================
+function cvcParsedToStrategy(parsed, isTemplate) {
+  const trades = parsed.trades;
+  const n = trades.length;
+  if (!n) return null;
+
+  // Métricas básicas trade-by-trade
+  const total = trades.reduce((s, t) => s + t.pl, 0);
+  const wins = trades.filter(t => t.pl > 0).length;
+  const losses = trades.filter(t => t.pl < 0).length;
+  const winPct = (wins / n) * 100;
+  const grossP = trades.filter(t => t.pl > 0).reduce((s, t) => s + t.pl, 0);
+  const grossL = Math.abs(trades.filter(t => t.pl < 0).reduce((s, t) => s + t.pl, 0));
+  const pf = grossL > 0 ? grossP / grossL : Infinity;
+
+  // Equity, DD, stagnation días
+  let bal = 0, peak = 0, peakDate = trades[0].close_time, maxDD = 0;
+  let maxStagStart = trades[0].close_time, maxStag = 0;
+  let curPeakDate = trades[0].close_time;
+  for (const t of trades) {
+    bal += t.pl;
+    if (bal > peak) {
+      const stag = (t.close_time - curPeakDate) / (24 * 3600 * 1000);
+      if (stag > maxStag) { maxStag = stag; maxStagStart = curPeakDate; }
+      peak = bal; peakDate = t.close_time; curPeakDate = t.close_time;
+    } else {
+      const dd = peak - bal;
+      if (dd > maxDD) maxDD = dd;
+    }
+  }
+  // Final stag
+  const finalStag = (trades[trades.length - 1].close_time - curPeakDate) / (24 * 3600 * 1000);
+  if (finalStag > maxStag) maxStag = finalStag;
+
+  // R-multiples
+  const rValues = trades.map(t => Math.abs(t.mae) > 0 ? t.pl / Math.abs(t.mae) : 0);
+  const rExp = rValues.reduce((s, r) => s + r, 0) / n;
+  const avgTrade = total / n;
+
+  // L/S split (todos los trades del .sqx son por dirección del template)
+  // No tenemos flag por trade — inferimos del template/símbolo
+  let tradesL = null, tradesS = null, npL = null, npS = null;
+  const nameUpper = (parsed.header.strategy_name || '').toUpperCase();
+  const chartUpper = (parsed.header.chart_name || '').toUpperCase();
+  if (/LONG/.test(nameUpper) || /LONG/.test(chartUpper)) {
+    tradesL = n; tradesS = 0; npL = total; npS = 0;
+  } else if (/SHORT/.test(nameUpper) || /SHORT/.test(chartUpper)) {
+    tradesL = 0; tradesS = n; npL = 0; npS = total;
+  }
+
+  // TF + avg_bars
+  const tfMin = window.SQXTradeAnalysis?.detectTimeframeMinutes?.(parsed.header.chart_name) || 60;
+  const tfLabel = tfMin === 1 ? 'M1' : tfMin === 5 ? 'M5' : tfMin === 15 ? 'M15'
+                : tfMin === 30 ? 'M30' : tfMin === 60 ? 'H1' : tfMin === 240 ? 'H4' : 'D1';
+  const avgBarsRaw = trades.reduce((s, t) => s + t.duration_seconds, 0) / n;
+  const avgBars = avgBarsRaw / (tfMin * 60);
+
+  const firstDate = trades[0].open_time;
+  const lastDate = trades[trades.length - 1].close_time;
+  const months = (lastDate - firstDate) / (30.4375 * 24 * 3600 * 1000);
+  const avgTradesPerMonth = months > 0 ? n / months : null;
+
+  // Indicators desde XML
+  const indicators = window.SQXTradeAnalysis?.extractIndicatorsFromXml?.(parsed.strategy_xml) || [];
+
+  // Starting capital implícito $100K para % aproximados
+  const SC = 100000;
+
+  return {
+    name: parsed.header.strategy_name || 'Strategy',
+    tf: tfLabel,
+    symbol: parsed.header.symbol || '',
+    np: total,
+    np_pct: (total / SC) * 100,
+    pf,
+    sharpe: null,
+    ret_dd: maxDD > 0 ? total / maxDD : null,
+    dd_abs: maxDD,
+    dd_pct: peak > 0 ? (maxDD / peak) * 100 : null,
+    trades: n,
+    trades_long: tradesL,
+    trades_short: tradesS,
+    np_long: npL,
+    np_short: npS,
+    win_pct: winPct,
+    r_exp: rExp,
+    stag: maxStag,
+    stag_pct: null,
+    fitness: null,
+    avg_trade: avgTrade,
+    exposure: null,
+    payout: null,
+    avg_bars: avgBars,
+    avg_trades_per_month: avgTradesPerMonth,
+    indicators: indicators.join(','),
+    filters_result: 'PASSED',  // asumimos PASSED — las ya filtradas por SQX
+    // Extra para forensics → la conexión bilateral
+    _parsed: parsed,
+    _isTemplate: !!isTemplate,
+  };
+}
+
+function cvcAutoPopulateFromSqx(parsedList) {
+  if (!parsedList || !parsedList.length) return;
+
+  // Identificar Champion (= el .sqx con más trades; típicamente el template Capa 1)
+  let champIdx = 0, maxN = 0;
+  parsedList.forEach((p, i) => { if (p.trades.length > maxN) { maxN = p.trades.length; champIdx = i; } });
+  const champParsed = parsedList[champIdx];
+  const challengerParsedList = parsedList.filter((_, i) => i !== champIdx);
+
+  // Convertir a objetos strategy
+  CVC_STATE.champion = cvcParsedToStrategy(champParsed, true);
+  CVC_STATE.challengers = challengerParsedList.map(p => cvcParsedToStrategy(p, false));
+  CVC_STATE.rawHeaders = ['name','tf','symbol','np','pf','sharpe','ret_dd','dd_abs','dd_pct','trades','win_pct','r_exp','stag','indicators','filters'];
+
+  // Direccion auto
+  const dirInfo = cvcDetectDirection(CVC_STATE.champion);
+  CVC_STATE.directionDetected = dirInfo;
+  if (!CVC_STATE.directionManualOverride && dirInfo.dir !== 'unknown') {
+    CVC_STATE.egtThresholds.direction = dirInfo.dir;
+  }
+
+  // Generar bloques OOS sintéticos para TODAS las strategies + régime
+  if (window.SQXTradeAnalysis?.runSyntheticOOS) {
+    for (const p of parsedList) {
+      try {
+        window.SQXTradeAnalysis.runSyntheticOOS(p);
+      } catch(e) { console.warn('runSyntheticOOS failed for', p.header.strategy_name, e); }
+    }
+  }
+
+  // Defaults inteligentes de fechas (si SQXTradeAnalysis no fijó nada o falló asset detection)
+  if (!CVC_STATE.regimeStartDate || !CVC_STATE.regimeEndDate) {
+    const def = cvcDefaultMiningRange(CVC_STATE.champion.symbol);
+    CVC_STATE.regimeStartDate = def.start;
+    CVC_STATE.regimeEndDate = def.end;
+  }
+
+  cvcSaveLS();
+  cvcRenderAll();
+
+  // 🧩 Portfolio descorrelacionado — auto-render si hay ≥2 strategies
+  if (parsedList.length >= 2 && window.SQXTradeAnalysis?.renderDecorrelationSection) {
+    const section = document.getElementById('cvc-decorrelation-section');
+    const panel = document.getElementById('cvc-decorrelation-panel');
+    if (section && panel) {
+      section.style.display = 'block';
+      panel.innerHTML = window.SQXTradeAnalysis.renderDecorrelationSection(parsedList, { threshold: 0.70 });
+      window.SQXTradeAnalysis.wireDecorrelationSection(panel, parsedList);
+    }
+  }
+}
+
+// ===================================================================
 // INIT — listeners
 // ===================================================================
 (function cvcInit() {
@@ -2785,6 +2944,56 @@ function cvcExportMarkdown() {
     const oosMsg = document.getElementById('cvc-oos-msg'); if (oosMsg) oosMsg.textContent = '';
     cvcRenderAll();
   });
+
+  // 🔬 Forensics — carga .sqx (parser binario in-browser)
+  const sqxInput = document.getElementById('cvc-sqx-files');
+  if (sqxInput) {
+    sqxInput.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files || []);
+      const msg = document.getElementById('cvc-sqx-msg');
+      const container = document.getElementById('cvc-forensics-container');
+      if (!files.length) {
+        msg.textContent = '';
+        container.innerHTML = '';
+        return;
+      }
+      if (!window.SQXParser || !window.JSZip) {
+        msg.innerHTML = '<span style="color:#ff6b6b;">❌ Falta JSZip o sqxParser.js. Revisa la consola.</span>';
+        return;
+      }
+      msg.innerHTML = '<span style="color:var(--text2);">⏳ Parseando ' + files.length + ' archivos…</span>';
+      const parsedList = [];
+      const errors = [];
+      for (const f of files) {
+        try {
+          const parsed = await window.SQXParser.parseSqxFile(f);
+          parsedList.push(parsed);
+        } catch (err) {
+          errors.push({ name: f.name, error: err.message });
+          console.error('SQX parse error for ' + f.name + ':', err);
+        }
+      }
+      if (parsedList.length === 0) {
+        msg.innerHTML = '<span style="color:#ff6b6b;">❌ Ningún archivo parseado correctamente.</span>'
+          + (errors.length ? '<br><span style="font-size:11px;color:var(--text2);">' + errors.map(e => e.name + ': ' + e.error).join('<br>') + '</span>' : '');
+        container.innerHTML = '';
+        return;
+      }
+      const totalTrades = parsedList.reduce((s, p) => s + p.trades.length, 0);
+      msg.innerHTML = '<span style="color:#5dd95d;">✓ ' + parsedList.length + ' archivo(s) parseado(s) · ' + totalTrades + ' trades totales</span>'
+        + (errors.length ? '<br><span style="font-size:11px;color:var(--yellow);">⚠ ' + errors.length + ' fallaron: ' + errors.map(e => e.name).join(', ') + '</span>' : '');
+      window.__forensics = parsedList;
+
+      // Auto-poblar TODO el dashboard CvC desde los .sqx
+      try {
+        cvcAutoPopulateFromSqx(parsedList);
+      } catch (err) {
+        console.error('cvcAutoPopulateFromSqx error:', err);
+      }
+
+      window.SQXTradeAnalysis.renderMultiInto(container, parsedList);
+    });
+  }
 
   // Render inicial vacío
   cvcRenderAll();
