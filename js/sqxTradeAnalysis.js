@@ -109,7 +109,9 @@
       else { curL++; curW = 0; maxL = Math.max(maxL, curL); }
     }
 
-    // Equity curve & DD
+    // Equity curve & DD — SQX-compatible: % sobre equity total (capital + peak),
+    // no sobre peak PL solo. Capital inicial default $100K (Reformia/Darwinex).
+    const STARTING_CAPITAL = 100000;
     let balance = 0, peak = 0, maxDdPct = 0, maxDdAbs = 0;
     const equity = [];
     for (const t of trades) {
@@ -117,7 +119,7 @@
       equity.push(balance);
       if (balance > peak) peak = balance;
       const ddAbs = peak - balance;
-      const ddPct = peak !== 0 ? (ddAbs / peak) * 100 : 0;
+      const ddPct = (ddAbs / (STARTING_CAPITAL + peak)) * 100;
       if (ddAbs > maxDdAbs) maxDdAbs = ddAbs;
       if (ddPct > maxDdPct) maxDdPct = ddPct;
     }
@@ -591,24 +593,33 @@
    *   - Si ambos se exceden → bandera roja "currently in extreme drawdown"
    */
   function computeOngoingDD(trades, opts = {}) {
-    const ddPctCutoff = opts.ddPctCutoff != null ? opts.ddPctCutoff : 8;
+    // SQX calcula DD% sobre equity total (capital + PL acumulado), no sobre peak PL solo.
+    // Por eso usamos startingCapital como denominador base (default $100K para coincidir
+    // con SQX Reformia Algotrading).
+    const ddPctCutoff = opts.ddPctCutoff != null ? opts.ddPctCutoff : 1.5;  // antes 8 (sin capital)
     const daysCutoff = opts.daysCutoff != null ? opts.daysCutoff : 60;
+    const startingCapital = opts.startingCapital != null ? opts.startingCapital : 100000;
 
     const sorted = trades.slice().sort((a, b) => a.close_time - b.close_time);
     if (!sorted.length) return null;
 
     let cum = 0, peak = 0, peakDate = sorted[0].close_time;
     let maxDD = 0, maxDDTroughDate = sorted[0].close_time, maxDDPeakDate = sorted[0].close_time;
+    let maxDDPct = 0;  // % máximo histórico SQX-compatible
     for (const t of sorted) {
       cum += t.pl;
       if (cum > peak) { peak = cum; peakDate = t.close_time; }
       const dd = peak - cum;
+      const equityAtPeak = startingCapital + peak;
+      const ddPct = equityAtPeak > 0 ? (dd / equityAtPeak) * 100 : 0;
       if (dd > maxDD) { maxDD = dd; maxDDPeakDate = peakDate; maxDDTroughDate = t.close_time; }
+      if (ddPct > maxDDPct) maxDDPct = ddPct;
     }
     const finalBal = cum;
     const lastDate = sorted[sorted.length - 1].close_time;
     const currentDD = peak - finalBal;
-    const currentDDPct = peak > 0 ? (currentDD / peak) * 100 : 0;
+    // SQX-compatible: DD actual / (capital + peak), no DD/peak
+    const currentDDPct = (currentDD / (startingCapital + peak)) * 100;
     const daysSinceATH = currentDD > 0
       ? Math.round((lastDate.getTime() - peakDate.getTime()) / (24 * 3600 * 1000))
       : 0;
@@ -636,11 +647,13 @@
       currentDDPct,
       daysSinceATH,
       maxDDEver: maxDD,
+      maxDDPctEver: maxDDPct,   // % máximo histórico (SQX-compatible)
       maxDDTroughDate: lastTroughDateStr,
       isAtMaxDD,
       passDD, passTime, passOngoing,
       severity,
       ddPctCutoff, daysCutoff,
+      startingCapital,
     };
   }
 

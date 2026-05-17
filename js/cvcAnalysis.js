@@ -2582,8 +2582,9 @@ function cvcParsedToStrategy(parsed, isTemplate) {
   const grossL = Math.abs(trades.filter(t => t.pl < 0).reduce((s, t) => s + t.pl, 0));
   const pf = grossL > 0 ? grossP / grossL : Infinity;
 
-  // Equity, DD, stagnation días
-  let bal = 0, peak = 0, peakDate = trades[0].close_time, maxDD = 0;
+  // Equity, DD, stagnation días — DD% SQX-compatible (sobre equity total)
+  const SC = 100000;  // starting capital
+  let bal = 0, peak = 0, peakDate = trades[0].close_time, maxDD = 0, maxDDPct = 0;
   let maxStagStart = trades[0].close_time, maxStag = 0;
   let curPeakDate = trades[0].close_time;
   for (const t of trades) {
@@ -2594,7 +2595,9 @@ function cvcParsedToStrategy(parsed, isTemplate) {
       peak = bal; peakDate = t.close_time; curPeakDate = t.close_time;
     } else {
       const dd = peak - bal;
+      const ddPct = (dd / (SC + peak)) * 100;
       if (dd > maxDD) maxDD = dd;
+      if (ddPct > maxDDPct) maxDDPct = ddPct;
     }
   }
   // Final stag
@@ -2632,9 +2635,6 @@ function cvcParsedToStrategy(parsed, isTemplate) {
   // Indicators desde XML
   const indicators = window.SQXTradeAnalysis?.extractIndicatorsFromXml?.(parsed.strategy_xml) || [];
 
-  // Starting capital implícito $100K para % aproximados
-  const SC = 100000;
-
   return {
     name: parsed.header.strategy_name || 'Strategy',
     tf: tfLabel,
@@ -2645,7 +2645,7 @@ function cvcParsedToStrategy(parsed, isTemplate) {
     sharpe: null,
     ret_dd: maxDD > 0 ? total / maxDD : null,
     dd_abs: maxDD,
-    dd_pct: peak > 0 ? (maxDD / peak) * 100 : null,
+    dd_pct: maxDDPct,   // SQX-compatible: sobre equity total ($100K + peak)
     trades: n,
     trades_long: tradesL,
     trades_short: tradesS,
