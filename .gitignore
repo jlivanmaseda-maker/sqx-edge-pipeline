@@ -1,0 +1,71 @@
+# =======================================================
+# Capas — repo de metodología, scripts y CLAUDE.md
+# =======================================================
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+.pytest_cache/
+
+# IDEs / editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Claude Code interno
+.claude/
+.playwright-mcp/
+.tmp_sqx/
+
+# Screenshots de sesiones (heavy, no son código)
+*.png
+*.jpg
+*.jpeg
+
+# Snapshots YAML del navegador
+*_snapshot.yml
+*_full_snapshot.yml
+
+# JSONs de sesión (datos efímeros, no código)
+forensics_data.json
+oos_synthetic.json
+spp_*.json
+finales_*.json
+finales2*.json
+spp_portfolio.json
+spp6_portfolio.json
+portfolio_descorrelacionado_spp.json
+
+# Backups grandes de blocksettings (se regeneran con scripts)
+backup_pre_*/
+backup_v*_pre_*/
+backup_post_*/
+
+# Mining outputs (estrategias .sqx que no son código)
+*.sqx
+*.sqb
+*.zip
+
+# Logs
+*.log
+log/
+
+# Node.js (deps de los tests JS)
+node_modules/
+**/node_modules/
+package-lock.json
+**/package-lock.json
+
+# Carpetas de prueba locales
+cvc_test/
