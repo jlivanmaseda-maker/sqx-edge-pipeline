@@ -912,7 +912,12 @@
     const ongoingDD = computeOngoingDD(parsed.trades, opts);
 
     // Veredicto 5-filtros consolidados (con ongoingDD integrado en filtro #3)
-    const verdict = compute5Filters(npBlocks, regimeBlocks, egt, health, ongoingDD);
+    // ctx: para el Filtro #4 v2 (supervivencia por régime)
+    const verdict = compute5Filters(npBlocks, regimeBlocks, egt, health, ongoingDD, {
+      symbol: parsed.header.symbol,
+      archetype: archetype,
+      direction: dirInfo.dir,
+    });
 
     return {
       assetKey, regimeError,
@@ -925,8 +930,112 @@
     };
   }
 
+  // ====================================================================
+  // FILTRO #4 v2 — "Supervivencia por régime" (mayo 2026)
+  // ====================================================================
+  // Reemplaza el viejo "9/9 OOS positivos" (irreal en sample largo 16y).
+  // Filosofía: "domina en tu régime propio + sobrevive en los adversos".
+  //
+  // 2 variantes auto-seleccionadas por nº de bloques adversos disponibles:
+  //   ≥3 bloques adversos → ESTADÍSTICA  (avg adversos ≥ −30% × avg propio)
+  //   <3 bloques adversos → POR-EVENTO   (cada bloque adverso pierde <1.5% capital)
+
+  /** Clasifica el activo (solo contexto para el reporte, NO decide la variante). */
+  function detectAssetClass(symbol) {
+    const s = (symbol || '').toUpperCase()
+      .replace(/_DUKASCOPY|_DARWINEX|\.IDX|IDXUSD/g, '')
+      .replace(/M$/, '');
+    const INDICES = ['US30','US500','USTEC','GER40','NDX','SPX','SP500','NASDAQ',
+                     'DAX','WS30','USATECH','USA500','USA30','DEU','UK100','JP225','AUS200'];
+    const METALS  = ['XAU','XAG','GOLD','SILVER'];
+    if (INDICES.some(ix => s.includes(ix))) return 'INDEX';
+    if (METALS.some(mx => s.includes(mx)))  return 'METAL';
+    if (/^[A-Z]{6}$/.test(s))               return 'FOREX';
+    return 'UNKNOWN';
+  }
+
+  /** Régime propio según arquetipo + dirección. */
+  function detectOwnRegime(archetype, direction) {
+    const arch = (typeof archetype === 'string' ? archetype : archetype?.archetype) || 'UNKNOWN';
+    const isShort = /short/i.test(direction || '');
+    if (arch === 'MEAN_REVERT') return 'RANGE';
+    if (arch === 'SCALPER')     return 'RANGE';   // vol intradía, régime macro neutro
+    // TREND_FOLLOWING, BREAKOUT, UNKNOWN → por dirección
+    return isShort ? 'BEAR' : 'BULL';
+  }
+
+  /** Filtro #4 v2. Devuelve {verdict, mode, assetClass, ownRegime, detail}. */
+  function cvcFilter4v2(npBlocks, regimeBlocks, ctx, capital = 100000) {
+    if (!regimeBlocks || !regimeBlocks.length || regimeBlocks.length !== npBlocks.length) {
+      // Sin régimes → fallback al criterio viejo (todos positivos)
+      const allPos = npBlocks.every(v => v > 0);
+      return { verdict: allPos ? 'ROBUSTO' : 'FRAGIL', mode: 'fallback-sin-regime',
+               assetClass: 'UNKNOWN', ownRegime: null, pass: allPos,
+               detail: 'Sin datos de régime — usado criterio viejo (todos positivos)' };
+    }
+    const assetClass = detectAssetClass(ctx?.symbol);
+    const ownRegime  = detectOwnRegime(ctx?.archetype, ctx?.direction);
+
+    const own = [], adverse = [];
+    npBlocks.forEach((np, i) => {
+      const g = regimeBlocks[i]?.group;
+      if (!g) return;
+      if (g === ownRegime)    own.push(np);
+      else if (g !== 'RANGE') adverse.push(np);   // RANGE = neutro, no cuenta como adverso
+    });
+
+    const avg = a => a.length ? a.reduce((s, v) => s + v, 0) / a.length : 0;
+    const sum = a => a.reduce((s, v) => s + v, 0);
+    const avgOwn = avg(own);
+    const ownPos = own.length ? own.filter(v => v > 0).length / own.length : 0;
+    const worst = Math.min(...npBlocks);
+    const totalNet = sum(npBlocks);
+
+    // Componentes comunes
+    const c4A = ownPos >= 0.80 && avgOwn > 0;
+    const c4C = worst > -0.02 * capital;
+    const c4D = totalNet > 0;
+
+    // 4B — variante según nº de bloques adversos. 2 umbrales:
+    //   c4B_strict → pasa = ROBUSTO
+    //   c4B_lax    → pasa strict-no/lax-sí = DEFENSIVO ; falla lax = FRÁGIL
+    const useStatistical = adverse.length >= 3;
+    let c4B_strict, c4B_lax, mode, detail;
+    if (useStatistical) {
+      mode = 'estadístico';
+      const avgAdv = avg(adverse);
+      c4B_strict = avgAdv >= -0.30 * avgOwn;   // robusto: adversos ≤ 30% del propio
+      c4B_lax    = avgAdv >= -0.50 * avgOwn;   // defensivo: hasta 50%
+      const ratio = avgOwn > 0 ? (avgAdv / avgOwn * 100) : 0;
+      detail = `avg propio +$${avgOwn.toFixed(0)} · avg adverso $${avgAdv.toFixed(0)} `
+             + `(${ratio.toFixed(0)}% del propio · umbral ROBUSTO −30%, DEFENSIVO −50%) `
+             + `· ${adverse.length} bloques adversos`;
+    } else {
+      mode = 'por-evento';
+      c4B_strict = adverse.every(v => v > -0.015 * capital);  // robusto: cada uno >−1.5% cap
+      c4B_lax    = adverse.every(v => v > -0.02 * capital);   // defensivo: cada uno >−2% cap
+      const worstAdv = adverse.length ? Math.min(...adverse) : 0;
+      detail = `${adverse.length} bloque(s) adverso(s) · peor adverso $${worstAdv.toFixed(0)} `
+             + `(umbral ROBUSTO −$${(0.015*capital).toFixed(0)}, DEFENSIVO −$${(0.02*capital).toFixed(0)})`;
+    }
+
+    let verdict;
+    if (!c4C) verdict = 'CATASTROFICO';
+    else if (c4A && c4D && c4B_strict)  verdict = 'ROBUSTO';
+    else if (c4A && c4D && c4B_lax)     verdict = 'DEFENSIVO';
+    else verdict = 'FRAGIL';
+
+    // pass = ROBUSTO o DEFENSIVO (ambos cuentan como filtro #4 superado)
+    return {
+      verdict, mode, assetClass, ownRegime,
+      pass: verdict === 'ROBUSTO' || verdict === 'DEFENSIVO',
+      ownCount: own.length, adverseCount: adverse.length,
+      detail,
+    };
+  }
+
   /** Cálculo del veredicto consolidado (filtros 2-5 + ongoing DD bandera roja) */
-  function compute5Filters(npBlocks, regimeBlocks, egt, health, ongoingDD) {
+  function compute5Filters(npBlocks, regimeBlocks, egt, health, ongoingDD, ctx) {
     const N = npBlocks.length;
     const positive = npBlocks.filter(v => v > 0).length;
     // F2 — EGT v2
@@ -937,8 +1046,9 @@
     const ongoingPass = !ongoingDD || ongoingDD.passOngoing;
     // F3 combinado: AMBOS deben pasar
     const healthPass = healthBlocksPass && ongoingPass;
-    // F4 — 9/9 OOS positivos (estricto)
-    const allPositive = positive === N;
+    // F4 v2 — Supervivencia por régime (reemplaza "9/9 OOS positivos")
+    const f4 = cvcFilter4v2(npBlocks, regimeBlocks, ctx);
+    const allPositive = f4.pass;  // ROBUSTO o DEFENSIVO cuenta como #4 superado
     // F5 — Recovery ≥ 70%
     const recoveryPass = health && (health.recoveryIndex == null || health.recoveryIndex >= 0.7);
     const passCount = (egtPass ? 1 : 0) + (healthPass ? 1 : 0) + (allPositive ? 1 : 0) + (recoveryPass ? 1 : 0);
@@ -966,7 +1076,14 @@
         status: health?.status || 'N/A',
         ongoingSeverity: ongoingDD?.severity || 'N/A',
       },
-      F4_AllOOSPositive: { pass: allPositive, positive, total: N },
+      F4_RegimeSurvival: {
+        pass: f4.pass, verdict: f4.verdict, mode: f4.mode,
+        assetClass: f4.assetClass, ownRegime: f4.ownRegime,
+        ownCount: f4.ownCount, adverseCount: f4.adverseCount,
+        detail: f4.detail,
+        // retro-compat: positive/total siguen disponibles
+        positive, total: N,
+      },
       F5_Recovery: { pass: !!recoveryPass, value: health?.recoveryIndex },
       label,
     };
@@ -1551,7 +1668,7 @@
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:11px;">
           <span style="color:${v.F2_EGT.pass ? '#22c55e' : '#ff6b6b'};">${v.F2_EGT.pass ? '✓' : '✗'} EGT v2: ${v.F2_EGT.verdict}</span>
           <span style="color:${v.F3_Health.pass ? '#22c55e' : '#ff6b6b'};" title="Bloques OOS: ${v.F3_Health.blocksPass ? '✓' : '✗'} · Ongoing DD: ${v.F3_Health.ongoingPass ? '✓' : '✗ ' + v.F3_Health.ongoingSeverity}">${v.F3_Health.pass ? '✓' : '✗'} Salud: ${v.F3_Health.status}${v.F3_Health.blocksPass && !v.F3_Health.ongoingPass ? ' (' + v.F3_Health.ongoingSeverity + ')' : ''}</span>
-          <span style="color:${v.F4_AllOOSPositive.pass ? '#22c55e' : '#ff6b6b'};">${v.F4_AllOOSPositive.pass ? '✓' : '✗'} ${v.F4_AllOOSPositive.positive}/${v.F4_AllOOSPositive.total} OOS+</span>
+          <span style="color:${v.F4_RegimeSurvival.pass ? '#22c55e' : '#ff6b6b'};" title="Filtro #4 v2 — Supervivencia por régime · ${v.F4_RegimeSurvival.assetClass} · modo ${v.F4_RegimeSurvival.mode} · ${v.F4_RegimeSurvival.detail}">${v.F4_RegimeSurvival.pass ? '✓' : '✗'} #4 ${v.F4_RegimeSurvival.verdict} (${v.F4_RegimeSurvival.positive}/${v.F4_RegimeSurvival.total} OOS+)</span>
           <span style="color:${v.F5_Recovery.pass ? '#22c55e' : '#ff6b6b'};">${v.F5_Recovery.pass ? '✓' : '✗'} Recovery ${v.F5_Recovery.value != null ? (v.F5_Recovery.value*100).toFixed(0) + '%' : 'n/a'}</span>
         </div>
       </div>
@@ -1703,5 +1820,10 @@
     detectMiningMode,
     renderLayerBadge,
     renderMiningModeBanner,
+    // Filtro #4 v2 — Supervivencia por régime
+    detectAssetClass,
+    detectOwnRegime,
+    cvcFilter4v2,
+    compute5Filters,
   };
 })(typeof window !== 'undefined' ? window : globalThis);
