@@ -50,6 +50,62 @@ USDJPY: cuidado con sesgo, verificar
 
 ---
 
+## METODOLOGÍA DE PERÍODOS (mayo 2026 — regla de 3 períodos)
+
+**Problema resuelto:** distintos activos tienen distinta calidad de data Dukascopy
+(forex/oro limpio desde 2010, índices CFD solo desde 2019). Usar 2 métodos de
+mining distintos creaba 2 sets de filtros incompatibles. La regla de 3 períodos
+unifica el criterio.
+
+### Los 3 períodos con roles distintos
+
+```
+1. MINING (buscar el edge) — mejor data disponible por activo
+   Forex/Oro:  Dukas 2010-2023 IS  +  OOS 2024-2026   (sample 14y = robustez)
+   Índices:    Darwinex 2018-2023 IS + OOS 2024-2026  (data limpia disponible)
+   Add Market: Darwinex como mercado adicional en el mining (cross-broker in-mining)
+
+2. FILTROS CAPA 2 (la VARA DE MEDIR — única para todos) — período común 2018-2026
+   TODOS los activos se evalúan sobre 2018-01 → 2026, sin importar el broker
+   de mining. Filtros ACTUALES sin cambios:
+       PF≥1.5 · Ret/DD≥5 · RExp≥0.30 · Stag<25% · #trades>150 · R:R≥0.6
+   Razón: comparar 16y (con BEAR estructural) vs 8y (solo BULL) es injusto.
+   El mismo período de evaluación = comparación manzana-con-manzana.
+
+3. CvC / ROBUSTEZ HISTÓRICA (bonus informativo, NO filtro hard) — sample completo
+   Forex/Oro:  sample Dukas completo 2010-2026 (16y) → valida BEAR estructural 2013-15
+   Índices:    sample Darwinex 8.5y
+   El plus de robustez histórica suma en el veredicto pero NO descarta por filtro.
+```
+
+### Por qué esta regla funciona
+
+- **Un solo set de filtros** para forex-Dukas e índices-Darwinex (no 2 calibraciones)
+- **Vara de medir justa**: evaluar siempre 2018-2026 elimina el sesgo sample-length
+- **El sample largo Dukas NO se desperdicia**: se usa en mining (selecciona edges
+  robustos a 14 años) y en CvC (el bloque BEAR FUERTE 2013-15 valida el peor régime)
+- **Validación cross-broker confirmada empíricamente**: las 14 estrategias del lote
+  SSL XAUUSD, evaluadas en período común 2018-2026, dieron métricas Dukas≈Darwinex
+  (PF disc <6%, Win% disc <4%, 0/14 DRIFT) → el edge no depende del feed.
+
+### Caso validado — lote SSL XAUUSD H1 (mayo 2026)
+
+Mining Dukas 2010-2023 produjo 14 estrategias con edge `SSL crosses SessionHigh`:
+- Evaluadas sobre 2018-2026 (período común): **1 de 14** pasa 5/5 filtros (`0.125931`)
+- CvC de `0.125931` sobre sample Dukas 16y: **PIERDE -$1,310 en BEAR estructural 2014**
+- Veredicto: lote descartado — edge breakout alcista estructuralmente frágil a BEAR oro
+- **Lección:** el método viejo (Darwinex 2018+) habría adoptado `0.125931` con falsa
+  confianza (se ve 5/5 perfecta en 2018+). El sample Dukas 16y reveló la fragilidad
+  real. El método nuevo descartó correctamente un mining entero antes de arriesgar capital.
+
+### Scripts de soporte
+
+- `scripts/analyze_dukas_csv_quality.py` — calidad data Dukas por activo+TF+año
+- `scripts/compare_cross_broker.py` — comparación DK/DW + filtros sobre período común
+- `scripts/cvc_single_strategy.py` — CvC con auto-N bloques (~12 meses/bloque)
+
+---
+
 ## CHAMPION VS CHALLENGER
 
 **Antes de Capa 2:** documentar métricas de Capa 1 como "Champion".
@@ -1207,5 +1263,7 @@ Paso 4: Decisión
 
 ---
 
-**Última actualización:** 2026-05-18
+**Última actualización:** 2026-05-22
+**Versión:** v5.6 — **Metodología de 3 períodos** (MINING / FILTROS / CvC) para unificar el criterio entre activos con data Dukas buena (forex/oro 2010+) y activos solo Darwinex (índices CFD). Regla clave: **los filtros Capa 2 se evalúan SIEMPRE sobre el período común 2018-2026**, sin importar el broker de mining → un solo set de filtros, vara de medir justa. + **Validación cross-broker empírica**: lote SSL XAUUSD H1 (14 estrategias mismo edge, backtesteadas en Dukas + Darwinex) → 0/14 DRIFT, métricas Dukas≈Darwinex en período común. + **Caso `0.125931`**: pasa 5/5 filtros en 2018-2026 pero CvC sobre Dukas 16y revela pérdida -$1,310 en BEAR estructural 2014 → lote SSL descartado (edge breakout alcista frágil a BEAR oro). El método nuevo descartó correctamente un mining que el método viejo habría adoptado. + Scripts nuevos: `analyze_dukas_csv_quality.py`, `compare_cross_broker.py`, auto-N bloques en `cvc_single_strategy.py` y web. + Stock se mantiene en 14 (lote SSL no aporta adoptables).
+
 **Versión:** v5.5 — **Stock pasa de 13 a 14** con adopción de **#14 XAUUSD H1 LONG Fibo 0.8883321** (`Fibo[1] > Highest[1] AND LowD[1] > SessionLow[1]`): edge breakout-mean-revert híbrido. **10/10 OOS positivos + 10/10 años civiles positivos** (incluso 2020 COVID +$105, 2022 BEAR oro +$311). PF 2.12, Ret/DD 12.98 ⭐, DD% 0.62, Sharpe 1.51, R Exp 0.39. PRIMERA con CvC 6/6 perfecto. + Mining XAUUSD H1 80 estrategias procesadas: **magic marker `04 02 03 01` (variante F) descubierto** en orders.bin (sin este fix, 14/80 sin parsear) — actualizado `parse_sqx_orders.py` y `sqxParser.js`. + **Filter by Correlation con threshold MENSUAL 0,3 (criterio SQX clásico)** — 9 estrategias que pasan filtros métricos colapsan a 1 ortogonal real (las otras 8 comparten edge `Fibo > Highest` → corr mensual 0,33-0,42). + Stock pasa de 13 a 14 estrategias.
