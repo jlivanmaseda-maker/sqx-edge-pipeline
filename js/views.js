@@ -67,6 +67,7 @@ function renderAssetGrid() {
       <div class="score-badge">Score: <span>${a.sc.norm}%</span></div>
       ${compHtml}
       <div style="margin-top:6px">${sqxBadge(a, true)}</div>
+      ${typeof dukasBadge === 'function' ? dukasBadge(a.id) : ''}
     </div>`;
   }).join('');
 }
@@ -112,6 +113,14 @@ function renderDetail() {
     </div>
   </div>
   ${historySection(a.id)}
+  ${typeof dukasQualityDetail === 'function' ? `
+  <div class="dukas-quality-section" style="margin-top:18px;padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+      <span style="font-size:14px;font-weight:700;">📊 Calidad data Dukascopy</span>
+      <span style="font-size:11px;color:var(--text2);">— guía para decidir Opción 1 (Darwinex) vs Opción 2 (Dukas 2010+)</span>
+    </div>
+    ${dukasQualityDetail(a.id)}
+  </div>` : ''}
   <div class="cat-cards">`;
 
   for (const [catKey,entries] of Object.entries(baseCats)) {

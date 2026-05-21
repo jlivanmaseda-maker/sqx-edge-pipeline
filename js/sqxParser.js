@@ -23,6 +23,7 @@
   const MAGIC_C = [0x02, 0x03, 0x04, 0x01];
   const MAGIC_D = [0x03, 0x04, 0x02, 0x01];
   const MAGIC_E = [0x02, 0x04, 0x03, 0x01];
+  const MAGIC_F = [0x04, 0x02, 0x03, 0x01];
 
   const CLOSE_TYPE_MAP = {
     2: 'SL',    // Stop Loss
@@ -47,6 +48,7 @@
     if (arraysEqual(stream, MAGIC_C, offset)) return 'C';
     if (arraysEqual(stream, MAGIC_D, offset)) return 'D';
     if (arraysEqual(stream, MAGIC_E, offset)) return 'E';
+    if (arraysEqual(stream, MAGIC_F, offset)) return 'F';
     return null;
   }
 
@@ -395,5 +397,6 @@
     MAGIC_C,
     MAGIC_D,
     MAGIC_E,
+    MAGIC_F,
   };
 })(typeof window !== 'undefined' ? window : globalThis);

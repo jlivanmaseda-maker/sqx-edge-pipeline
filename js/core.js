@@ -153,6 +153,112 @@ const SCORES_TFS = ['H4', 'H1', 'M30', 'M15', 'M5'];
 let CURRENT_SCORES_TF = 'AUTO';  // por defecto cada fila usa su TF recomendado
 let SCORES = {};                 // SCORES global (override fallback), se rellena tras loadAllScores
 
+// ============================================================
+// DUKAS DATA QUALITY (generado por scripts/analyze_dukas_csv_quality.py --json)
+// ============================================================
+let DUKAS_QUALITY = null;
+async function loadDukasQuality() {
+  try {
+    const r = await fetch('data/dukas_quality.json', { cache: 'no-store' });
+    if (r.ok) {
+      DUKAS_QUALITY = await r.json();
+      console.log('Dukas quality cargada para ' + Object.keys(DUKAS_QUALITY.assets || {}).length + ' activos');
+    }
+  } catch (e) { /* JSON no disponible, ok */ }
+}
+
+/** Devuelve el peor verdict entre los TFs del activo (worst-of), para el badge del grid. */
+function dukasBadge(assetId, opts = {}) {
+  if (!DUKAS_QUALITY || !DUKAS_QUALITY.assets[assetId]) return '';
+  const tfs = DUKAS_QUALITY.assets[assetId];
+  const tfList = Object.keys(tfs);
+  if (!tfList.length) return '';
+  // Buscar el "mejor" TF (el que tiene verdict más permisivo)
+  const verdictRank = { opc2_ok: 0, opc2_limited: 1, opc1_recommended: 2, opc1_only: 3 };
+  let best = null;
+  for (const tf of tfList) {
+    const v = tfs[tf];
+    if (!best || verdictRank[v.verdict] < verdictRank[best.verdict]) {
+      best = { ...v, tf };
+    }
+  }
+  if (!best) return '';
+  const cleanYear = best.first_clean_year || '?';
+  const cfg = {
+    opc2_ok:           { color: '#22c55e', icon: '✅', label: `Dukas ${cleanYear}+` },
+    opc2_limited:      { color: '#fbbf24', icon: '⚠',  label: `Dukas ${cleanYear}+` },
+    opc1_recommended:  { color: '#fb923c', icon: '⚠',  label: `Dukas ${cleanYear}+` },
+    opc1_only:         { color: '#ef4444', icon: '🔴', label: 'Sin Dukas' },
+  }[best.verdict] || { color: '#6b7280', icon: '?', label: '?' };
+  const tip = `Dukas H1: ${tfs.H1?.coverage || '?'}% cov · ${tfs.H1?.gap_pct || '?'}% gaps · clean desde ${cleanYear}\\nGenerado: ${DUKAS_QUALITY.generated_at}`;
+  if (opts.compact) {
+    return `<span class="dukas-badge" style="display:inline-block;background:rgba(0,0,0,.25);border:1px solid ${cfg.color}40;color:${cfg.color};padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600;" title="${tip}">${cfg.icon} ${cfg.label}</span>`;
+  }
+  return `<div class="dukas-badge" style="display:inline-flex;align-items:center;gap:4px;background:rgba(0,0,0,.25);border:1px solid ${cfg.color}40;color:${cfg.color};padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-top:4px;" title="${tip}">${cfg.icon} ${cfg.label}</div>`;
+}
+
+/** Render detallado de calidad por TF para el panel de detalle del activo. */
+function dukasQualityDetail(assetId) {
+  if (!DUKAS_QUALITY || !DUKAS_QUALITY.assets[assetId]) {
+    return '<div style="padding:10px;color:var(--text2);font-size:12px;">Sin data de calidad Dukas. Ejecuta <code>scripts/analyze_dukas_csv_quality.py --json all</code> para generar.</div>';
+  }
+  const tfs = DUKAS_QUALITY.assets[assetId];
+  const verdictColor = (v) => ({
+    opc2_ok: '#22c55e', opc2_limited: '#fbbf24',
+    opc1_recommended: '#fb923c', opc1_only: '#ef4444',
+  })[v] || '#6b7280';
+  const verdictLabel = (v) => ({
+    opc2_ok: '✅ Mining Dukas 2010-2023 viable',
+    opc2_limited: '⚠ Mining Dukas desde año limpio',
+    opc1_recommended: '⚠ Sample corto, usa Darwinex',
+    opc1_only: '🔴 Solo Darwinex',
+  })[v] || v;
+  let html = '<div style="font-size:11px;color:var(--text2);margin-bottom:8px;">Generado: ' + DUKAS_QUALITY.generated_at + '</div>';
+  html += '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+  html += '<thead><tr style="background:var(--surface);border-bottom:1px solid var(--border);">' +
+    '<th style="padding:6px;text-align:left;">TF</th>' +
+    '<th style="padding:6px;text-align:right;">Barras</th>' +
+    '<th style="padding:6px;text-align:right;">Cov %</th>' +
+    '<th style="padding:6px;text-align:right;">Gap %</th>' +
+    '<th style="padding:6px;text-align:right;">Bad OHLC</th>' +
+    '<th style="padding:6px;text-align:left;">Rango</th>' +
+    '<th style="padding:6px;text-align:center;">Apto</th>' +
+    '<th style="padding:6px;text-align:left;">Veredicto</th>' +
+    '</tr></thead><tbody>';
+  for (const [tf, d] of Object.entries(tfs)) {
+    const c = verdictColor(d.verdict);
+    html += '<tr style="border-bottom:1px solid rgba(255,255,255,.05);">' +
+      '<td style="padding:6px;font-weight:700;">' + tf + '</td>' +
+      '<td style="padding:6px;text-align:right;font-family:Consolas,monospace;">' + d.bars.toLocaleString() + '</td>' +
+      '<td style="padding:6px;text-align:right;font-family:Consolas,monospace;">' + d.coverage + '%</td>' +
+      '<td style="padding:6px;text-align:right;font-family:Consolas,monospace;color:' + (d.gap_pct > 5 ? '#ef4444' : d.gap_pct > 1 ? '#fbbf24' : '#22c55e') + ';">' + d.gap_pct + '%</td>' +
+      '<td style="padding:6px;text-align:right;font-family:Consolas,monospace;">' + d.bad_ohlc + '</td>' +
+      '<td style="padding:6px;font-family:Consolas,monospace;font-size:11px;">' + d.first_bar + ' → ' + d.last_bar + '</td>' +
+      '<td style="padding:6px;text-align:center;font-weight:700;color:' + c + ';">' + (d.first_clean_year || '—') + '+</td>' +
+      '<td style="padding:6px;color:' + c + ';">' + verdictLabel(d.verdict) + '</td>' +
+      '</tr>';
+  }
+  html += '</tbody></table>';
+  // Mini heatmap por año
+  const tf1 = tfs.H1 || tfs.H4 || Object.values(tfs)[0];
+  if (tf1 && tf1.by_year) {
+    const years = Object.keys(tf1.by_year).sort();
+    html += '<div style="margin-top:12px;font-size:11px;color:var(--text2);">Heatmap por año (TF ' + (tfs.H1 ? 'H1' : Object.keys(tfs)[0]) + '):</div>';
+    html += '<div style="display:flex;gap:2px;margin-top:4px;flex-wrap:wrap;">';
+    for (const y of years) {
+      const yd = tf1.by_year[y];
+      const c = yd.verdict === 'VERDE' ? '#22c55e' : yd.verdict === 'AMARILLO' ? '#fbbf24' : '#ef4444';
+      const tip = y + ': ' + yd.bars + '/' + yd.expected + ' bars (' + yd.coverage + '% cov)';
+      html += '<div style="display:flex;flex-direction:column;align-items:center;background:' + c + '20;border:1px solid ' + c + '60;border-radius:3px;padding:3px 6px;" title="' + tip + '">' +
+        '<span style="font-size:10px;font-weight:700;color:' + c + ';">' + y + '</span>' +
+        '<span style="font-size:9px;color:var(--text2);font-family:Consolas,monospace;">' + yd.coverage + '%</span>' +
+        '</div>';
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
 async function loadAllScores() {
   const tasks = SCORES_TFS.map(async tf => {
     const fname = (tf === 'H1') ? 'dashboard_scores.json' : ('dashboard_scores_' + tf + '.json');
@@ -216,7 +322,7 @@ function _showNoScoresBanner() {
 }
 
 // Promesa global — main.js espera a esto antes de renderizar
-window.SCORES_READY = loadAllScores();
+window.SCORES_READY = Promise.all([loadAllScores(), loadDukasQuality()]);
 
 function getAvailableScoresTFs() {
   return SCORES_TFS.filter(tf => SCORES_ALL[tf] && Object.keys(SCORES_ALL[tf]).length);

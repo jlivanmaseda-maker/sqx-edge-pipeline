@@ -1,0 +1,7326 @@
+{
+  "generated_at": "2026-05-20 10:16:43",
+  "source": "Dukascopy MT5 CSV bulk download",
+  "assets": {
+    "AUDCAD": {
+      "H1": {
+        "bars": 89078,
+        "expected": 83001,
+        "coverage": 107.32,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 147,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6206,
+            "expected": 5748,
+            "coverage": 107.97,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6221,
+            "expected": 5796,
+            "coverage": 107.33,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6206,
+            "expected": 5796,
+            "coverage": 107.07,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6213,
+            "expected": 5796,
+            "coverage": 107.19,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6247,
+            "expected": 5796,
+            "coverage": 107.78,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 22305,
+        "expected": 21652,
+        "coverage": 103.02,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 13,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1554,
+            "expected": 1512,
+            "coverage": 102.78,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "AUDJPY": {
+      "H1": {
+        "bars": 95145,
+        "expected": 88797,
+        "coverage": 107.15,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 141,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6197,
+            "expected": 5748,
+            "coverage": 107.81,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6211,
+            "expected": 5796,
+            "coverage": 107.16,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6213,
+            "expected": 5796,
+            "coverage": 107.19,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6155,
+            "expected": 5796,
+            "coverage": 106.19,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6154,
+            "expected": 5796,
+            "coverage": 106.18,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6190,
+            "expected": 5796,
+            "coverage": 106.8,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6204,
+            "expected": 5796,
+            "coverage": 107.04,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6213,
+            "expected": 5796,
+            "coverage": 107.19,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6249,
+            "expected": 5796,
+            "coverage": 107.82,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 23854,
+        "expected": 23164,
+        "coverage": 102.98,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 28,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "AUDNZD": {
+      "H1": {
+        "bars": 101345,
+        "expected": 94593,
+        "coverage": 107.14,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 204,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6192,
+            "expected": 5748,
+            "coverage": 107.72,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6205,
+            "expected": 5796,
+            "coverage": 107.06,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6154,
+            "expected": 5796,
+            "coverage": 106.18,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6149,
+            "expected": 5796,
+            "coverage": 106.09,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6229,
+            "expected": 5796,
+            "coverage": 107.47,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6204,
+            "expected": 5796,
+            "coverage": 107.04,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6224,
+            "expected": 5796,
+            "coverage": 107.38,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6247,
+            "expected": 5796,
+            "coverage": 107.78,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6224,
+            "expected": 5796,
+            "coverage": 107.38,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25414,
+        "expected": 24676,
+        "coverage": 102.99,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 27,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "AUDUSD": {
+      "H1": {
+        "bars": 101378,
+        "expected": 94593,
+        "coverage": 107.17,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 212,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6194,
+            "expected": 5748,
+            "coverage": 107.76,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6211,
+            "expected": 5796,
+            "coverage": 107.16,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6161,
+            "expected": 5796,
+            "coverage": 106.3,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6152,
+            "expected": 5796,
+            "coverage": 106.14,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6249,
+            "expected": 5796,
+            "coverage": 107.82,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25412,
+        "expected": 24676,
+        "coverage": 102.98,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 19,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "CADCHF": {
+      "H1": {
+        "bars": 101383,
+        "expected": 94593,
+        "coverage": 107.18,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 169,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6204,
+            "expected": 5748,
+            "coverage": 107.93,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6215,
+            "expected": 5796,
+            "coverage": 107.23,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6212,
+            "expected": 5796,
+            "coverage": 107.18,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6162,
+            "expected": 5796,
+            "coverage": 106.31,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6153,
+            "expected": 5796,
+            "coverage": 106.16,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6196,
+            "expected": 5796,
+            "coverage": 106.9,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6229,
+            "expected": 5796,
+            "coverage": 107.47,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6196,
+            "expected": 5796,
+            "coverage": 106.9,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6225,
+            "expected": 5796,
+            "coverage": 107.4,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6249,
+            "expected": 5796,
+            "coverage": 107.82,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25412,
+        "expected": 24676,
+        "coverage": 102.98,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 29,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1554,
+            "expected": 1512,
+            "coverage": 102.78,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "CADJPY": {
+      "H1": {
+        "bars": 101331,
+        "expected": 94593,
+        "coverage": 107.12,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 201,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6133,
+            "expected": 5748,
+            "coverage": 106.7,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6185,
+            "expected": 5796,
+            "coverage": 106.71,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6189,
+            "expected": 5796,
+            "coverage": 106.78,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6193,
+            "expected": 5796,
+            "coverage": 106.85,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6186,
+            "expected": 5796,
+            "coverage": 106.73,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6196,
+            "expected": 5796,
+            "coverage": 106.9,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6213,
+            "expected": 5796,
+            "coverage": 107.19,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6250,
+            "expected": 5796,
+            "coverage": 107.83,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25383,
+        "expected": 24676,
+        "coverage": 102.87,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 35,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1547,
+            "expected": 1499,
+            "coverage": 103.2,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1550,
+            "expected": 1512,
+            "coverage": 102.51,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1550,
+            "expected": 1512,
+            "coverage": 102.51,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1548,
+            "expected": 1512,
+            "coverage": 102.38,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "CHFJPY": {
+      "H1": {
+        "bars": 95142,
+        "expected": 88797,
+        "coverage": 107.15,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 117,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6200,
+            "expected": 5748,
+            "coverage": 107.86,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6215,
+            "expected": 5796,
+            "coverage": 107.23,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6213,
+            "expected": 5796,
+            "coverage": 107.19,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6157,
+            "expected": 5796,
+            "coverage": 106.23,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6152,
+            "expected": 5796,
+            "coverage": 106.14,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6196,
+            "expected": 5796,
+            "coverage": 106.9,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6227,
+            "expected": 5796,
+            "coverage": 107.44,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6205,
+            "expected": 5796,
+            "coverage": 107.06,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6249,
+            "expected": 5796,
+            "coverage": 107.82,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6225,
+            "expected": 5796,
+            "coverage": 107.4,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2038,
+            "expected": 1905,
+            "coverage": 106.98,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 23852,
+        "expected": 23164,
+        "coverage": 102.97,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 37,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "EURAUD": {
+      "H1": {
+        "bars": 101390,
+        "expected": 94593,
+        "coverage": 107.19,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 140,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6202,
+            "expected": 5748,
+            "coverage": 107.9,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6212,
+            "expected": 5796,
+            "coverage": 107.18,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6162,
+            "expected": 5796,
+            "coverage": 106.31,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6156,
+            "expected": 5796,
+            "coverage": 106.21,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6247,
+            "expected": 5796,
+            "coverage": 107.78,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25413,
+        "expected": 24676,
+        "coverage": 102.99,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 21,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "EURCAD": {
+      "H1": {
+        "bars": 101380,
+        "expected": 94593,
+        "coverage": 107.17,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 210,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6192,
+            "expected": 5748,
+            "coverage": 107.72,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6211,
+            "expected": 5796,
+            "coverage": 107.16,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6170,
+            "expected": 5796,
+            "coverage": 106.45,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6150,
+            "expected": 5796,
+            "coverage": 106.11,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6212,
+            "expected": 5796,
+            "coverage": 107.18,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6249,
+            "expected": 5796,
+            "coverage": 107.82,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6225,
+            "expected": 5796,
+            "coverage": 107.4,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25412,
+        "expected": 24676,
+        "coverage": 102.98,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 26,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1559,
+            "expected": 1499,
+            "coverage": 104.0,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "EURCHF": {
+      "H1": {
+        "bars": 101074,
+        "expected": 94593,
+        "coverage": 106.85,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 226,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6196,
+            "expected": 5748,
+            "coverage": 107.79,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6213,
+            "expected": 5796,
+            "coverage": 107.19,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6154,
+            "expected": 5796,
+            "coverage": 106.18,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6149,
+            "expected": 5796,
+            "coverage": 106.09,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 5906,
+            "expected": 5796,
+            "coverage": 101.9,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6204,
+            "expected": 5796,
+            "coverage": 107.04,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6238,
+            "expected": 5796,
+            "coverage": 107.63,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6204,
+            "expected": 5796,
+            "coverage": 107.04,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6250,
+            "expected": 5796,
+            "coverage": 107.83,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25359,
+        "expected": 24676,
+        "coverage": 102.77,
+        "gap_pct": 0.13,
+        "bad_ohlc": 0,
+        "spikes": 69,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1480,
+            "expected": 1512,
+            "coverage": 97.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1562,
+            "expected": 1512,
+            "coverage": 103.31,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1570,
+            "expected": 1512,
+            "coverage": 103.84,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "EURGBP": {
+      "H1": {
+        "bars": 101382,
+        "expected": 94593,
+        "coverage": 107.18,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 197,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6199,
+            "expected": 5748,
+            "coverage": 107.85,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6210,
+            "expected": 5796,
+            "coverage": 107.14,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6159,
+            "expected": 5796,
+            "coverage": 106.26,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6153,
+            "expected": 5796,
+            "coverage": 106.16,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6250,
+            "expected": 5796,
+            "coverage": 107.83,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25412,
+        "expected": 24676,
+        "coverage": 102.98,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 30,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "EURJPY": {
+      "H1": {
+        "bars": 101381,
+        "expected": 94593,
+        "coverage": 107.18,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 180,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6203,
+            "expected": 5748,
+            "coverage": 107.92,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6209,
+            "expected": 5796,
+            "coverage": 107.13,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6158,
+            "expected": 5796,
+            "coverage": 106.25,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6150,
+            "expected": 5796,
+            "coverage": 106.11,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6192,
+            "expected": 5796,
+            "coverage": 106.83,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6205,
+            "expected": 5796,
+            "coverage": 107.06,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6227,
+            "expected": 5796,
+            "coverage": 107.44,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6250,
+            "expected": 5796,
+            "coverage": 107.83,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25412,
+        "expected": 24676,
+        "coverage": 102.98,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 42,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "EURNZD": {
+      "H1": {
+        "bars": 101339,
+        "expected": 94593,
+        "coverage": 107.13,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 127,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6200,
+            "expected": 5748,
+            "coverage": 107.86,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6210,
+            "expected": 5796,
+            "coverage": 107.14,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6213,
+            "expected": 5796,
+            "coverage": 107.19,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6151,
+            "expected": 5796,
+            "coverage": 106.12,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6150,
+            "expected": 5796,
+            "coverage": 106.11,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6229,
+            "expected": 5796,
+            "coverage": 107.47,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6196,
+            "expected": 5796,
+            "coverage": 106.9,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6227,
+            "expected": 5796,
+            "coverage": 107.44,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6206,
+            "expected": 5796,
+            "coverage": 107.07,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6239,
+            "expected": 5796,
+            "coverage": 107.64,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6216,
+            "expected": 5796,
+            "coverage": 107.25,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25406,
+        "expected": 24676,
+        "coverage": 102.96,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 25,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1554,
+            "expected": 1512,
+            "coverage": 102.78,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1565,
+            "expected": 1512,
+            "coverage": 103.51,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1555,
+            "expected": 1512,
+            "coverage": 102.84,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "EURUSD": {
+      "H1": {
+        "bars": 95225,
+        "expected": 88797,
+        "coverage": 107.24,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 267,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6204,
+            "expected": 5748,
+            "coverage": 107.93,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6211,
+            "expected": 5796,
+            "coverage": 107.16,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6210,
+            "expected": 5796,
+            "coverage": 107.14,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6157,
+            "expected": 5796,
+            "coverage": 106.23,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6227,
+            "expected": 5796,
+            "coverage": 107.44,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6196,
+            "expected": 5796,
+            "coverage": 106.9,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6250,
+            "expected": 5796,
+            "coverage": 107.83,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 23861,
+        "expected": 23164,
+        "coverage": 103.01,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 24,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "GBPAUD": {
+      "H1": {
+        "bars": 95087,
+        "expected": 88797,
+        "coverage": 107.08,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 104,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6133,
+            "expected": 5748,
+            "coverage": 106.7,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6184,
+            "expected": 5796,
+            "coverage": 106.69,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6189,
+            "expected": 5796,
+            "coverage": 106.78,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6193,
+            "expected": 5796,
+            "coverage": 106.85,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6186,
+            "expected": 5796,
+            "coverage": 106.73,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6182,
+            "expected": 5796,
+            "coverage": 106.66,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6218,
+            "expected": 5796,
+            "coverage": 107.28,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6213,
+            "expected": 5796,
+            "coverage": 107.19,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6238,
+            "expected": 5796,
+            "coverage": 107.63,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6224,
+            "expected": 5796,
+            "coverage": 107.38,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 23820,
+        "expected": 23164,
+        "coverage": 102.83,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 20,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1547,
+            "expected": 1499,
+            "coverage": 103.2,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1550,
+            "expected": 1512,
+            "coverage": 102.51,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1550,
+            "expected": 1512,
+            "coverage": 102.51,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1548,
+            "expected": 1512,
+            "coverage": 102.38,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1547,
+            "expected": 1512,
+            "coverage": 102.31,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1565,
+            "expected": 1512,
+            "coverage": 103.51,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "GBPCAD": {
+      "H1": {
+        "bars": 94969,
+        "expected": 88797,
+        "coverage": 106.95,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 180,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6133,
+            "expected": 5748,
+            "coverage": 106.7,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6183,
+            "expected": 5796,
+            "coverage": 106.68,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6189,
+            "expected": 5796,
+            "coverage": 106.78,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6194,
+            "expected": 5796,
+            "coverage": 106.87,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6186,
+            "expected": 5796,
+            "coverage": 106.73,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6121,
+            "expected": 5796,
+            "coverage": 105.61,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6202,
+            "expected": 5796,
+            "coverage": 107.0,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6155,
+            "expected": 5796,
+            "coverage": 106.19,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6213,
+            "expected": 5796,
+            "coverage": 107.19,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6246,
+            "expected": 5796,
+            "coverage": 107.76,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6225,
+            "expected": 5796,
+            "coverage": 107.4,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 23795,
+        "expected": 23164,
+        "coverage": 102.72,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 18,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1547,
+            "expected": 1499,
+            "coverage": 103.2,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1550,
+            "expected": 1512,
+            "coverage": 102.51,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1550,
+            "expected": 1512,
+            "coverage": 102.51,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1548,
+            "expected": 1512,
+            "coverage": 102.38,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1532,
+            "expected": 1512,
+            "coverage": 101.32,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1543,
+            "expected": 1512,
+            "coverage": 102.05,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "GBPCHF": {
+      "H1": {
+        "bars": 101367,
+        "expected": 94593,
+        "coverage": 107.16,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 149,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6201,
+            "expected": 5748,
+            "coverage": 107.88,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6210,
+            "expected": 5796,
+            "coverage": 107.14,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6159,
+            "expected": 5796,
+            "coverage": 106.26,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6150,
+            "expected": 5796,
+            "coverage": 106.11,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6194,
+            "expected": 5796,
+            "coverage": 106.87,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6196,
+            "expected": 5796,
+            "coverage": 106.9,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6205,
+            "expected": 5796,
+            "coverage": 107.06,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6248,
+            "expected": 5796,
+            "coverage": 107.8,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6225,
+            "expected": 5796,
+            "coverage": 107.4,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25410,
+        "expected": 24676,
+        "coverage": 102.97,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 34,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "GBPJPY": {
+      "H1": {
+        "bars": 95143,
+        "expected": 88797,
+        "coverage": 107.15,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 161,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6204,
+            "expected": 5748,
+            "coverage": 107.93,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6211,
+            "expected": 5796,
+            "coverage": 107.16,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6155,
+            "expected": 5796,
+            "coverage": 106.19,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6152,
+            "expected": 5796,
+            "coverage": 106.14,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6194,
+            "expected": 5796,
+            "coverage": 106.87,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6213,
+            "expected": 5796,
+            "coverage": 107.19,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6250,
+            "expected": 5796,
+            "coverage": 107.83,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 23851,
+        "expected": 23164,
+        "coverage": 102.97,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 35,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "GBPNZD": {
+      "H1": {
+        "bars": 90271,
+        "expected": 83049,
+        "coverage": 108.7,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 102,
+        "first_bar": "2009-12-31",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2009": {
+            "bars": 1,
+            "expected": 0,
+            "coverage": 0,
+            "verdict": "ROJO"
+          },
+          "2010": {
+            "bars": 6523,
+            "expected": 5796,
+            "coverage": 112.54,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6491,
+            "expected": 5796,
+            "coverage": 111.99,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6485,
+            "expected": 5796,
+            "coverage": 111.89,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6253,
+            "expected": 5796,
+            "coverage": 107.88,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6253,
+            "expected": 5796,
+            "coverage": 107.88,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6249,
+            "expected": 5796,
+            "coverage": 107.82,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6254,
+            "expected": 5796,
+            "coverage": 107.9,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6250,
+            "expected": 5796,
+            "coverage": 107.83,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6274,
+            "expected": 5796,
+            "coverage": 108.25,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6265,
+            "expected": 5796,
+            "coverage": 108.09,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6263,
+            "expected": 5796,
+            "coverage": 108.06,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6225,
+            "expected": 5796,
+            "coverage": 107.4,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 22947,
+        "expected": 21665,
+        "coverage": 105.92,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 16,
+        "first_bar": "2010-01-01",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1674,
+            "expected": 1512,
+            "coverage": 110.71,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1668,
+            "expected": 1512,
+            "coverage": 110.32,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1671,
+            "expected": 1512,
+            "coverage": 110.52,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1592,
+            "expected": 1512,
+            "coverage": 105.29,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1591,
+            "expected": 1512,
+            "coverage": 105.22,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1589,
+            "expected": 1512,
+            "coverage": 105.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1591,
+            "expected": 1512,
+            "coverage": 105.22,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1591,
+            "expected": 1512,
+            "coverage": 105.22,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1593,
+            "expected": 1512,
+            "coverage": 105.36,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1589,
+            "expected": 1512,
+            "coverage": 105.09,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1589,
+            "expected": 1512,
+            "coverage": 105.09,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1580,
+            "expected": 1512,
+            "coverage": 104.5,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1565,
+            "expected": 1512,
+            "coverage": 103.51,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1554,
+            "expected": 1512,
+            "coverage": 102.78,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "GBPUSD": {
+      "H1": {
+        "bars": 101379,
+        "expected": 94593,
+        "coverage": 107.17,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 225,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6200,
+            "expected": 5748,
+            "coverage": 107.86,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6212,
+            "expected": 5796,
+            "coverage": 107.18,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6212,
+            "expected": 5796,
+            "coverage": 107.18,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6158,
+            "expected": 5796,
+            "coverage": 106.25,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6150,
+            "expected": 5796,
+            "coverage": 106.11,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6204,
+            "expected": 5796,
+            "coverage": 107.04,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6198,
+            "expected": 5796,
+            "coverage": 106.94,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6212,
+            "expected": 5796,
+            "coverage": 107.18,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6250,
+            "expected": 5796,
+            "coverage": 107.83,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25412,
+        "expected": 24676,
+        "coverage": 102.98,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 20,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "GER40": {
+      "H1": {
+        "bars": 60973,
+        "expected": 67121,
+        "coverage": 90.84,
+        "gap_pct": 10.11,
+        "bad_ohlc": 0,
+        "spikes": 112,
+        "first_bar": "2013-09-30",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2019,
+        "verdict": "opc2_limited",
+        "by_year": {
+          "2013": {
+            "bars": 1307,
+            "expected": 1460,
+            "coverage": 89.52,
+            "verdict": "AMARILLO"
+          },
+          "2014": {
+            "bars": 5862,
+            "expected": 5796,
+            "coverage": 101.14,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 4057,
+            "expected": 5796,
+            "coverage": 70.0,
+            "verdict": "ROJO"
+          },
+          "2016": {
+            "bars": 3698,
+            "expected": 5796,
+            "coverage": 63.8,
+            "verdict": "ROJO"
+          },
+          "2017": {
+            "bars": 3630,
+            "expected": 5796,
+            "coverage": 62.63,
+            "verdict": "ROJO"
+          },
+          "2018": {
+            "bars": 5167,
+            "expected": 5796,
+            "coverage": 89.15,
+            "verdict": "AMARILLO"
+          },
+          "2019": {
+            "bars": 5871,
+            "expected": 5796,
+            "coverage": 101.29,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 5851,
+            "expected": 5796,
+            "coverage": 100.95,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 5922,
+            "expected": 5796,
+            "coverage": 102.17,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 5873,
+            "expected": 5796,
+            "coverage": 101.33,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 5917,
+            "expected": 5796,
+            "coverage": 102.09,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 5903,
+            "expected": 5796,
+            "coverage": 101.85,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 1915,
+            "expected": 1905,
+            "coverage": 100.52,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 16126,
+        "expected": 17510,
+        "coverage": 92.1,
+        "gap_pct": 9.21,
+        "bad_ohlc": 0,
+        "spikes": 22,
+        "first_bar": "2013-09-30",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2019,
+        "verdict": "opc2_limited",
+        "by_year": {
+          "2013": {
+            "bars": 343,
+            "expected": 381,
+            "coverage": 90.03,
+            "verdict": "AMARILLO"
+          },
+          "2014": {
+            "bars": 1490,
+            "expected": 1512,
+            "coverage": 98.54,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1082,
+            "expected": 1512,
+            "coverage": 71.56,
+            "verdict": "ROJO"
+          },
+          "2016": {
+            "bars": 1024,
+            "expected": 1512,
+            "coverage": 67.72,
+            "verdict": "ROJO"
+          },
+          "2017": {
+            "bars": 1016,
+            "expected": 1512,
+            "coverage": 67.2,
+            "verdict": "ROJO"
+          },
+          "2018": {
+            "bars": 1374,
+            "expected": 1512,
+            "coverage": 90.87,
+            "verdict": "AMARILLO"
+          },
+          "2019": {
+            "bars": 1548,
+            "expected": 1512,
+            "coverage": 102.38,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1548,
+            "expected": 1512,
+            "coverage": 102.38,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1536,
+            "expected": 1512,
+            "coverage": 101.59,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1555,
+            "expected": 1512,
+            "coverage": 102.84,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 506,
+            "expected": 497,
+            "coverage": 101.81,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "NZDCAD": {
+      "H1": {
+        "bars": 88004,
+        "expected": 83001,
+        "coverage": 106.03,
+        "gap_pct": 0.21,
+        "bad_ohlc": 0,
+        "spikes": 165,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6081,
+            "expected": 5748,
+            "coverage": 105.79,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6132,
+            "expected": 5796,
+            "coverage": 105.8,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 5618,
+            "expected": 5796,
+            "coverage": 96.93,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6152,
+            "expected": 5796,
+            "coverage": 106.14,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6142,
+            "expected": 5796,
+            "coverage": 105.97,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6206,
+            "expected": 5796,
+            "coverage": 107.07,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6227,
+            "expected": 5796,
+            "coverage": 107.44,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6071,
+            "expected": 5796,
+            "coverage": 104.74,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6198,
+            "expected": 5796,
+            "coverage": 106.94,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6210,
+            "expected": 5796,
+            "coverage": 107.14,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6243,
+            "expected": 5796,
+            "coverage": 107.71,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6225,
+            "expected": 5796,
+            "coverage": 107.4,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 22108,
+        "expected": 21652,
+        "coverage": 102.11,
+        "gap_pct": 0.47,
+        "bad_ohlc": 0,
+        "spikes": 12,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1549,
+            "expected": 1499,
+            "coverage": 103.34,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1410,
+            "expected": 1512,
+            "coverage": 93.25,
+            "verdict": "AMARILLO"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1554,
+            "expected": 1512,
+            "coverage": 102.78,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1521,
+            "expected": 1512,
+            "coverage": 100.6,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1555,
+            "expected": 1512,
+            "coverage": 102.84,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "NZDJPY": {
+      "H1": {
+        "bars": 88747,
+        "expected": 83001,
+        "coverage": 106.92,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 142,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6081,
+            "expected": 5748,
+            "coverage": 105.79,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6132,
+            "expected": 5796,
+            "coverage": 105.8,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6194,
+            "expected": 5796,
+            "coverage": 106.87,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6150,
+            "expected": 5796,
+            "coverage": 106.11,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6153,
+            "expected": 5796,
+            "coverage": 106.16,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6210,
+            "expected": 5796,
+            "coverage": 107.14,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6244,
+            "expected": 5796,
+            "coverage": 107.73,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 22292,
+        "expected": 21652,
+        "coverage": 102.96,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 23,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1549,
+            "expected": 1499,
+            "coverage": 103.34,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1555,
+            "expected": 1512,
+            "coverage": 102.84,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "NZDUSD": {
+      "H1": {
+        "bars": 95161,
+        "expected": 88797,
+        "coverage": 107.17,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 179,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6195,
+            "expected": 5748,
+            "coverage": 107.78,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6212,
+            "expected": 5796,
+            "coverage": 107.18,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6153,
+            "expected": 5796,
+            "coverage": 106.16,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6150,
+            "expected": 5796,
+            "coverage": 106.11,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6211,
+            "expected": 5796,
+            "coverage": 107.16,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6249,
+            "expected": 5796,
+            "coverage": 107.82,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6224,
+            "expected": 5796,
+            "coverage": 107.38,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 23860,
+        "expected": 23164,
+        "coverage": 103.0,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 13,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1559,
+            "expected": 1499,
+            "coverage": 104.0,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "US30": {
+      "H1": {
+        "bars": 67569,
+        "expected": 72917,
+        "coverage": 92.67,
+        "gap_pct": 8.43,
+        "bad_ohlc": 0,
+        "spikes": 141,
+        "first_bar": "2013-09-30",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2019,
+        "verdict": "opc2_limited",
+        "by_year": {
+          "2013": {
+            "bars": 1194,
+            "expected": 1460,
+            "coverage": 81.78,
+            "verdict": "AMARILLO"
+          },
+          "2014": {
+            "bars": 5855,
+            "expected": 5796,
+            "coverage": 101.02,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 4468,
+            "expected": 5796,
+            "coverage": 77.09,
+            "verdict": "ROJO"
+          },
+          "2016": {
+            "bars": 3844,
+            "expected": 5796,
+            "coverage": 66.32,
+            "verdict": "ROJO"
+          },
+          "2017": {
+            "bars": 3741,
+            "expected": 5796,
+            "coverage": 64.54,
+            "verdict": "ROJO"
+          },
+          "2018": {
+            "bars": 5249,
+            "expected": 5796,
+            "coverage": 90.56,
+            "verdict": "AMARILLO"
+          },
+          "2019": {
+            "bars": 5900,
+            "expected": 5796,
+            "coverage": 101.79,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 5900,
+            "expected": 5796,
+            "coverage": 101.79,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 5923,
+            "expected": 5796,
+            "coverage": 102.19,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 5903,
+            "expected": 5796,
+            "coverage": 101.85,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 5873,
+            "expected": 5796,
+            "coverage": 101.33,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 5917,
+            "expected": 5796,
+            "coverage": 102.09,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 5879,
+            "expected": 5796,
+            "coverage": 101.43,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 1923,
+            "expected": 1905,
+            "coverage": 100.94,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 17743,
+        "expected": 19022,
+        "coverage": 93.28,
+        "gap_pct": 7.85,
+        "bad_ohlc": 0,
+        "spikes": 41,
+        "first_bar": "2013-09-30",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2019,
+        "verdict": "opc2_limited",
+        "by_year": {
+          "2013": {
+            "bars": 333,
+            "expected": 381,
+            "coverage": 87.4,
+            "verdict": "AMARILLO"
+          },
+          "2014": {
+            "bars": 1498,
+            "expected": 1512,
+            "coverage": 99.07,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1172,
+            "expected": 1512,
+            "coverage": 77.51,
+            "verdict": "ROJO"
+          },
+          "2016": {
+            "bars": 1028,
+            "expected": 1512,
+            "coverage": 67.99,
+            "verdict": "ROJO"
+          },
+          "2017": {
+            "bars": 1021,
+            "expected": 1512,
+            "coverage": 67.53,
+            "verdict": "ROJO"
+          },
+          "2018": {
+            "bars": 1396,
+            "expected": 1512,
+            "coverage": 92.33,
+            "verdict": "AMARILLO"
+          },
+          "2019": {
+            "bars": 1541,
+            "expected": 1512,
+            "coverage": 101.92,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1545,
+            "expected": 1512,
+            "coverage": 102.18,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1546,
+            "expected": 1512,
+            "coverage": 102.25,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1541,
+            "expected": 1512,
+            "coverage": 101.92,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1533,
+            "expected": 1512,
+            "coverage": 101.39,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1548,
+            "expected": 1512,
+            "coverage": 102.38,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1539,
+            "expected": 1512,
+            "coverage": 101.79,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 502,
+            "expected": 497,
+            "coverage": 101.01,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "US500": {
+      "H1": {
+        "bars": 73144,
+        "expected": 84700,
+        "coverage": 86.36,
+        "gap_pct": 14.58,
+        "bad_ohlc": 0,
+        "spikes": 173,
+        "first_bar": "2011-09-18",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2019,
+        "verdict": "opc2_limited",
+        "by_year": {
+          "2011": {
+            "bars": 36,
+            "expected": 1651,
+            "coverage": 2.18,
+            "verdict": "ROJO"
+          },
+          "2012": {
+            "bars": 2418,
+            "expected": 5796,
+            "coverage": 41.72,
+            "verdict": "ROJO"
+          },
+          "2013": {
+            "bars": 4344,
+            "expected": 5796,
+            "coverage": 74.95,
+            "verdict": "ROJO"
+          },
+          "2014": {
+            "bars": 5846,
+            "expected": 5796,
+            "coverage": 100.86,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 4400,
+            "expected": 5796,
+            "coverage": 75.91,
+            "verdict": "ROJO"
+          },
+          "2016": {
+            "bars": 3873,
+            "expected": 5796,
+            "coverage": 66.82,
+            "verdict": "ROJO"
+          },
+          "2017": {
+            "bars": 3758,
+            "expected": 5796,
+            "coverage": 64.84,
+            "verdict": "ROJO"
+          },
+          "2018": {
+            "bars": 5250,
+            "expected": 5796,
+            "coverage": 90.58,
+            "verdict": "AMARILLO"
+          },
+          "2019": {
+            "bars": 5900,
+            "expected": 5796,
+            "coverage": 101.79,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 5898,
+            "expected": 5796,
+            "coverage": 101.76,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 5923,
+            "expected": 5796,
+            "coverage": 102.19,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 5903,
+            "expected": 5796,
+            "coverage": 101.85,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 5872,
+            "expected": 5796,
+            "coverage": 101.31,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 5919,
+            "expected": 5796,
+            "coverage": 102.12,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 5881,
+            "expected": 5796,
+            "coverage": 101.47,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 1923,
+            "expected": 1905,
+            "coverage": 100.94,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 19565,
+        "expected": 22095,
+        "coverage": 88.55,
+        "gap_pct": 12.41,
+        "bad_ohlc": 0,
+        "spikes": 44,
+        "first_bar": "2011-09-18",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2019,
+        "verdict": "opc2_limited",
+        "by_year": {
+          "2011": {
+            "bars": 17,
+            "expected": 430,
+            "coverage": 3.95,
+            "verdict": "ROJO"
+          },
+          "2012": {
+            "bars": 902,
+            "expected": 1512,
+            "coverage": 59.66,
+            "verdict": "ROJO"
+          },
+          "2013": {
+            "bars": 1228,
+            "expected": 1512,
+            "coverage": 81.22,
+            "verdict": "AMARILLO"
+          },
+          "2014": {
+            "bars": 1503,
+            "expected": 1512,
+            "coverage": 99.4,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1159,
+            "expected": 1512,
+            "coverage": 76.65,
+            "verdict": "ROJO"
+          },
+          "2016": {
+            "bars": 1038,
+            "expected": 1512,
+            "coverage": 68.65,
+            "verdict": "ROJO"
+          },
+          "2017": {
+            "bars": 1027,
+            "expected": 1512,
+            "coverage": 67.92,
+            "verdict": "ROJO"
+          },
+          "2018": {
+            "bars": 1397,
+            "expected": 1512,
+            "coverage": 92.39,
+            "verdict": "AMARILLO"
+          },
+          "2019": {
+            "bars": 1541,
+            "expected": 1512,
+            "coverage": 101.92,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1545,
+            "expected": 1512,
+            "coverage": 102.18,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1546,
+            "expected": 1512,
+            "coverage": 102.25,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1541,
+            "expected": 1512,
+            "coverage": 101.92,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1532,
+            "expected": 1512,
+            "coverage": 101.32,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1548,
+            "expected": 1512,
+            "coverage": 102.38,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1539,
+            "expected": 1512,
+            "coverage": 101.79,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 502,
+            "expected": 497,
+            "coverage": 101.01,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "USDCAD": {
+      "H1": {
+        "bars": 101387,
+        "expected": 94593,
+        "coverage": 107.18,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 258,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6197,
+            "expected": 5748,
+            "coverage": 107.81,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6211,
+            "expected": 5796,
+            "coverage": 107.16,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6210,
+            "expected": 5796,
+            "coverage": 107.14,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6166,
+            "expected": 5796,
+            "coverage": 106.38,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6156,
+            "expected": 5796,
+            "coverage": 106.21,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6195,
+            "expected": 5796,
+            "coverage": 106.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6204,
+            "expected": 5796,
+            "coverage": 107.04,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6196,
+            "expected": 5796,
+            "coverage": 106.9,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6214,
+            "expected": 5796,
+            "coverage": 107.21,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6250,
+            "expected": 5796,
+            "coverage": 107.83,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25412,
+        "expected": 24676,
+        "coverage": 102.98,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 21,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "USDCHF": {
+      "H1": {
+        "bars": 101357,
+        "expected": 94593,
+        "coverage": 107.15,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 253,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6202,
+            "expected": 5748,
+            "coverage": 107.9,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 6210,
+            "expected": 5796,
+            "coverage": 107.14,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 6212,
+            "expected": 5796,
+            "coverage": 107.18,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6164,
+            "expected": 5796,
+            "coverage": 106.35,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6150,
+            "expected": 5796,
+            "coverage": 106.11,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6176,
+            "expected": 5796,
+            "coverage": 106.56,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6230,
+            "expected": 5796,
+            "coverage": 107.49,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6203,
+            "expected": 5796,
+            "coverage": 107.02,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6196,
+            "expected": 5796,
+            "coverage": 106.9,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6207,
+            "expected": 5796,
+            "coverage": 107.09,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6250,
+            "expected": 5796,
+            "coverage": 107.83,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6225,
+            "expected": 5796,
+            "coverage": 107.4,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25406,
+        "expected": 24676,
+        "coverage": 102.96,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 27,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1560,
+            "expected": 1499,
+            "coverage": 104.07,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1547,
+            "expected": 1512,
+            "coverage": 102.31,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1552,
+            "expected": 1512,
+            "coverage": 102.65,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1554,
+            "expected": 1512,
+            "coverage": 102.78,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "USDJPY": {
+      "H1": {
+        "bars": 23105,
+        "expected": 48209,
+        "coverage": 47.93,
+        "gap_pct": 55.09,
+        "bad_ohlc": 0,
+        "spikes": 89,
+        "first_bar": "2018-01-24",
+        "last_bar": "2026-05-19",
+        "first_clean_year": 2023,
+        "verdict": "opc1_recommended",
+        "by_year": {
+          "2018": {
+            "bars": 239,
+            "expected": 5430,
+            "coverage": 4.4,
+            "verdict": "ROJO"
+          },
+          "2019": {
+            "bars": 260,
+            "expected": 5796,
+            "coverage": 4.49,
+            "verdict": "ROJO"
+          },
+          "2020": {
+            "bars": 261,
+            "expected": 5796,
+            "coverage": 4.5,
+            "verdict": "ROJO"
+          },
+          "2021": {
+            "bars": 260,
+            "expected": 5796,
+            "coverage": 4.49,
+            "verdict": "ROJO"
+          },
+          "2022": {
+            "bars": 1038,
+            "expected": 5796,
+            "coverage": 17.91,
+            "verdict": "ROJO"
+          },
+          "2023": {
+            "bars": 6225,
+            "expected": 5796,
+            "coverage": 107.4,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6246,
+            "expected": 5796,
+            "coverage": 107.76,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6225,
+            "expected": 5796,
+            "coverage": 107.4,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2351,
+            "expected": 2207,
+            "coverage": 106.52,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 6819,
+        "expected": 12575,
+        "coverage": 54.23,
+        "gap_pct": 47.77,
+        "bad_ohlc": 0,
+        "spikes": 19,
+        "first_bar": "2018-01-24",
+        "last_bar": "2026-05-19",
+        "first_clean_year": 2023,
+        "verdict": "opc1_recommended",
+        "by_year": {
+          "2018": {
+            "bars": 239,
+            "expected": 1416,
+            "coverage": 16.88,
+            "verdict": "ROJO"
+          },
+          "2019": {
+            "bars": 260,
+            "expected": 1512,
+            "coverage": 17.2,
+            "verdict": "ROJO"
+          },
+          "2020": {
+            "bars": 261,
+            "expected": 1512,
+            "coverage": 17.26,
+            "verdict": "ROJO"
+          },
+          "2021": {
+            "bars": 260,
+            "expected": 1512,
+            "coverage": 17.2,
+            "verdict": "ROJO"
+          },
+          "2022": {
+            "bars": 437,
+            "expected": 1512,
+            "coverage": 28.9,
+            "verdict": "ROJO"
+          },
+          "2023": {
+            "bars": 1609,
+            "expected": 1512,
+            "coverage": 106.42,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1608,
+            "expected": 1512,
+            "coverage": 106.35,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 588,
+            "expected": 575,
+            "coverage": 102.26,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "USDMXN": {
+      "H1": {
+        "bars": 84419,
+        "expected": 83001,
+        "coverage": 101.71,
+        "gap_pct": 4.19,
+        "bad_ohlc": 0,
+        "spikes": 192,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2012,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6014,
+            "expected": 5748,
+            "coverage": 104.63,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 2319,
+            "expected": 5796,
+            "coverage": 40.01,
+            "verdict": "ROJO"
+          },
+          "2012": {
+            "bars": 5874,
+            "expected": 5796,
+            "coverage": 101.35,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6145,
+            "expected": 5796,
+            "coverage": 106.02,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 6138,
+            "expected": 5796,
+            "coverage": 105.9,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6143,
+            "expected": 5796,
+            "coverage": 105.99,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6227,
+            "expected": 5796,
+            "coverage": 107.44,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6235,
+            "expected": 5796,
+            "coverage": 107.57,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6204,
+            "expected": 5796,
+            "coverage": 107.04,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6229,
+            "expected": 5796,
+            "coverage": 107.47,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2037,
+            "expected": 1905,
+            "coverage": 106.93,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 21307,
+        "expected": 21652,
+        "coverage": 98.41,
+        "gap_pct": 4.33,
+        "bad_ohlc": 0,
+        "spikes": 40,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2012,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1559,
+            "expected": 1499,
+            "coverage": 104.0,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 605,
+            "expected": 1512,
+            "coverage": 40.01,
+            "verdict": "ROJO"
+          },
+          "2012": {
+            "bars": 1481,
+            "expected": 1512,
+            "coverage": 97.95,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1550,
+            "expected": 1512,
+            "coverage": 102.51,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1587,
+            "expected": 1512,
+            "coverage": 104.96,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1553,
+            "expected": 1512,
+            "coverage": 102.71,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1567,
+            "expected": 1512,
+            "coverage": 103.64,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1556,
+            "expected": 1512,
+            "coverage": 102.91,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "USDZAR": {
+      "H1": {
+        "bars": 96400,
+        "expected": 94593,
+        "coverage": 101.91,
+        "gap_pct": 3.69,
+        "bad_ohlc": 0,
+        "spikes": 151,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2012,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 6117,
+            "expected": 5748,
+            "coverage": 106.42,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 2368,
+            "expected": 5796,
+            "coverage": 40.86,
+            "verdict": "ROJO"
+          },
+          "2012": {
+            "bars": 5858,
+            "expected": 5796,
+            "coverage": 101.07,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 6109,
+            "expected": 5796,
+            "coverage": 105.4,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 5737,
+            "expected": 5796,
+            "coverage": 98.98,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 6137,
+            "expected": 5796,
+            "coverage": 105.88,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 6226,
+            "expected": 5796,
+            "coverage": 107.42,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 6073,
+            "expected": 5796,
+            "coverage": 104.78,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 6197,
+            "expected": 5796,
+            "coverage": 106.92,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 6190,
+            "expected": 5796,
+            "coverage": 106.8,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 6223,
+            "expected": 5796,
+            "coverage": 107.37,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 6232,
+            "expected": 5796,
+            "coverage": 107.52,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 6228,
+            "expected": 5796,
+            "coverage": 107.45,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 6210,
+            "expected": 5796,
+            "coverage": 107.14,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 6240,
+            "expected": 5796,
+            "coverage": 107.66,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 6216,
+            "expected": 5796,
+            "coverage": 107.25,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 2039,
+            "expected": 1905,
+            "coverage": 107.03,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 24290,
+        "expected": 24676,
+        "coverage": 98.44,
+        "gap_pct": 4.0,
+        "bad_ohlc": 0,
+        "spikes": 25,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2012,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1559,
+            "expected": 1499,
+            "coverage": 104.0,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 607,
+            "expected": 1512,
+            "coverage": 40.15,
+            "verdict": "ROJO"
+          },
+          "2012": {
+            "bars": 1478,
+            "expected": 1512,
+            "coverage": 97.75,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1545,
+            "expected": 1512,
+            "coverage": 102.18,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1464,
+            "expected": 1512,
+            "coverage": 96.83,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1591,
+            "expected": 1512,
+            "coverage": 105.22,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1559,
+            "expected": 1512,
+            "coverage": 103.11,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1521,
+            "expected": 1512,
+            "coverage": 100.6,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1551,
+            "expected": 1512,
+            "coverage": 102.58,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1549,
+            "expected": 1512,
+            "coverage": 102.45,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1560,
+            "expected": 1512,
+            "coverage": 103.17,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1558,
+            "expected": 1512,
+            "coverage": 103.04,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1555,
+            "expected": 1512,
+            "coverage": 102.84,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1568,
+            "expected": 1512,
+            "coverage": 103.7,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1557,
+            "expected": 1512,
+            "coverage": 102.98,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 510,
+            "expected": 497,
+            "coverage": 102.62,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "USTEC": {
+      "H1": {
+        "bars": 71254,
+        "expected": 84700,
+        "coverage": 84.13,
+        "gap_pct": 16.7,
+        "bad_ohlc": 0,
+        "spikes": 203,
+        "first_bar": "2011-09-18",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2019,
+        "verdict": "opc2_limited",
+        "by_year": {
+          "2011": {
+            "bars": 34,
+            "expected": 1651,
+            "coverage": 2.06,
+            "verdict": "ROJO"
+          },
+          "2012": {
+            "bars": 2068,
+            "expected": 5796,
+            "coverage": 35.68,
+            "verdict": "ROJO"
+          },
+          "2013": {
+            "bars": 4050,
+            "expected": 5796,
+            "coverage": 69.88,
+            "verdict": "ROJO"
+          },
+          "2014": {
+            "bars": 5835,
+            "expected": 5796,
+            "coverage": 100.67,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 4477,
+            "expected": 5796,
+            "coverage": 77.24,
+            "verdict": "ROJO"
+          },
+          "2016": {
+            "bars": 3843,
+            "expected": 5796,
+            "coverage": 66.3,
+            "verdict": "ROJO"
+          },
+          "2017": {
+            "bars": 3741,
+            "expected": 5796,
+            "coverage": 64.54,
+            "verdict": "ROJO"
+          },
+          "2018": {
+            "bars": 5249,
+            "expected": 5796,
+            "coverage": 90.56,
+            "verdict": "AMARILLO"
+          },
+          "2019": {
+            "bars": 5903,
+            "expected": 5796,
+            "coverage": 101.85,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 5894,
+            "expected": 5796,
+            "coverage": 101.69,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 5923,
+            "expected": 5796,
+            "coverage": 102.19,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 5903,
+            "expected": 5796,
+            "coverage": 101.85,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 4615,
+            "expected": 5796,
+            "coverage": 79.62,
+            "verdict": "ROJO"
+          },
+          "2024": {
+            "bars": 5917,
+            "expected": 5796,
+            "coverage": 102.09,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 5879,
+            "expected": 5796,
+            "coverage": 101.43,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 1923,
+            "expected": 1905,
+            "coverage": 100.94,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 19026,
+        "expected": 22095,
+        "coverage": 86.11,
+        "gap_pct": 14.77,
+        "bad_ohlc": 0,
+        "spikes": 35,
+        "first_bar": "2011-09-18",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2019,
+        "verdict": "opc2_limited",
+        "by_year": {
+          "2011": {
+            "bars": 15,
+            "expected": 430,
+            "coverage": 3.49,
+            "verdict": "ROJO"
+          },
+          "2012": {
+            "bars": 787,
+            "expected": 1512,
+            "coverage": 52.05,
+            "verdict": "ROJO"
+          },
+          "2013": {
+            "bars": 1146,
+            "expected": 1512,
+            "coverage": 75.79,
+            "verdict": "ROJO"
+          },
+          "2014": {
+            "bars": 1492,
+            "expected": 1512,
+            "coverage": 98.68,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1174,
+            "expected": 1512,
+            "coverage": 77.65,
+            "verdict": "ROJO"
+          },
+          "2016": {
+            "bars": 1027,
+            "expected": 1512,
+            "coverage": 67.92,
+            "verdict": "ROJO"
+          },
+          "2017": {
+            "bars": 1021,
+            "expected": 1512,
+            "coverage": 67.53,
+            "verdict": "ROJO"
+          },
+          "2018": {
+            "bars": 1396,
+            "expected": 1512,
+            "coverage": 92.33,
+            "verdict": "AMARILLO"
+          },
+          "2019": {
+            "bars": 1542,
+            "expected": 1512,
+            "coverage": 101.98,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1545,
+            "expected": 1512,
+            "coverage": 102.18,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1546,
+            "expected": 1512,
+            "coverage": 102.25,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1541,
+            "expected": 1512,
+            "coverage": 101.92,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1205,
+            "expected": 1512,
+            "coverage": 79.7,
+            "verdict": "ROJO"
+          },
+          "2024": {
+            "bars": 1548,
+            "expected": 1512,
+            "coverage": 102.38,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1539,
+            "expected": 1512,
+            "coverage": 101.79,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 502,
+            "expected": 497,
+            "coverage": 101.01,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    },
+    "XAUUSD": {
+      "H1": {
+        "bars": 95672,
+        "expected": 94577,
+        "coverage": 101.16,
+        "gap_pct": 0.18,
+        "bad_ohlc": 0,
+        "spikes": 318,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 5634,
+            "expected": 5732,
+            "coverage": 98.29,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 5726,
+            "expected": 5796,
+            "coverage": 98.79,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 5847,
+            "expected": 5796,
+            "coverage": 100.88,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 5874,
+            "expected": 5796,
+            "coverage": 101.35,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 5872,
+            "expected": 5796,
+            "coverage": 101.31,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 5843,
+            "expected": 5796,
+            "coverage": 100.81,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 5889,
+            "expected": 5796,
+            "coverage": 101.6,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 5861,
+            "expected": 5796,
+            "coverage": 101.12,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 5873,
+            "expected": 5796,
+            "coverage": 101.33,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 5871,
+            "expected": 5796,
+            "coverage": 101.29,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 5904,
+            "expected": 5796,
+            "coverage": 101.86,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 5900,
+            "expected": 5796,
+            "coverage": 101.79,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 5904,
+            "expected": 5796,
+            "coverage": 101.86,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 5893,
+            "expected": 5796,
+            "coverage": 101.67,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 5938,
+            "expected": 5796,
+            "coverage": 102.45,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 5915,
+            "expected": 5796,
+            "coverage": 102.05,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 1928,
+            "expected": 1905,
+            "coverage": 101.21,
+            "verdict": "VERDE"
+          }
+        }
+      },
+      "H4": {
+        "bars": 25144,
+        "expected": 24676,
+        "coverage": 101.9,
+        "gap_pct": 0.0,
+        "bad_ohlc": 0,
+        "spikes": 33,
+        "first_bar": "2010-01-04",
+        "last_bar": "2026-04-30",
+        "first_clean_year": 2010,
+        "verdict": "opc2_ok",
+        "by_year": {
+          "2010": {
+            "bars": 1528,
+            "expected": 1499,
+            "coverage": 101.93,
+            "verdict": "VERDE"
+          },
+          "2011": {
+            "bars": 1525,
+            "expected": 1512,
+            "coverage": 100.86,
+            "verdict": "VERDE"
+          },
+          "2012": {
+            "bars": 1537,
+            "expected": 1512,
+            "coverage": 101.65,
+            "verdict": "VERDE"
+          },
+          "2013": {
+            "bars": 1544,
+            "expected": 1512,
+            "coverage": 102.12,
+            "verdict": "VERDE"
+          },
+          "2014": {
+            "bars": 1539,
+            "expected": 1512,
+            "coverage": 101.79,
+            "verdict": "VERDE"
+          },
+          "2015": {
+            "bars": 1532,
+            "expected": 1512,
+            "coverage": 101.32,
+            "verdict": "VERDE"
+          },
+          "2016": {
+            "bars": 1542,
+            "expected": 1512,
+            "coverage": 101.98,
+            "verdict": "VERDE"
+          },
+          "2017": {
+            "bars": 1534,
+            "expected": 1512,
+            "coverage": 101.46,
+            "verdict": "VERDE"
+          },
+          "2018": {
+            "bars": 1539,
+            "expected": 1512,
+            "coverage": 101.79,
+            "verdict": "VERDE"
+          },
+          "2019": {
+            "bars": 1540,
+            "expected": 1512,
+            "coverage": 101.85,
+            "verdict": "VERDE"
+          },
+          "2020": {
+            "bars": 1547,
+            "expected": 1512,
+            "coverage": 102.31,
+            "verdict": "VERDE"
+          },
+          "2021": {
+            "bars": 1542,
+            "expected": 1512,
+            "coverage": 101.98,
+            "verdict": "VERDE"
+          },
+          "2022": {
+            "bars": 1547,
+            "expected": 1512,
+            "coverage": 102.31,
+            "verdict": "VERDE"
+          },
+          "2023": {
+            "bars": 1542,
+            "expected": 1512,
+            "coverage": 101.98,
+            "verdict": "VERDE"
+          },
+          "2024": {
+            "bars": 1555,
+            "expected": 1512,
+            "coverage": 102.84,
+            "verdict": "VERDE"
+          },
+          "2025": {
+            "bars": 1547,
+            "expected": 1512,
+            "coverage": 102.31,
+            "verdict": "VERDE"
+          },
+          "2026": {
+            "bars": 504,
+            "expected": 497,
+            "coverage": 101.41,
+            "verdict": "VERDE"
+          }
+        }
+      }
+    }
+  }
+}

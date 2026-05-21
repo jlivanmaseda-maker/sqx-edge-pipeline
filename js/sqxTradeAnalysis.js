@@ -663,8 +663,14 @@
    * Cada bloque: {idx, startMonth, endMonth, netProfit, netProfitPct,
    *               maxDD, maxDDPct, cagr, cagrDD, trades, wins, worstYear}
    */
+  /** Calcula N bloques auto-escalado: target ~12 meses/bloque.
+   *  4 años → 6 bloques (mín), 8 años → 8, 16 años → 16, >20y → 20 (máx). */
+  function autoN(rangeMs, targetMonthsPerBlock = 12) {
+    const years = rangeMs / (365.25 * 24 * 3600 * 1000);
+    return Math.max(6, Math.min(20, Math.round(years * 12 / targetMonthsPerBlock)));
+  }
+
   function generateOOSBlocks(trades, opts = {}) {
-    const N = opts.nBlocks || 9;
     const startingCapital = opts.startingCapital || 100000;
 
     let minOpen = Infinity, maxClose = -Infinity;
@@ -680,6 +686,8 @@
     if (opts.endDate) endDate.setTime(new Date(opts.endDate + 'T00:00:00Z').getTime());
 
     const rangeMs = endDate.getTime() - startDate.getTime();
+    // Auto-N por defecto: target 12 meses/bloque. opts.nBlocks fuerza valor concreto.
+    const N = opts.nBlocks || autoN(rangeMs);
     const blockMs = rangeMs / N;
     const yearsPerBlock = blockMs / (365.25 * 24 * 3600 * 1000);
 
@@ -995,14 +1003,23 @@
   }
 
   function buildCorrelationMatrix(parsedList, opts = {}) {
-    const N_BLOCKS = opts.nBlocks || 9;
+    // resample modes:
+    //   'blocks'  → N bloques OOS (default, retro-compat)
+    //   'daily'   → un punto por día calendario
+    //   'weekly'  → un punto por semana ISO
+    //   'monthly' → un punto por mes año-mes
+    const resample = opts.resample || 'blocks';
     const cvcState = getCvcState();
     const startStr = opts.startDate || cvcState?.regimeStartDate;
     const endStr = opts.endDate || cvcState?.regimeEndDate;
     if (!startStr || !endStr) return null;
     const startD = new Date(startStr + 'T00:00:00Z').getTime();
     const endD = new Date(endStr + 'T00:00:00Z').getTime();
+    // Auto-N por defecto: target 12 meses/bloque
+    const N_BLOCKS = opts.nBlocks || autoN(endD - startD);
     const blockMs = (endD - startD) / N_BLOCKS;
+    const DAY_MS = 86400 * 1000;
+    const WEEK_MS = 7 * DAY_MS;
 
     function tradesToBlocks(trades) {
       const blocks = new Array(N_BLOCKS).fill(0);
@@ -1013,6 +1030,56 @@
         blocks[idx] += t.pl;
       }
       return blocks;
+    }
+
+    function tradesToDaily(trades) {
+      const nDays = Math.floor((endD - startD) / DAY_MS) + 1;
+      const arr = new Array(nDays).fill(0);
+      for (const t of trades) {
+        const dt = t.close_time.getTime();
+        if (dt < startD || dt >= endD) continue;
+        const idx = Math.floor((dt - startD) / DAY_MS);
+        if (idx >= 0 && idx < nDays) arr[idx] += t.pl;
+      }
+      return arr;
+    }
+
+    function tradesToWeekly(trades) {
+      const nWeeks = Math.floor((endD - startD) / WEEK_MS) + 1;
+      const arr = new Array(nWeeks).fill(0);
+      for (const t of trades) {
+        const dt = t.close_time.getTime();
+        if (dt < startD || dt >= endD) continue;
+        const idx = Math.floor((dt - startD) / WEEK_MS);
+        if (idx >= 0 && idx < nWeeks) arr[idx] += t.pl;
+      }
+      return arr;
+    }
+
+    function tradesToMonthly(trades) {
+      const startDate = new Date(startD);
+      const endDate = new Date(endD);
+      const startY = startDate.getUTCFullYear();
+      const startM = startDate.getUTCMonth();
+      const endY = endDate.getUTCFullYear();
+      const endM = endDate.getUTCMonth();
+      const nMonths = (endY - startY) * 12 + (endM - startM) + 1;
+      const arr = new Array(nMonths).fill(0);
+      for (const t of trades) {
+        const dt = t.close_time.getTime();
+        if (dt < startD || dt >= endD) continue;
+        const d = new Date(dt);
+        const idx = (d.getUTCFullYear() - startY) * 12 + (d.getUTCMonth() - startM);
+        if (idx >= 0 && idx < nMonths) arr[idx] += t.pl;
+      }
+      return arr;
+    }
+
+    function tradesToSeries(trades) {
+      if (resample === 'daily') return tradesToDaily(trades);
+      if (resample === 'weekly') return tradesToWeekly(trades);
+      if (resample === 'monthly') return tradesToMonthly(trades);
+      return tradesToBlocks(trades);
     }
 
     const items = parsedList.map(p => {
@@ -1032,22 +1099,26 @@
       const rExp = trades.length > 0
         ? trades.reduce((s, t) => s + (Math.abs(t.mae) > 0 ? t.pl / Math.abs(t.mae) : 0), 0) / trades.length
         : 0;
+      // npBlocks (siempre, para mantener métricas "positive/N_BLOCKS" que alimentan el score)
       const npBlocks = tradesToBlocks(trades);
       const positive = npBlocks.filter(v => v > 0).length;
+      // serie para correlación (puede ser distinta de npBlocks si resample != 'blocks')
+      const corrSeries = tradesToSeries(trades);
       const score = pf * retDD * (positive / N_BLOCKS) * (rExp > 0 ? 1 : 0.5);
       return {
         parsed: p,
         name: p.header.strategy_name || p.file_name,
         total, pf, retDD, maxDD, rExp, positive, score,
         npBlocks,
+        corrSeries,
       };
     });
 
     const matrix = items.map((it1, i) =>
-      items.map((it2, j) => i === j ? 1 : pearson(it1.npBlocks, it2.npBlocks))
+      items.map((it2, j) => i === j ? 1 : pearson(it1.corrSeries, it2.corrSeries))
     );
 
-    return { items, matrix, nBlocks: N_BLOCKS, startStr, endStr };
+    return { items, matrix, nBlocks: N_BLOCKS, startStr, endStr, resample, nPoints: items[0]?.corrSeries.length || 0 };
   }
 
   /**
@@ -1067,7 +1138,7 @@
       }
       let maxCorr = -1, maxCorrWith = null;
       for (const s of selected) {
-        const c = pearson(item.npBlocks, s.npBlocks);
+        const c = pearson(item.corrSeries, s.corrSeries);
         if (c > maxCorr) { maxCorr = c; maxCorrWith = s.name; }
       }
       if (maxCorr < threshold) {
@@ -1085,7 +1156,8 @@
       return '<div class="cvc-empty-state">Carga al menos 2 .sqx para análisis de descorrelación.</div>';
     }
     const threshold = opts.threshold != null ? opts.threshold : 0.70;
-    const data = buildCorrelationMatrix(parsedList, opts);
+    const resample = opts.resample || 'blocks';
+    const data = buildCorrelationMatrix(parsedList, { ...opts, resample });
     if (!data) return '<div class="cvc-empty-state">No se pudo computar matriz (falta rango temporal).</div>';
     const portfolio = selectDecorrelatedPortfolio(data, threshold);
 
@@ -1178,16 +1250,42 @@
 
     const selectedNamesList = portfolio.selected.map(s => s.name).join('\n');
 
+    // Hint del resample: a más granular, más puntos pero correlación más baja
+    // (ruido del día a día). El criterio SQX clásico es MONTHLY 0.3.
+    const resampleLabels = {
+      blocks: `OOS (${data.nBlocks} bloques)`,
+      daily: `Diaria (${data.nPoints} días)`,
+      weekly: `Semanal (${data.nPoints} sem)`,
+      monthly: `Mensual (${data.nPoints} meses)`,
+    };
+    const resampleHint = {
+      blocks: 'segmentos OOS, granularidad gruesa (correlación más alta)',
+      daily: 'punto por día, granularidad fina (correlación más baja)',
+      weekly: 'punto por semana ISO, equilibrio entre granularidad y robustez',
+      monthly: 'punto por mes calendario (criterio SQX clásico)',
+    };
+
     return `
       <p style="font-size:12px;color:var(--text2);margin:0 0 10px;">
         Algoritmo greedy: ordena por score (PF × Ret/DD × OOS+/N × signal R Exp), añade strategy si correlación con cualquier ya elegida &lt; umbral.
         Detecta <strong>duplicados funcionales</strong> (mismo edge aunque reglas SQX difieran).
+        <span style="color:var(--accent);">Criterio SQX clásico: <strong>Mensual 0.30</strong>.</span>
       </p>
 
       <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:14px;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;">
         <label style="display:flex;align-items:center;gap:8px;font-size:12px;">
+          <span>Resample:</span>
+          <select id="cvc-corr-resample" style="background:var(--surface);border:1px solid var(--border);color:var(--text);padding:3px 6px;border-radius:4px;font-size:12px;">
+            <option value="blocks"${resample==='blocks'?' selected':''}>OOS blocks (default)</option>
+            <option value="daily"${resample==='daily'?' selected':''}>Diaria</option>
+            <option value="weekly"${resample==='weekly'?' selected':''}>Semanal</option>
+            <option value="monthly"${resample==='monthly'?' selected':''}>Mensual (SQX clásico)</option>
+          </select>
+          <span style="color:var(--text2);font-size:11px;">${resampleLabels[resample]}</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12px;">
           <span>Umbral correlación:</span>
-          <input type="range" id="cvc-corr-threshold" min="0.30" max="0.95" step="0.05" value="${threshold}" style="width:150px;">
+          <input type="range" id="cvc-corr-threshold" min="0.10" max="0.95" step="0.05" value="${threshold}" style="width:150px;">
           <strong id="cvc-corr-threshold-val" style="color:var(--accent);min-width:42px;">${threshold.toFixed(2)}</strong>
         </label>
         <div style="font-size:12px;color:var(--text2);">
@@ -1197,6 +1295,7 @@
         </div>
         <button id="cvc-portfolio-copy" class="export-btn" style="margin-left:auto;font-size:11px;">📋 Copiar nombres</button>
       </div>
+      <div style="font-size:11px;color:var(--text2);margin-bottom:10px;font-style:italic;">${resampleHint[resample]}</div>
 
       <details open style="margin-bottom:14px;">
         <summary style="cursor:pointer;font-weight:700;color:#22c55e;padding:6px 0;">⭐ Portfolio seleccionado (${portfolio.selected.length})</summary>
@@ -1227,29 +1326,44 @@
     `;
   }
 
-  // Wiring del slider + botón copiar.
+  // Wiring del slider + selector resample + botón copiar.
   // IMPORTANTE: container es el <div id="cvc-decorrelation-panel">; al re-renderizar
   // se reemplaza su innerHTML (no outerHTML) para preservar el wrapper y sus IDs.
-  function wireDecorrelationSection(container, parsedList) {
+  function wireDecorrelationSection(container, parsedList, currentOpts = {}) {
     if (!container) return;
 
     const slider = container.querySelector('#cvc-corr-threshold');
     const valSpan = container.querySelector('#cvc-corr-threshold-val');
+    const resampleSel = container.querySelector('#cvc-corr-resample');
     const copyBtn = container.querySelector('#cvc-portfolio-copy');
+
+    // Estado vivo (threshold + resample) que se hereda al re-renderizar
+    const state = {
+      threshold: currentOpts.threshold != null ? currentOpts.threshold
+                : (slider ? parseFloat(slider.value) : 0.70),
+      resample: currentOpts.resample || (resampleSel ? resampleSel.value : 'blocks'),
+    };
+
+    function rerender() {
+      const newHTML = renderDecorrelationSection(parsedList, state);
+      container.innerHTML = newHTML;
+      wireDecorrelationSection(container, parsedList, state);
+    }
 
     if (slider) {
       let timer;
       slider.addEventListener('input', (e) => {
         const v = parseFloat(e.target.value);
         if (valSpan) valSpan.textContent = v.toFixed(2);
+        state.threshold = v;
         clearTimeout(timer);
-        timer = setTimeout(() => {
-          // Re-render: reemplaza el contenido SIN destruir el wrapper container
-          const newHTML = renderDecorrelationSection(parsedList, { threshold: v });
-          container.innerHTML = newHTML;
-          // Re-wire sobre el MISMO container (que ahora tiene contenido nuevo)
-          wireDecorrelationSection(container, parsedList);
-        }, 300);
+        timer = setTimeout(rerender, 300);
+      });
+    }
+    if (resampleSel) {
+      resampleSel.addEventListener('change', (e) => {
+        state.resample = e.target.value;
+        rerender();
       });
     }
     if (copyBtn) {
