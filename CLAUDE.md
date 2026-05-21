@@ -136,10 +136,63 @@ Forward 2024-2026: todos años positivos
 | 1 | **CvC 4/4** (PF×1.05, Ret/DD×0.95, DD%×1.20, #trades×0.7) | Calidad histórica formal |
 | 2 | **EGT v2 ≥ DEFENSIVE** (STRONG / COMPLIANT / DEFENSIVE) — método Miguel Jiménez refinado | Robustez por régimen del subyacente |
 | 3 | **Salud temporal OK** (peak en 2ª mitad + DD@close <15% + Recovery ≥70%) | Estancamiento contextual (sustituye al Stag<365d hard) |
-| 4 | **9/9 OOS bloques positivos** (no introducir negativos en 2ª mitad) | Sin años perdedores |
+| 4 | **Supervivencia por régime ≥ DEFENSIVO** (Filtro #4 v2 — ver abajo) | Edge frágil a régimen adverso |
 | 5 | **avg(últimos 3 OOS) ≥ 70% × avg(histórico)** | Adaptación al régimen actual |
 
 **Filtro adicional R:R (post-mining a partir del v7):** TP_value / SL_value ≥ 0.6 (descarta combinaciones de gestión catastróficas).
+
+### Filtro #4 v2 — Supervivencia por régime (mayo 2026)
+
+**Reemplaza** el antiguo "9/9 OOS bloques positivos" que era irreal en sample largo
+(16 años incluyen BULL + BEAR estructural + RANGE — pedir que un edge gane en TODOS
+los régimes = pedir overfit).
+
+**Filosofía:** *"domina en tu régime propio + sobrevive en los adversos"*. Una
+estrategia ES un edge específico (breakout gana en BULL, mean-revert en RANGE, etc.);
+no se le exige ganar en todo, se le exige no romperse en lo adverso.
+
+**Régime propio** = detectado por arquetipo + dirección:
+- breakout/trend-following long → BULL · short → BEAR
+- mean-revert / scalper → RANGE
+
+**2 variantes auto-seleccionadas por nº de bloques en régime adverso:**
+
+```
+ESTADÍSTICA  (≥3 bloques adversos — oro/forex sample largo 16y):
+   avg(bloques adversos) ≥ −30% × avg(propio)  → ROBUSTO
+   avg(bloques adversos) −30% a −50%           → DEFENSIVO
+   avg(bloques adversos) < −50%                → FRÁGIL (edge roto en adversos)
+
+POR-EVENTO   (<3 bloques adversos — índices CFD sample corto 8y):
+   cada bloque adverso pierde < 1.5% capital   → ROBUSTO
+   algún bloque adverso entre 1.5% y 2%        → DEFENSIVO
+   algún bloque adverso pierde > 2% capital    → CATASTRÓFICO
+```
+
+**Componentes comunes (4A/4C/4D):**
+- 4A: ≥80% de bloques del régime propio son positivos + avg propio > 0
+- 4C: ningún bloque pierde > 2% capital (worst block)
+- 4D: suma total claramente positiva
+
+**Veredictos:** ROBUSTO ✓ · DEFENSIVO ⚠ (ambos = filtro #4 superado) · FRÁGIL ✗ · CATASTRÓFICO ✗✗
+
+**Por qué 2 variantes:** los índices CFD no tienen historia BEAR suficiente (Dukas
+malo pre-2019, solo BEAR 2022 + shock COVID 2020 en el sample). Con 1-2 bloques
+adversos un test estadístico (avg) no es fiable → se evalúa cada bloque adverso
+individualmente. El oro/forex con Dukas 16y sí tiene 4-6 bloques BEAR → test estadístico.
+
+**El discriminante NO es el nombre del activo** sino el nº real de bloques adversos.
+Un forex minado solo 8y usaría por-evento automáticamente. `detectAssetClass()`
+solo etiqueta el contexto (INDEX/METAL/FOREX) para el reporte.
+
+**Implementación:** `cvcFilter4v2()` + `detectAssetClass()` + `detectOwnRegime()` en
+`js/sqxTradeAnalysis.js`. Integrado en `compute5Filters()`. El veredicto consolidado
+muestra "✓ #4 ROBUSTO (14/16 OOS+)" con tooltip del modo y detalle.
+
+**Caso validado:** `0.125931` (SSL XAUUSD) — el viejo filtro la descartaba por 11/16
+OOS; el v2 la evalúa por su edge breakout-long → régime propio BULL, mide pérdida en
+BEAR estructural → FRÁGIL si avg adverso < −50% propio. La estrategia que el método
+viejo "adoptaba" con falsa confianza queda correctamente clasificada.
 
 **Caso real validado:** mining USTEC H1 SMA — solo `0.4066882` pasa los 5 filtros (mining grande con 18 candidatas 4/4 CvC). Mining USTEC H1 SuperTrend — NINGUNA pasa (descartado entero, todas tienen R:R 1:2 desfavorable).
 
@@ -1264,6 +1317,8 @@ Paso 4: Decisión
 ---
 
 **Última actualización:** 2026-05-22
+**Versión:** v5.7 — **Filtro #4 v2 "Supervivencia por régime"** reemplaza el antiguo "9/9 OOS positivos" (irreal en sample largo 16y — pedir que un edge gane en todos los régimes = overfit). Nueva filosofía: "domina en tu régime propio + sobrevive en los adversos". 2 variantes auto-seleccionadas por nº de bloques adversos: ESTADÍSTICA (≥3 adversos, oro/forex 16y — avg adversos ≥ −30%/−50% del propio) y POR-EVENTO (<3 adversos, índices CFD 8y — cada bloque adverso < 1.5%/2% capital). Veredictos ROBUSTO/DEFENSIVO/FRÁGIL/CATASTRÓFICO. Implementado en `cvcFilter4v2()` + `detectAssetClass()` + `detectOwnRegime()`, integrado en `compute5Filters()`. 7/7 tests unitarios pasan.
+
 **Versión:** v5.6 — **Metodología de 3 períodos** (MINING / FILTROS / CvC) para unificar el criterio entre activos con data Dukas buena (forex/oro 2010+) y activos solo Darwinex (índices CFD). Regla clave: **los filtros Capa 2 se evalúan SIEMPRE sobre el período común 2018-2026**, sin importar el broker de mining → un solo set de filtros, vara de medir justa. + **Validación cross-broker empírica**: lote SSL XAUUSD H1 (14 estrategias mismo edge, backtesteadas en Dukas + Darwinex) → 0/14 DRIFT, métricas Dukas≈Darwinex en período común. + **Caso `0.125931`**: pasa 5/5 filtros en 2018-2026 pero CvC sobre Dukas 16y revela pérdida -$1,310 en BEAR estructural 2014 → lote SSL descartado (edge breakout alcista frágil a BEAR oro). El método nuevo descartó correctamente un mining que el método viejo habría adoptado. + Scripts nuevos: `analyze_dukas_csv_quality.py`, `compare_cross_broker.py`, auto-N bloques en `cvc_single_strategy.py` y web. + Stock se mantiene en 14 (lote SSL no aporta adoptables).
 
 **Versión:** v5.5 — **Stock pasa de 13 a 14** con adopción de **#14 XAUUSD H1 LONG Fibo 0.8883321** (`Fibo[1] > Highest[1] AND LowD[1] > SessionLow[1]`): edge breakout-mean-revert híbrido. **10/10 OOS positivos + 10/10 años civiles positivos** (incluso 2020 COVID +$105, 2022 BEAR oro +$311). PF 2.12, Ret/DD 12.98 ⭐, DD% 0.62, Sharpe 1.51, R Exp 0.39. PRIMERA con CvC 6/6 perfecto. + Mining XAUUSD H1 80 estrategias procesadas: **magic marker `04 02 03 01` (variante F) descubierto** en orders.bin (sin este fix, 14/80 sin parsear) — actualizado `parse_sqx_orders.py` y `sqxParser.js`. + **Filter by Correlation con threshold MENSUAL 0,3 (criterio SQX clásico)** — 9 estrategias que pasan filtros métricos colapsan a 1 ortogonal real (las otras 8 comparten edge `Fibo > Highest` → corr mensual 0,33-0,42). + Stock pasa de 13 a 14 estrategias.
