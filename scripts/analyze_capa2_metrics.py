@@ -136,10 +136,27 @@ def find_top_level_items(body, keys):
 
 
 def extract_item_name_shift(item_xml):
+    """Devuelve (name, shift). name incluye horarios para indicators Session* (ej. 'SessionLow(19:26-3:49)')."""
     key_m = re.search(r'<Item[^>]*?key="([A-Za-z][A-Za-z0-9_]+)"', item_xml)
     name = key_m.group(1) if key_m else '?'
     shift_m = re.search(r'<Param key="#Shift#"[^>]*?>([^<]+)</Param>', item_xml)
-    return (name, shift_m.group(1).strip() if shift_m else '')
+    shift = shift_m.group(1).strip() if shift_m else ''
+
+    # Para indicators Session*: añadir horarios al nombre
+    if name.startswith('Session'):
+        sh = re.search(r'<Param key="#StartHours#"[^>]*?>([^<]+)</Param>', item_xml)
+        sm = re.search(r'<Param key="#StartMinutes#"[^>]*?>([^<]+)</Param>', item_xml)
+        eh = re.search(r'<Param key="#EndHours#"[^>]*?>([^<]+)</Param>', item_xml)
+        em = re.search(r'<Param key="#EndMinutes#"[^>]*?>([^<]+)</Param>', item_xml)
+        def fmt(h, m):
+            return f'{int(h.group(1)):02d}:{int(m.group(1)):02d}' if h and m else None
+        end_str = fmt(eh, em)
+        start_str = fmt(sh, sm)
+        if start_str and end_str:
+            name = f'{name}({start_str}-{end_str})'   # rango: SessionLow/High
+        elif end_str:
+            name = f'{name}({end_str})'                # puntual: SessionClose/Open
+    return (name, shift)
 
 
 def parse_signal(xml, side='long'):
@@ -218,10 +235,17 @@ def resolve_rule(rule, vars_):
 
 
 def parse_exits(xml):
-    """Devuelve exits con valor ATR + R:R.
-    SQX structure: <Param key="#X.X#" ...> <Formula key="..."> <Param key="#Value#">N</Param> ... </Formula> </Param>
-    El primer </Param> en regex .*? captura el del Value interno (incorrecto),
-    así que usamos look-ahead de hasta 4000 chars desde el inicio del Param outer."""
+    """Devuelve exits con tipo + valor + R:R.
+
+    Formato del valor por exit:
+      ('ATR', value, atr_period)  → ATR-based:       value × ATR(period)
+      ('PIPS', value, None)       → Fixed value:     value pips
+      ('OFF', None, None)         → exit desactivado
+      None                        → exit no encontrado en el XML
+
+    SQX structure: <Param key="#X.X#" ...><Formula key="SQ.Formulas.X.{TIPO}"><Param key="#Value#">N</Param>...</Formula></Param>
+    TIPO posibles: ATRBasedValue, FixedValue, PipsBasedValue, None
+    """
     out = {}
     for label, key in [('PT', 'ProfitTarget.ProfitTarget'),
                        ('SL', 'StopLoss.StopLoss'),
@@ -233,17 +257,24 @@ def parse_exits(xml):
         if not m:
             out[label] = None; continue
         tail = xml[m.end():m.end()+4000]
-        # ¿Formula None? — exit OFF
-        if re.search(r'<Formula key="SQ\.Formulas\.\w+\.None"\s*/?>', tail[:300]):
-            out[label] = None; continue
+        # Detectar tipo de Formula
+        fm = re.search(r'<Formula key="SQ\.Formulas\.\w+\.(\w+)"', tail[:500])
+        ftype = fm.group(1) if fm else None
+        if ftype == 'None' or (re.search(r'<Formula key="SQ\.Formulas\.\w+\.None"\s*/?>', tail[:300])):
+            out[label] = ('OFF', None, None); continue
         v = re.search(r'<Param key="#Value#"[^>]*?>([0-9.]+)</Param>', tail)
         a = re.search(r'<Param key="#AtrPeriod#"[^>]*?>(\d+)</Param>', tail)
-        if v and a:
-            out[label] = (float(v.group(1)), int(a.group(1)))
+        val = float(v.group(1)) if v else None
+        if ftype == 'ATRBasedValue' and v and a:
+            out[label] = ('ATR', val, int(a.group(1)))
+        elif ftype in ('FixedValue', 'PipsBasedValue') and v:
+            out[label] = ('PIPS', val, None)
+        elif v and a:
+            out[label] = ('ATR', val, int(a.group(1)))   # fallback retro-compat
         elif v:
-            out[label] = (float(v.group(1)), None)
+            out[label] = ('PIPS', val, None)
         else:
-            out[label] = (None, None)
+            out[label] = (None, None, None)
     # EAB
     eab = re.search(r'<Param key="#ExitAfterBars\.ExitAfterBars#"[^>]*?>\s*([^<]*)\s*</Param>', xml)
     eab_v = eab.group(1).strip() if eab else ''
@@ -271,11 +302,14 @@ def analyze_one(sqx_path):
     direction = 'LONG' if ml and not ms else 'SHORT' if ms and not ml else 'L/S' if ml else 'NONE'
 
     exits = parse_exits(strat_xml)
-    # R:R
+    # R:R — usa el VALUE (índice 1) de las tuplas (type, value, atr_period)
+    # Solo calculamos R:R si PT y SL son comparables (ambos ATR o ambos PIPS — sino no tiene sentido)
     pt = exits.get('PT'); sl = exits.get('SL')
     rr = None
-    if pt and sl and pt[0] and sl[0] and sl[0] > 0:
-        rr = pt[0] / sl[0]
+    if pt and sl and pt[0] in ('ATR', 'PIPS') and sl[0] in ('ATR', 'PIPS'):
+        if pt[0] == sl[0]:   # mismo tipo de unidad
+            if pt[1] and sl[1] and sl[1] > 0:
+                rr = pt[1] / sl[1]
 
     # Close types
     ct = {}
@@ -376,9 +410,11 @@ def main():
             pt = r['exits'].get('PT'); sl = r['exits'].get('SL')
             ts = r['exits'].get('TS'); tsa = r['exits'].get('TSAct')
             def fmt_exit(e):
-                if not e: return 'OFF'
-                v, a = e
-                return f'{v}xATR({a})' if a else f'{v}fix'
+                if not e: return '—'
+                if e[0] == 'OFF': return 'OFF'
+                if e[0] == 'ATR': return f'{e[1]}xATR({e[2]})'
+                if e[0] == 'PIPS': return f'{e[1]}pips'
+                return '?'
             print()
             print(f'STRATEGY {r["name"]} · {r["direction"]} · {r["header"]["symbol"]} '
                   f'{r["header"]["chart_name"]}')

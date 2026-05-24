@@ -888,9 +888,9 @@ Stagnation < 25%
 
 ## ESTADO ACTUAL DEL PROYECTO
 
-### Stock adoptado: 14 estrategias
+### Stock adoptado: 15 estrategias
 
-> **Estado validación:** Todas las 14 han pasado el flujo completo:
+> **Estado validación:** Todas han pasado el flujo completo:
 > 1. Mining IS (Darwinex 2018-2023 según activo)
 > 2. **FOWARD 2024-2026** (Darwinex, OOS reservado intocado, PF>1.0)
 > 3. **RETEST 1 Dukas 2010-2017** (broker + régime distintos, NP>0 + #trd>50)
@@ -914,7 +914,8 @@ Stagnation < 25%
 | 11 | AUDCAD M30 SHORT SuperTrend | 0.2282445 | ADX+ATR+SuperTrend (SHORT-only) | $15,404 | 9.66 | 0.29 |
 | 12 | SP500 M30 LONG AvgVolumen | 0.58054 | AvgVolume(95% pct) + Close rising | $9,637 | 7.05 | 0.16 |
 | 13 | SP500 M30 LONG CLOSE | 0.333026 | Close(60% pct 900) + Open(40% pct 1000) | $14,900 | 10.25 | 0.42 |
-| **14** | **XAUUSD H1 LONG Fibo** | **0.8883321** | **Fibo>Highest + LowD>SessionLow** | **$8,412** | **12.98** | **0.39** |
+| 14 | XAUUSD H1 LONG Fibo | 0.8883321 | Fibo>Highest + LowD>SessionLow | $8,412 | 12.98 | 0.39 |
+| **15** | **WS30 H1 LONG MOAMA** | **0.1551816** | **SessionLow(19:26-3:49)X↑EhlersMOAMA + SessionClose(10:12)>SessionClose(6:51)** | **$8,297** | **10.29** | **0.38** |
 
 **#11 detalles (AUDCAD M30 SHORT 0.2282445) — versión MEJORADA con filtro ADX:**
 
@@ -1091,6 +1092,46 @@ Stagnation < 25%
 3. **9 estrategias pasan filtros métricos pero solo 1 aporta diversificación real.** Lección: PF/Ret/DD/Sharpe son condición necesaria pero NO suficiente — Filter by Correlation mensual estricto es el filtro de portfolio.
 4. **CvC 6/6 perfecto + Monthly Filter 0,3** = criterio ORO para adopción individual. Cada estrategia del stock debe pasar AMBOS independientemente.
 5. **Stock pasa de 13 → 14** — XAUUSD H1 ahora también tiene un edge Capa 2 (antes solo había XAUUSD H1 Capa 1 #1-2 y XAUUSD H4 Capa 1 #3).
+
+**#15 detalles (WS30 H1 LONG MOAMA 0.1551816) — primer Dow Jones del stock:**
+
+> **Hito histórico:** PRIMERA estrategia WS30 (Dow Jones) del stock. Diversifica vs índices US ya presentes (SP500 #12-13, NASDAQ #5-10). Edge multi-sesión sofisticado que combina 3 horarios distintos del mercado.
+
+- DD% **0,80** | PF **1,89** | Sharpe 1,32 | 211 trades | Stagnation 431d (15,2%) | Win 57,3% | R Exp **0,38**
+- Direction LONG-only · Capital base $100,000 · Backtest 7,75 años (Darwinex 2018-2026)
+- **Edge real (del source code):**
+  ```
+  LongEntry = SessionLow(19:26-03:49)[1] crosses above EhlersMotherOfAdaptiveMovingAverages-FAMA(0, 0.68)[1]
+              AND SessionClose(10:12)[1] > SessionClose(06:51)[1]
+  ```
+  → 2 condiciones multi-sesión:
+  1. **SessionLow asia X↑ EhlersMOAMA-FAMA** — el mínimo de la sesión asiática (19:26-3:49 UTC) cruza arriba la MA adaptativa lenta (FAMA del par MAMA-FAMA de Ehlers)
+  2. **SessionClose(10:12) > SessionClose(6:51)** — momentum positivo entre cierre Frankfurt/Tokyo y London/NY (los 2 SessionClose tienen horarios distintos)
+  → Edge **multi-sesión sofisticado**: combina precio asiático + MA adaptativa + momentum europeo/americano. Arquetipo: probable MEAN_REVERT con filtro de momentum.
+- **Exits (extraídos del .sqx):**
+  ```
+  ✗ ExitAfterBars (DESACTIVADO ⭐ fix v7)
+  ✓ ProfitTarget:    3,5 × ATR(185)
+  ✓ StopLoss:        3,0 × ATR(100)
+  ✓ TrailingStop:    100 pips fijos
+  ✓ TS Activation:   0,5 × ATR(40)
+  R:R formal = 1,17
+  ```
+- **CvC 5/6 ✓ PASA:**
+  - 7/8 OOS positivos · 9/9 años civiles positivos ⭐
+  - Salud temporal **fresh** (peak OOS8)
+  - DD@close 0%, Recovery 161% (accelerating)
+  - Peor año 2020 +$29 (positivo aunque marginal — COVID)
+  - Mejor año 2025 +$2,024 (momentum reciente fuerte)
+- **Filtros 5/5 Capa 2 ✓** — única del lote (7 strategies) que pasa todos: PF≥1.5 ✓ Ret/DD≥5 ✓ RExp≥0.30 ✓ Stag<25% ✓ #trd>150 ✓
+- **Cierres balanceados:** PT 30% · SL 18% · TR 53% (no dependiente de un solo exit)
+- **2,27 trades/mes** — supera el criterio anti-zombi (≥2 trd/mes añadido en mayo 2026)
+
+**Lecciones del adopción #15:**
+1. **Mejora del script de análisis** — añadida extracción de horarios para Session* indicators (`SessionLow(HH:MM-HH:MM)`, `SessionClose(HH:MM)`) + diferenciación de exits Fixed pips vs ATR-based en `parse_exits()`. Antes el script mostraba `SessionClose>SessionClose` (parecía tautología) y `100×ATR(40)` (parecía trailing absurdo). Con la mejora se ve el edge real: 2 sesiones distintas + 100 pips fijos normales.
+2. **Criterio anti-zombi confirmado** — el filtro `Avg Trades Per Month ≥ 2` se añadió tras detectar estrategias esporádicas (1 trade/mes con años en cero). Esta estrategia con 2,27 trd/mes pasa cómodamente.
+3. **Edge multi-sesión es ventaja diversificadora** — combina 3 horarios distintos (asia 19:26-3:49, frankfurt 6:51, london 10:12). Es estructuralmente distinto de los edges simples del stock (Fibo, AvgVolume, CloseM, etc.).
+4. **WS30 H1 primer Dow del stock** — diversifica vs SP500 (M30, edges volumen/candle) y NASDAQ (H1/H4, edges trend/momentum).
 
 **Stock antiguo XAUUSD H4 Capa 1 (FORWARD aplicado, NO operables en prop firms con SL/TP obligatorio):**
 - 0.713168: AvgVolume+Close, NP $4,758, Ret/DD 11.11, DD% 0.42%, 210 trades
@@ -1277,6 +1318,14 @@ Paso 4: Decisión
 - Snake_case en variables Python
 - Comentarios en español
 
+### Cuando sirva el dashboard web (SQX_Dashboard_v6.html)
+
+- **SIEMPRE usar el puerto fijo `8770`**: `python -m http.server 8770 --bind 127.0.0.1`
+- Motivo: el pipeline tracking se guarda en `localStorage`, que está atado al
+  origin (host + **puerto**). Cambiar de puerto = el navegador ve otro localStorage
+  vacío = el tracking del usuario "desaparece" y tiene que re-hacerlo.
+- NUNCA arrancar el dashboard en un puerto distinto de 8770.
+
 ### Cuando modifique blocksettings
 
 - Documentar cambios en `CLAUDE_Blocksettings_Detalle.md`
@@ -1316,7 +1365,9 @@ Paso 4: Decisión
 
 ---
 
-**Última actualización:** 2026-05-22
+**Última actualización:** 2026-05-23
+**Versión:** v5.8 — **Stock pasa de 14 a 15** con adopción de **#15 WS30 H1 LONG MOAMA 0.1551816** (primer Dow Jones del stock). Edge multi-sesión sofisticado: `SessionLow(19:26-3:49) crosses above EhlersMOAMA-FAMA AND SessionClose(10:12) > SessionClose(6:51)`. PF 1.89, Ret/DD 10.29, RExp 0.38, 9/9 años positivos, CvC 5/6. Única del lote (7 strats) que pasa los 6 filtros estrictos Capa 2. + **Mejora del script de análisis**: `parse_exits()` ahora diferencia Fixed pips vs ATR-based, y `extract_item_name_shift()` extrae horarios de Session* indicators. Antes mostraba `SessionClose>SessionClose` y `100×ATR(40)` (parecían tautología/absurdos); ahora muestra `SessionClose(10:12)>SessionClose(6:51)` y `100 pips fijos` (información correcta). + **Criterio anti-zombi añadido**: `Avg Trades Per Month ≥ 2` en SQX para evitar estrategias esporádicas (1 trade/mes con años en $0). + Stock 14 → 15 estrategias.
+
 **Versión:** v5.7 — **Filtro #4 v2 "Supervivencia por régime"** reemplaza el antiguo "9/9 OOS positivos" (irreal en sample largo 16y — pedir que un edge gane en todos los régimes = overfit). Nueva filosofía: "domina en tu régime propio + sobrevive en los adversos". 2 variantes auto-seleccionadas por nº de bloques adversos: ESTADÍSTICA (≥3 adversos, oro/forex 16y — avg adversos ≥ −30%/−50% del propio) y POR-EVENTO (<3 adversos, índices CFD 8y — cada bloque adverso < 1.5%/2% capital). Veredictos ROBUSTO/DEFENSIVO/FRÁGIL/CATASTRÓFICO. Implementado en `cvcFilter4v2()` + `detectAssetClass()` + `detectOwnRegime()`, integrado en `compute5Filters()`. 7/7 tests unitarios pasan.
 
 **Versión:** v5.6 — **Metodología de 3 períodos** (MINING / FILTROS / CvC) para unificar el criterio entre activos con data Dukas buena (forex/oro 2010+) y activos solo Darwinex (índices CFD). Regla clave: **los filtros Capa 2 se evalúan SIEMPRE sobre el período común 2018-2026**, sin importar el broker de mining → un solo set de filtros, vara de medir justa. + **Validación cross-broker empírica**: lote SSL XAUUSD H1 (14 estrategias mismo edge, backtesteadas en Dukas + Darwinex) → 0/14 DRIFT, métricas Dukas≈Darwinex en período común. + **Caso `0.125931`**: pasa 5/5 filtros en 2018-2026 pero CvC sobre Dukas 16y revela pérdida -$1,310 en BEAR estructural 2014 → lote SSL descartado (edge breakout alcista frágil a BEAR oro). El método nuevo descartó correctamente un mining que el método viejo habría adoptado. + Scripts nuevos: `analyze_dukas_csv_quality.py`, `compare_cross_broker.py`, auto-N bloques en `cvc_single_strategy.py` y web. + Stock se mantiene en 14 (lote SSL no aporta adoptables).
